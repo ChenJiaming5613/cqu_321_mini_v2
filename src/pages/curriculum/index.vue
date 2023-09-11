@@ -42,7 +42,7 @@
   const courseModel = CourseModel.getInstance();
   const customCourseModel = CustomCourseModel.getInstance();
   // CONST
-  let colorMap: Map<string, string>;
+  let colorMap: Map<string, string> = new Map<string, string>();
   let fixedWeekOfTerm: number = 0;
   // STATUS
   const termOffset = ref<TermOffset>(TermOffset.CurrTerm);

@@ -17,3 +17,13 @@
 .std-border-radius {
     border-radius: 20rpx;
 }
+
+/* 解决markdown组件显示文本时文字不换行溢出问题 */
+view {
+    word-wrap: break-word;
+}
+
+/* 设置全局页面背景颜色 */
+page {
+    background-color: #f8f8f8;
+}

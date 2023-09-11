@@ -1,5 +1,5 @@
 <template>
-  <view class="flex" style="margin-top: 100rpx;">
+  <view class="flex bg-white" style="margin-top: 100rpx;">
     <view class="flex flex-direction text-lg text-center" style="width: 50rpx;">
       <view
           v-for="index in 13"
@@ -19,7 +19,7 @@
         >
           <view v-if="tableItem.isOverlap" class="text-white text-bold text-right padding-top-xs padding-right-xs">...</view>
           <view v-if="'classroom' in tableItem.course">
-            <view>{{tableItem.course.classroom}}</view>
+            <view>{{(tableItem.course as Course).classroom}}</view>
             <view class="bg-white" style="height: 1rpx;"></view>
           </view>
           <view>{{tableItem.course.name}}</view>
@@ -44,6 +44,7 @@
   import {calcDayOfWeek} from "@/utils/datetime";
   import {computed} from "vue";
   import {calcCurrPeriod} from "@/pages/curriculum/util";
+  import {Course} from "@/models/CourseModel";
 
   const props = defineProps<{
     tableItems: CourseCell[],
