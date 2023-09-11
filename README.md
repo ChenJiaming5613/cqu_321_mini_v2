@@ -1,26 +1,8 @@
 # 321CQU Mini v2
 
-## 环境搭建
-依赖下载
-~~~shell
-npm install -g @vue/cli
-npx degit dcloudio/uni-preset-vue#vite-ts cqu321
-~~~
-微信小程序Dev
-~~~shell
-npm run dev:mp-weixin
-~~~
+321CQU Mini v2 is powered by Uniapp with Vue3 and Typescript.
 
-## Addon
+## Docs
 
-### Markdown Parser
-在`package.json`中
-- `dependencies`
-~~~text
-"node-sass": "^6.0.1",
-"sass-loader": "^10.2.0"
-~~~
-- `devDependencies`中
-~~~text
-"sass": "^1.64.2"
-~~~
+- [环境配置](docs/环境配置.md)
+- [命名规范](docs/命名规范.md)
