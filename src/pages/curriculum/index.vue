@@ -74,18 +74,18 @@
     await CoursePriorityModel.getInstance().load();
     termOffset.value = await courseModel.getCurrSelectTerm();
     const coursesData = await courseModel.getCoursesData(termOffset.value);
-    termName.value = "unknown";
-    currDate.value = new Date();
-    startDate.value = new Date();
-    courses.value = [];
+    // termName.value = "unknown";
+    // currDate.value = new Date();
+    // startDate.value = new Date();
+    // courses.value = [];
     if (coursesData !== null) {
       termName.value = coursesData.termName;
       startDate.value = stringToDateInChinaTime(coursesData.startDate);
-      courses.value = [...coursesData.courses];
-      // TODO: 自定义课表
-      courses.value.push(...await customCourseModel.get());
-      colorMap = makeColorMap(courses.value);
       fixedWeekOfTerm = weekOfTerm.value;
+      const tmpCourses: UniCourse[] = [...coursesData.courses];
+      tmpCourses.push(...await customCourseModel.get());
+      colorMap = makeColorMap(tmpCourses);
+      courses.value = tmpCourses;
     }
   }
 
