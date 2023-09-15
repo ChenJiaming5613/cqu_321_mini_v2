@@ -1,8 +1,9 @@
 <template>
   <view class="flex flex-direction align-center text-center root" @click="$emit('click')">
-    <view class="icon-bg" :class="disabled ? 'disable' : 'able'">
-      <text class="text-white icon" :class="iconName"></text>
-    </view>
+<!--    <view class="icon-bg" :class="disabled ? 'disable' : 'able'">-->
+<!--      <text class="text-white icon" :class="iconName"></text>-->
+<!--    </view>-->
+    <image class="icon" :src="`/static/images/icon_${iconName}.svg`"/>
     <view class="icon-text text-df">{{ title }}</view>
   </view>
 </template>
@@ -22,6 +23,10 @@ defineEmits<{
 .root {
   width: 120rpx;
 }
+.icon {
+  width: 40rpx;
+  height: 40rpx;
+}
 .icon-bg {
   width: 80rpx;
   height: 80rpx;
@@ -40,5 +45,6 @@ defineEmits<{
 .icon-text {
   padding-top: 10rpx;
   color: #696969;
+  font-size: 24rpx;
 }
 </style>

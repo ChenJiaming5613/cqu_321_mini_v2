@@ -31,12 +31,6 @@
 			}
 		},
 		{
-			"path": "pages/settings/index",
-			"style": {
-				"navigationBarTitleText": "设置"
-			}
-		},
-		{
 			"path": "pages/settings/login/index",
 			"style": {
 				"navigationBarTitleText": "登录"
@@ -88,6 +82,12 @@
 			"path": "pages/library/index",
 			"style": {
 				"navigationBarTitleText": "图书馆"
+			}
+		},
+		{
+			"path": "pages/empty_room/index",
+			"style": {
+				"navigationBarTitleText": "空教室"
 			}
 		}
 	],

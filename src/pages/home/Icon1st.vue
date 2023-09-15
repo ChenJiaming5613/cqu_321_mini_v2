@@ -1,9 +1,10 @@
 <template>
-  <view class="flex flex-direction text-center root" @click="$emit('click')">
-    <view class="icon-bg">
-      <text class="text-white text-bold icon" :class="iconName"></text>
-    </view>
-    <view class="icon-text text-lg">{{ title }}</view>
+  <view class="flex flex-direction text-center" @click="$emit('click')">
+<!--    <view class="icon-bg">-->
+<!--      <text class="text-white text-bold icon" :class="iconName"></text>-->
+<!--    </view>-->
+    <image class="icon" :src="`/static/images/icon_${iconName}.svg`"/>
+    <view class="icon-text">{{ title }}</view>
   </view>
 </template>
 
@@ -18,8 +19,9 @@
 </script>
 
 <style scoped>
-  .root {
-    width: 120rpx;
+  .icon {
+    width: 96rpx;
+    height: 96rpx;
   }
   .icon-bg {
     height: 120rpx;
@@ -31,6 +33,7 @@
     font-size: 65rpx;
   }
   .icon-text {
+    font-size: 28rpx;
     padding-top: 10rpx;
     color: #696969;
   }
