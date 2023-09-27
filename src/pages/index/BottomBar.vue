@@ -1,11 +1,13 @@
 <template>
   <view class="bar">
-    <image @click="() => { $emit('click', 'home') }" class="item" :src="`/static/images/icon_home${curr === 'home' ? '_selected' : ''}.svg`"/>
-    <image @click="() => { $emit('click', 'settings') }" class="item" :src="`/static/images/icon_person${curr === 'settings' ? '_selected' : ''}.svg`"/>
+    <image @click="() => { $emit('click', 'home') }" class="item" :src="getSvgPath(`home${curr === 'home' ? '_selected' : ''}`)"/>
+    <image @click="() => { $emit('click', 'settings') }" class="item" :src="getSvgPath(`person${curr === 'settings' ? '_selected' : ''}`)"/>
   </view>
 </template>
 
 <script setup lang="ts">
+  import {getSvgPath} from "@/utils/resource";
+
   const props = defineProps<{
     curr: "home" | "settings"
   }>();
@@ -30,7 +32,7 @@
   }
 
   .item {
-    width: 52rpx;
-    height: 52rpx;
+    width: 46rpx;
+    height: 46rpx;
   }
 </style>

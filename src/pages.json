@@ -89,6 +89,12 @@
 			"style": {
 				"navigationBarTitleText": "空教室"
 			}
+		},
+		{
+			"path": "pages/life/index",
+			"style": {
+				"navigationBarTitleText": "生活"
+			}
 		}
 	],
 	"globalStyle": {

@@ -11,11 +11,16 @@
 }
 
 .std-box-shadow {
-    box-shadow: rgba(0, 0, 0, 0.1) 0 1rpx 3rpx 0, rgba(0, 0, 0, 0.06) 0 1rpx 2rpx 0;
+    box-shadow: 0 6rpx 16rpx 0 rgba(0, 0, 0, 0.07);
 }
 
 .std-border-radius {
-    border-radius: 20rpx;
+    border-radius: 25rpx;
+}
+
+.std-page-margin {
+    margin-left: 30rpx;
+    margin-right: 30rpx;
 }
 
 /* 解决markdown组件显示文本时文字不换行溢出问题 */

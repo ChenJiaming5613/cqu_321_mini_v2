@@ -1,5 +1,5 @@
 <template>
-  <view class="std-box-shadow bg-white margin-bottom" style="width: 100%; height: 400rpx;">
+  <view class="activity-card std-page-margin std-border-radius">
     <swiper
       class="square-dot"
       indicator-dots
@@ -11,7 +11,7 @@
         :key="index"
         class="text-center"
         @click="() => { navToDetail(activityItem) }">
-        <image class="img" :src="activityItem.localUrl || activityItem.url" mode="aspectFit" show-menu-by-longpress></image>
+        <image class="img std-border-radius" :src="activityItem.localUrl || activityItem.url" mode="aspectFill" show-menu-by-longpress></image>
       </swiper-item>
     </swiper>
   </view>
@@ -32,6 +32,13 @@
 </script>
 
 <style scoped>
+  .activity-card {
+    height: 350rpx;
+    width: 700rpx;
+    margin-bottom: 25rpx;
+    box-shadow: 0 8rpx 20rpx 0 rgba(0, 0, 0, 0.3);
+  }
+
   .img {
     width: 100%;
     height: 100%;
