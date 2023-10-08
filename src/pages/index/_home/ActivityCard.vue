@@ -18,15 +18,12 @@
 </template>
 
 <script setup lang="ts">
-  import ActivityModel, {ActivityInfo, ActivityItem} from "@/models/ActivityModel";
-  import {computed, ref} from "vue";
-  import {onShow} from "@dcloudio/uni-app";
-  const activityModel = ActivityModel.getInstance();
-  const activityInfo = ref<ActivityInfo | null>(null);
-  const activityItems = computed<ActivityItem[]>(() => activityInfo.value?.pictures || []);
-  onShow(async () => { activityInfo.value = await activityModel.get() });
+  import {ActivityItem} from "@/models/ActivityModel";
+
+  defineProps<{ activityItems: ActivityItem[] }>();
+
   async function navToDetail(activityItem: ActivityItem) {
-    await uni.navigateTo({ url: './content/index?url=' + activityItem.contentUrl });
+    await uni.navigateTo({ url: '/pages/index/content/index?url=' + activityItem.contentUrl });
   }
   // TODO: 检测活动是否需要更新（目前的策略是缓存中没有活动数据采取更新）
 </script>

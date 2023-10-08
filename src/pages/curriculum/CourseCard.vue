@@ -40,9 +40,8 @@
 
 <script setup lang="ts">
   import CourseModel, {TermOffset} from "@/models/CourseModel";
-  import {computed, ref} from "vue";
+  import {computed, onMounted, ref} from "vue";
   import {calcDayOfWeek, calcWeeksBetweenDates, stringToDateInChinaTime} from "@/utils/datetime";
-  import {onShow} from "@dcloudio/uni-app";
   import {formatTextOverflow} from "@/utils/util";
   import {calcCurrPeriod, UniCourse} from "./util";
   import {getTimeText} from "@/utils/course";
@@ -69,7 +68,7 @@
     return courses.value.length - 1;
   });
 
-  onShow(initData);
+  onMounted(initData);
   async function initData() {
     currDate.value = new Date();
     startDate.value = new Date();

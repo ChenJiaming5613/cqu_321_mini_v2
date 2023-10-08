@@ -4,7 +4,7 @@ export async function userInfoLackCallback() {
     if (isLock) return;
     isLock = true;
     await uni.navigateTo({
-        url: "/pages/settings/login/index"
+        url: "/pages/index/login/index"
     });
     await uni.showToast({
         title: "用户未登录",

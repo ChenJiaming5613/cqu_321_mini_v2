@@ -9,15 +9,14 @@
 
 <script setup lang="ts">
   import {stdClearAllStorage} from "@/core/storage";
-  import UserInfoCard from "@/pages/settings/UserInfoCard.vue";
-  import {ref} from "vue";
+  import UserInfoCard from "@/pages/index/_settings/UserInfoCard.vue";
+  import {onMounted, ref} from "vue";
   import stdUser, {UserInfo} from "@/core/StdUser";
-  import {onShow} from "@dcloudio/uni-app";
-  import MenuItem from "@/pages/settings/MenuItem.vue";
+  import MenuItem from "@/pages/index/_settings/MenuItem.vue";
   import StdModel from "@/core/StdModel";
 
   const info = ref<UserInfo | null>(null);
-  onShow(async () => { info.value = await stdUser.getUserInfo(false) });
+  onMounted(async () => { info.value = await stdUser.getUserInfo(false) });
 
   async function clearCache() {
     info.value = null;
@@ -25,8 +24,8 @@
     StdModel.clearAll();
     await uni.showToast({ title: "已清除", icon: "success"});
   }
-  async function navToAbout() { await uni.navigateTo({ url: "./about/index" }) }
-  async function navToTutorial() { await uni.navigateTo({ url: "./tutorial/index" }) }
+  async function navToAbout() { await uni.navigateTo({ url: "/pages/index/about/index" }) }
+  async function navToTutorial() { await uni.navigateTo({ url: "/pages/index/tutorial/index" }) }
 </script>
 
 <style scoped>

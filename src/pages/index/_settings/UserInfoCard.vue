@@ -15,7 +15,7 @@
 <script setup lang="ts">
   import {UserInfo} from "@/core/StdUser";
   defineProps<{ info: UserInfo | null }>();
-  async function navToLogin() { await uni.navigateTo({ url: "./login/index" }); }
+  async function navToLogin() { await uni.navigateTo({ url: "/pages/index/login/index" }); }
 </script>
 
 <style scoped>

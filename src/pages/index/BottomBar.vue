@@ -1,18 +1,19 @@
 <template>
   <view class="bar std-box-shadow">
-    <image @click="() => { $emit('click', 'home') }" class="item" :src="getSvgPath(`home${curr === 'home' ? '_selected' : ''}`)"/>
-    <image @click="() => { $emit('click', 'settings') }" class="item" :src="getSvgPath(`person${curr === 'settings' ? '_selected' : ''}`)"/>
+    <image @click="() => { $emit('click', IndexMode.Home) }" class="item" :src="getSvgPath(`home${curr === IndexMode.Home ? '_selected' : ''}`)"/>
+    <image @click="() => { $emit('click', IndexMode.Settings) }" class="item" :src="getSvgPath(`person${curr === IndexMode.Settings ? '_selected' : ''}`)"/>
   </view>
 </template>
 
 <script setup lang="ts">
-  import {getSvgPath} from "@/utils/resource";
+import {getSvgPath} from "@/utils/resource";
+import {IndexMode} from "@/pages/index/util";
 
-  const props = defineProps<{
-    curr: "home" | "settings"
+const props = defineProps<{
+    curr: IndexMode
   }>();
   defineEmits<{
-    (e: 'click', newCurr: "home" | "settings"): void
+    (e: 'click', newCurr: IndexMode): void
   }>();
 </script>
 

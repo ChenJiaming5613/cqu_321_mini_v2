@@ -23,7 +23,7 @@ export function stringToDateInChinaTime(dateString: string): Date {
 export function calcDaysBetweenDates(date1: Date, date2: Date): number {
     const oneDay = 1000 * 60 * 60 * 24;
     const differenceInTime = date2.getTime() - date1.getTime();
-    return Math.round(differenceInTime / oneDay);
+    return Math.trunc(differenceInTime / oneDay);
 }
 
 export function calcWeeksBetweenDates(date1: Date, date2: Date): number {

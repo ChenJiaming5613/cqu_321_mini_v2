@@ -31,19 +31,19 @@
 			}
 		},
 		{
-			"path": "pages/settings/login/index",
+			"path": "pages/index/login/index",
 			"style": {
 				"navigationBarTitleText": "登录"
 			}
 		},
 		{
-			"path": "pages/settings/about/index",
+			"path": "pages/index/about/index",
 			"style": {
 				"navigationBarTitleText": "关于我们"
 			}
 		},
 		{
-			"path": "pages/settings/tutorial/index",
+			"path": "pages/index/tutorial/index",
 			"style": {
 				"navigationBarTitleText": "教程"
 			}
