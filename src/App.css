@@ -10,8 +10,24 @@
     color: #767676;
 }
 
+.std-color-gray {
+    color: #aaaaaa;
+}
+
+.std-color-main {
+    color: #1a1a1a;
+}
+
+.std-color-gradient {
+    color: linear-gradient(45deg, #FE3B39 30%, #FD8B8A 82%);
+}
+
+.std-bg-gradient {
+    background: linear-gradient(45deg, #FE3B39 30%, #FD8B8A 82%);
+}
+
 .std-box-shadow {
-    box-shadow: 0 6rpx 16rpx 0 rgba(0, 0, 0, 0.07);
+    box-shadow: 0 6rpx 18rpx 0 rgba(0, 0, 0, 0.12);
 }
 
 .std-border-radius {
@@ -21,6 +37,18 @@
 .std-page-margin {
     margin-left: 30rpx;
     margin-right: 30rpx;
+}
+
+.std-bottom-margin-narrow {
+    margin-bottom: 16rpx;
+}
+
+.std-bottom-margin-normal {
+    margin-bottom: 26rpx;
+}
+
+.std-bottom-margin-wide {
+    margin-bottom: 36rpx;
 }
 
 /* 解决markdown组件显示文本时文字不换行溢出问题 */

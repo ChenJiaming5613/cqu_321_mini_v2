@@ -1,5 +1,5 @@
 <template>
-  <scroll-view scroll-x class="bg-white nav solid-bottom fixed" scroll-with-animation>
+  <scroll-view scroll-x class="bg-white nav solid-bottom std-box-shadow" scroll-with-animation>
     <view class="flex text-center">
       <view
         v-for="(currType, index) in searchTypes"
@@ -21,3 +21,6 @@
   const searchTypes = [SearchType.CourseName, SearchType.TeacherName];
   const typeNames = ['搜课程', '搜老师'];
 </script>
+
+<style scoped>
+</style>

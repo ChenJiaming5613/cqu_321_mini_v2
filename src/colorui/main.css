@@ -1660,7 +1660,7 @@ button.cuIcon.lg {
 .nav.fixed {
 	position: fixed;
 	width: 100%;
-	top: 0;
+	top: 185rpx;
 	z-index: 1024;
 	box-shadow: 0 1upx 6upx rgba(0, 0, 0, 0.1);
 }

@@ -1,5 +1,5 @@
 <template>
-  <view class="activity-card std-page-margin std-border-radius">
+  <view class="activity-card std-page-margin std-border-radius std-box-shadow std-bottom-margin-wide">
     <swiper
       class="square-dot"
       indicator-dots
@@ -35,8 +35,6 @@
   .activity-card {
     height: 350rpx;
     width: 700rpx;
-    margin-bottom: 25rpx;
-    box-shadow: 0 8rpx 20rpx 0 rgba(0, 0, 0, 0.3);
   }
 
   .img {

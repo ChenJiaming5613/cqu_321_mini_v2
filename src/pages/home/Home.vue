@@ -1,10 +1,12 @@
 <template>
   <view>
-    <image class="cqu-buildings" :src="getSvgPath('cqu_buildings')"/>
+    <NavigationBar_home />
     <ActivityCard />
+    <CardTitle class="std-bottom-margin-narrow" content="课程提醒 Course Reminders"/>
     <CourseCard curriculum-page-url="../curriculum/index"/>
-    <view class="bg-white margin std-border-radius std-box-shadow padding-top padding-bottom">
-      <view class="icons-1st padding-bottom">
+    <CardTitle content="百宝箱 Treasure Chests"/>
+    <view class="bg-white std-border-radius std-box-shadow std-page-margin std-bottom-margin-normal">
+      <view class="icons-1st padding-top padding-bottom">
         <Icon1st title="课表" icon-name="kebiao" @click="navToCurriculumPage"/>
         <Icon1st title="成绩" icon-name="chengji" @click="navToGradePage"/>
         <Icon1st title="查课" icon-name="chake" @click="navToCourseInfoPage"/>
@@ -19,8 +21,8 @@
         <Icon2nd title="空教室" icon-name="kongjiaoshi" @click="navToEmptyRoomPage"/>
       </view>
     </view>
+    <ad-custom unit-id="adunit-67019180b6466026"></ad-custom>
   </view>
-  <ad-custom unit-id="adunit-67019180b6466026"></ad-custom>
 </template>
 
 <script setup lang="ts">
@@ -28,7 +30,9 @@
   import Icon2nd from "@/pages/home/Icon2nd.vue";
   import CourseCard from "@/pages/curriculum/CourseCard.vue";
   import ActivityCard from "@/pages/home/ActivityCard.vue";
+  import CardTitle from "@/pages/home/CardTitle.vue";
   import {getSvgPath} from "@/utils/resource";
+  import NavigationBar_home from "@/pages/components/NavigationBar_home.vue";
 
   function navToGradePage() {
     uni.navigateTo({url: "../grade/index"});
@@ -58,8 +62,8 @@
 
 <style scoped>
   .cqu-buildings {
-    height: 100rpx;
-    width: 540rpx;
+    height: 80rpx;
+    width: 432rpx;
     display: block;
     margin: 0 auto;
   }

@@ -1,4 +1,5 @@
 <template>
+  <NavigationBar/>
   <view class="std-bg-primary padding-bottom-xl padding">
     <TitleCard :name="courseDetail.name" :code="courseDetail.code"/>
     <DetailItem
@@ -9,6 +10,7 @@
 </template>
 
 <script setup lang="ts">
+  import NavigationBar from "@/pages/components/NavigationBar.vue";
   import {onLoad} from "@dcloudio/uni-app";
   import {ref} from "vue";
   import CourseInfoModel, {CourseDetail} from "@/models/CourseInfoModel";

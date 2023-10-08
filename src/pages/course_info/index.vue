@@ -1,6 +1,7 @@
 <template>
+  <NavigationBar pageTitle="查课"/>
   <TabBar :search-type="searchType" @click="(newSearchType: SearchType) => { searchType = newSearchType; }"/>
-  <view class="std-bg-primary" style="padding: 100rpx 0;">
+  <view class="std-bg-primary" >
     <view class="margin std-box-shadow std-border-radius bg-white padding">
       <view class="cu-bar search">
         <view class="search-form round">
@@ -13,7 +14,7 @@
         </view>
       </view>
       <view class="padding-top padding-bottom" style="display: flex; justify-content: center;">
-        <button class="cu-btn btn lg" @click="onTapQuery" style="width: 50%;">查询</button>
+        <button class="cu-btn btn lg std-c std-bg-gradient" @click="onTapQuery" style="width: 50%;">查询</button>
       </view>
     </view>
     <view v-if="searchType === SearchType.CourseName">
@@ -43,6 +44,7 @@
 </template>
 
 <script setup lang="ts">
+  import NavigationBar from "@/pages/components/NavigationBar.vue";
   import TabBar from "@/pages/course_info/TabBar.vue";
   import CourseInfoModel, {CourseAbstract, SearchType} from "@/models/CourseInfoModel";
   import {ref} from "vue";
@@ -80,7 +82,6 @@
 
 <style scoped>
   .btn {
-    background-color: #fd6260;
     color: white;
     font-weight: bold;
   }

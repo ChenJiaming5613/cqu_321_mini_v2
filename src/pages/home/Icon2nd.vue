@@ -1,5 +1,5 @@
 <template>
-  <view class="flex flex-direction align-center text-center root" @click="$emit('click')">
+  <view class="flex flex-direction align-center text-center root std-bottom-margin-normal" @click="$emit('click')">
 <!--    <view class="icon-bg" :class="disabled ? 'disable' : 'able'">-->
 <!--      <text class="text-white icon" :class="iconName"></text>-->
 <!--    </view>-->

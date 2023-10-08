@@ -1,13 +1,11 @@
 <template>
-  <view class="std-border-radius margin-left margin-right padding std-box-shadow bg-white flex flex-direction text-center">
+  <view class="std-border-radius margin-left margin-right padding-left padding-top padding-bottom-sm padding-right std-box-shadow bg-white flex flex-direction text-center std-bottom-margin-normal">
     <view v-if="!hasData" class="bg-white" @click="onTapUpdate">
-      <view class="padding-xl text-bold text-orange">👉 点击更新课程数据 👋</view>
+      <view class="text-bold text-orange padding-bottom-sm">👉 点击更新课程数据 👋</view>
     </view>
     <view v-else-if="courses.length === 0" class="bg-white" @click="navToCurriculumPage">
-      <view>
-        <view class="text-grey text-lg row0">第{{ weekOfTerm }}周 / 周{{ dayOfWeekText }}</view>
-        <view class="padding text-bold text-black text-xl">🎉 今日无课 ✨</view>
-      </view>
+      <view class="text-grey text-lg row0">第{{ weekOfTerm }}周 / 周{{ dayOfWeekText }}</view>
+      <view class="text-bold text-black text-xl  padding-bottom-sm">🎉 今日无课 ✨</view>
     </view>
     <swiper
         v-else
@@ -22,17 +20,17 @@
     >
       <swiper-item class="bg-white" v-for="(course, index) in courses" :key="index">
         <view>
-          <view class="text-grey text-lg row0">第{{ weekOfTerm }}周 / 周{{ dayOfWeekText }}</view>
+          <view class="text-grey text-df row0">第{{ weekOfTerm }}周 / 周{{ dayOfWeekText }}</view>
           <view class="flex justify-between row1">
             <view class="flex">
               <view class="name-left"></view>
-              <view class="course-name">{{ formatTextOverflow(course.name, 10) }}</view>
+              <view class="course-name std-color-main">{{ formatTextOverflow(course.name, 8) }}</view>
             </view>
-            <view class="classroom">{{ formatTextOverflow('classroom' in course ? course['classroom'] : course['content'], 5) }}</view>
+            <view class="classroom" :style="{ fontSize: ('classroom' in course ? course['classroom'] : course['content']).length > 7 ? '30rpx' : '34rpx' }">{{ formatTextOverflow('classroom' in course ? course['classroom'] : course['content'], 13) }}</view>
           </view>
           <view class="flex justify-between">
-            <view class="text-lg text-grey">第{{ course.dayTime.period.start }}-{{ course.dayTime.period.end }}节</view>
-            <view class="text-lg text-grey">{{ getTimeText(course.dayTime) }}</view>
+            <view class="text-df text-grey">第{{ course.dayTime.period.start }}-{{ course.dayTime.period.end }}节</view>
+            <view class="text-df text-grey">{{ getTimeText(course.dayTime) }}</view>
           </view>
         </view>
       </swiper-item>
@@ -97,6 +95,7 @@
     });
   }
   async function navToCurriculumPage() { await uni.navigateTo({ url: props.curriculumPageUrl }) }
+
 </script>
 
 <style scoped>
@@ -107,18 +106,20 @@
     background-clip: text;
     text-fill-color: transparent;
     font-weight: bold;
-    font-size: 40rpx;
+    vertical-align: middle;
   }
   .name-left {
     width: 8rpx;
-    height: 80%;
     background-color: #FF8F1F;
     margin-right: 8rpx;
+    vertical-align: middle;
   }
   .course-name {
-    font-size: 40rpx;
+    font-size: 34rpx;
     font-weight: bold;
-    color: black;
+  }
+  .week-name {
+    font-size: 34rpx;
   }
   .row0 {
     padding-bottom: 5rpx;
@@ -126,6 +127,7 @@
     border-bottom: 1rpx solid #F5F5F5;
   }
   .row1 {
+    align-items: center;
     padding-bottom: 10rpx;
   }
 </style>
