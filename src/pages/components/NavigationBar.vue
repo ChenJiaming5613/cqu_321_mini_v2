@@ -22,8 +22,8 @@ defineProps<{
 .cqu-buildings {
   height: 80rpx;
   width: 432rpx;
-  margin: 0 auto;
-  margin-top: auto; /* 将图片推到底部 */
+  /* 将图片推到底部 */
+  margin: auto auto 0;
   z-index: 1; /* 确保图片在导航背景下方，但在标题下方 */
 }
 

@@ -12,8 +12,7 @@ import {getSvgPath} from "@/utils/resource";
 .cqu-buildings {
   height: 80rpx;
   width: 432rpx;
-  margin: 0 auto;
-  margin-top: auto;
+  margin: auto auto 0;
   z-index: 1;
 }
 
