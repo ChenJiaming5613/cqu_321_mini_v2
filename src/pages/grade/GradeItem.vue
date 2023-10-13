@@ -73,12 +73,13 @@
     height: 14rpx;
     background-color: red;
     border-radius: 50%;
+    margin-right: 20rpx;
   }
 
   .course {
     display: flex;
     flex-direction: column;
-    width: 55%;
+    flex: auto;
   }
 
   .course > .name {
