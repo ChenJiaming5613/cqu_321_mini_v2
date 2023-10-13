@@ -1,6 +1,6 @@
 <template>
   <view class="bg-white shadow padding margin round-dot">
-    <view class="text-black text-left text-lg">当前学期</view>
+<!--    <view class="text-black text-left text-lg">当前学期</view>-->
     <view class="flex text-center padding-top">
       <view class="flex-sub">
         <view class="text-xxl std-color-primary">{{termAvgGpa.four}}</view>

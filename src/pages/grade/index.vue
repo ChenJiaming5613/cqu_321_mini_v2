@@ -1,4 +1,5 @@
 <template>
+  <NavigationBar page-title="成绩查询"/>
   <Header :term-names="termNames" :tab-cur="tabCur" @on-tab-select="(newTabCur) => {tabCur = newTabCur}"/>
   <view class="std-bg-primary padding" style="margin-top: 90rpx;">
     <view v-if="tabCur !== 0">
@@ -35,6 +36,7 @@ import Overview from "@/pages/grade/Overview.vue";
 import TermOverview from "@/pages/grade/TermOverview.vue";
 import GradeItem from "@/pages/grade/GradeItem.vue";
   import Empty from "@/pages/components/Empty.vue";
+  import NavigationBar from "@/pages/components/NavigationBar.vue";
 
   const gradeModel = GradeModel.getInstance();
 

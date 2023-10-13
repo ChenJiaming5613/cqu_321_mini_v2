@@ -1,10 +1,10 @@
 <template>
-  <image class="button-back" :src="getSvgPath('back')" @click="handleBack"/>
-  <view class="bg-white bar-background">
-    <view class="bar-title text-xl
-
-">{{pageTitle}}</view>
-    <image class="cqu-buildings" :src="getSvgPath('cqu_buildings')"/>
+  <view class="bar">
+    <image class="button-back" :src="getSvgPath('back')" @click="handleBack"/>
+    <view class="bg-white bar-background">
+      <view class="bar-title text-xl">{{pageTitle}}</view>
+      <image class="cqu-buildings" :src="getSvgPath('cqu_buildings')"/>
+    </view>
   </view>
 </template>
 
@@ -19,6 +19,12 @@ defineProps<{
 </script>
 
 <style scoped>
+.bar {
+  top: 0;
+  width: 100%;
+  background-color: white;
+  z-index: 1024;
+}
 .cqu-buildings {
   height: 80rpx;
   width: 432rpx;

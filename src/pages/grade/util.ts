@@ -38,20 +38,20 @@ export function scoreToPoint(score: number, gpaType: GpaType) {
 }
 
 export function scoreToColor(score: number) {
-    if (score < 0) return 'text-gray';
+    if (score < 0) return 'gray';
     const colors = [
-        'red',      // [0, 60)
-        'orange',   // [60, 70)
-        'olive',    // [70, 80)
-        'cyan',     // [80, 90)
-        'blue'      // [90, 100]
+        '#e54d42',      // [0, 60)
+        '#f37b1d',   // [60, 70)
+        '#8dc63f',    // [70, 80)
+        '#1cbbb4',     // [80, 90)
+        '#0081ff'      // [90, 100]
     ];
     let i = 0;
     if (score >= 60) i ++;
     if (score >= 70) i ++;
     if (score >= 80) i ++;
     if (score >= 90) i ++;
-    return 'text-' + colors[i];
+    return colors[i];
 }
 
 export function filterCourseWhenCalcGpa(scoreItem: ScoreItem) {
