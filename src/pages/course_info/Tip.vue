@@ -1,6 +1,6 @@
 <template>
   <view class="margin padding bg-white std-box-shadow std-border-radius radius text-lg std-bottom-margin-normal">
-    <view class="text-center text-black text-xl text-bold std-bottom-margin-normal">说明</view>
+    <view class="text-center text-xl text-bold std-bottom-margin-normal">说明</view>
     <view class="text-left text-df margin-top-xs">[1] 所有课程数据均来自我们目前已拥有的成绩信息。</view>
     <view class="text-left text-df margin-top-xs">[2] 课程信息除成绩分布外还有参考人数，参考人数指我们的成绩数据所来源的成绩条数，您可以依据参考人数来判定数据准确性。</view>
     <view class="text-left text-df margin-top-xs">[3] 在未来不排除找到可以查到准确信息的api接口的可能，因此未来可能会支持课程准确信息查询。</view>

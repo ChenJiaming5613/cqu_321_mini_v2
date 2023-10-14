@@ -22,7 +22,7 @@ const props = defineProps<{
     position: fixed;
     bottom: 0;
     width: 100%;
-    height: 80rpx;
+    height: 100rpx;
     display: flex;
     justify-content: space-around;
     align-items: center;
@@ -30,7 +30,7 @@ const props = defineProps<{
   }
 
   .item {
-    width: 36rpx;
-    height: 36rpx;
+    width: 40rpx;
+    height: 40rpx;
   }
 </style>

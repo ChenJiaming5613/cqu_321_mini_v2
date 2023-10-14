@@ -1,16 +1,16 @@
 <template>
-  <view class="card bg-white std-box-shadow text-center">
+  <view class="bg-white std-box-shadow text-center std-border-radius std-page-margin padding">
     <view class="padding">
-      <view class="text-black text-bold text-xl padding-bottom-sm">{{name}}</view>
+      <view class="text-bold text-xl padding-bottom-sm">{{name}}</view>
       <view class="text-gray text-lg">{{code}}</view>
     </view>
     <view class="flex justify-between">
       <view
           v-for="(item, index) in ScoreLevels"
           :key="index"
-          class="text-center text-shadow text-df" :class="`text-${item[0]}`"
+          class="text-center text-score" :class="`text-${item[0]}`"
       >
-        <text class="cuIcon-ellipse"></text>
+        <text class="cuIcon-ellipse padding-right-xxs"></text>
         <text class="text-gray">{{item[1]}}</text>
       </view>
     </view>
@@ -26,5 +26,9 @@
   .card {
     padding: 20rpx;
     border-radius: 10rpx;
+  }
+  .text-score {
+    font-size: 22rpx;
+    align-items: center;
   }
 </style>

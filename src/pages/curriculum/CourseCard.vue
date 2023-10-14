@@ -26,10 +26,13 @@
               <view class="name-left"></view>
               <view class="course-name std-color-main">{{ formatTextOverflow(course.name, 8) }}</view>
             </view>
-            <view class="classroom" :style="{ fontSize: ('classroom' in course ? course['classroom'] : course['content']).length > 7 ? '30rpx' : '34rpx' }">{{ formatTextOverflow('classroom' in course ? course['classroom'] : course['content'], 13) }}</view>
+            <view class="classroom std-bg-gradient" :style="{ fontSize: ('classroom' in course ? course['classroom'] : course['content']).length > 7 ? '30rpx' : '34rpx' }">{{ formatTextOverflow('classroom' in course ? course['classroom'] : course['content'], 13) }}</view>
           </view>
           <view class="flex justify-between">
-            <view class="text-df text-grey">第{{ course.dayTime.period.start }}-{{ course.dayTime.period.end }}节</view>
+            <view class="flex row2">
+              <view class="text-df text-grey margin-right-xs">第{{ course.dayTime.period.start }}-{{ course.dayTime.period.end }}节</view>
+              <image class="timetable" :src="getSvgPath('timetable')"/>
+            </view>
             <view class="text-df text-grey">{{ getTimeText(course.dayTime) }}</view>
           </view>
         </view>
@@ -46,6 +49,7 @@
   import {calcCurrPeriod, UniCourse} from "./util";
   import {getTimeText} from "@/utils/course";
   import CustomCourseModel from "@/models/CustomCourseModel";
+  import {getSvgPath} from "@/utils/resource";
 
   const props = defineProps<{ curriculumPageUrl: string }>();
 
@@ -99,7 +103,6 @@
 
 <style scoped>
   .classroom {
-    background: linear-gradient(76deg, #FE3B39 30%, #FD8B8A 81%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -108,9 +111,9 @@
     vertical-align: middle;
   }
   .name-left {
-    width: 8rpx;
+    width: 5rpx;
     background-color: #FF8F1F;
-    margin-right: 8rpx;
+    margin-right: 10rpx;
     vertical-align: middle;
   }
   .course-name {
@@ -128,5 +131,15 @@
   .row1 {
     align-items: center;
     padding-bottom: 10rpx;
+  }
+  .row1-0 {
+    align-items: center;
+  }
+  .row2 {
+    align-items: center;
+  }
+  .timetable {
+    width: 30rpx;
+    height: 30rpx;
   }
 </style>

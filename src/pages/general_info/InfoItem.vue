@@ -1,8 +1,10 @@
 <template>
   <view class="flex padding-top text-lg" @click="onTap">
-    <text class="cu-tag round margin-right-xs" :class="getInfoWayStyle(infoWay)">{{ infoWay }}</text>
-    <text class="text-grey txt-overflow">{{value}}</text>
-    <text class="cuIcon-copy text-bold text-red"></text>
+    <view class="row">
+      <text class="cu-tag round margin-right-xs text-white text-sm" :class="getInfoWayStyle(infoWay)">{{ infoWay }}</text>
+      <text class="text-grey txt-overflow text-sm">{{value}}</text>
+      <text class="cuIcon-copy text-bold text-red"></text>
+    </view>
   </view>
 </template>
 
@@ -23,5 +25,8 @@
     text-overflow:ellipsis;/*省略号 */
     white-space:nowrap;/*溢出时不换行 */
     overflow:hidden;/*溢出时隐藏 */
+  }
+  .row {
+    align-items: center;
   }
 </style>

@@ -1,4 +1,5 @@
 <template>
+  <NavigationBar pageTitle="成绩"/>
   <Header :term-names="termNames" :tab-cur="tabCur" @on-tab-select="(newTabCur) => {tabCur = newTabCur}"/>
   <view class="std-bg-primary padding" style="margin-top: 90rpx;">
     <view v-if="tabCur !== 0">
@@ -21,6 +22,7 @@
 </template>
 
 <script setup lang="ts">
+  import NavigationBar from "@/pages/components/NavigationBar.vue";
   import GradeModel, {GpaType, GradeInfo} from "@/models/GradeModel";
   import {onShow} from "@dcloudio/uni-app";
   import {computed, ref} from "vue";

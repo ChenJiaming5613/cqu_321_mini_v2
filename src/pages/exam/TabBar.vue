@@ -1,5 +1,5 @@
 <template>
-  <view class="fixed-top bg-white flex justify-around align-center std-box-shadow">
+  <view class="bg-white flex justify-around align-center std-box-shadow">
     <view @click="$emit('onTapTab', 0)" class="text-xl tab" :class="tabCur === 0 ? 'active' : ''">进行中</view>
     <view
       @click="$emit('onTapUpdate')"

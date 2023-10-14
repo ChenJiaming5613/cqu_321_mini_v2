@@ -1,4 +1,5 @@
 <template>
+  <NavigationBar pageTitle="排考"/>
   <TabBar
       :tab-cur="tabCur"
       @on-tap-tab="newTabCur => tabCur = newTabCur"
@@ -20,6 +21,7 @@
 </template>
 
 <script setup lang="ts">
+  import NavigationBar from "@/pages/components/NavigationBar.vue";
   import Empty from "@/pages/components/Empty.vue";
   import ExamModel, {ExamInfo} from "@/models/ExamModel";
   import {onShow} from "@dcloudio/uni-app";

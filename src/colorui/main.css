@@ -938,11 +938,12 @@ button.cuIcon.lg {
 
 .cu-progress {
 	overflow: hidden;
-	height: 28upx;
+	height: 20upx;
 	background-color: #ebeef5;
 	display: inline-flex;
 	align-items: center;
 	width: 100%;
+	border-radius: 6rpx;
 }
 
 .cu-progress+view,
@@ -965,7 +966,6 @@ button.cuIcon.lg {
 	display: flex;
 	justify-items: flex-end;
 	justify-content: space-around;
-	font-size: 20upx;
 	color: #ffffff;
 	transition: width 0.6s ease;
 }
@@ -1328,8 +1328,8 @@ button.cuIcon.lg {
 	margin: auto;
 	width: 30upx;
 	height: 30upx;
-	color: #8799a3;
-	content: "\e6a3";
+	color: #FE3B39;
+	content: "\e684";
 	text-align: center;
 	font-size: 34upx;
 	font-family: cuIcon;
@@ -3194,6 +3194,10 @@ scroll-view.cu-steps .cu-item {
 	padding-top: 50upx;
 }
 
+.padding-right-xxs {
+	padding-right: 5upx;
+}
+
 .padding-right-xs {
 	padding-right: 10upx;
 }
@@ -3404,22 +3408,22 @@ scroll-view.cu-steps .cu-item {
 }
 
 .bg-red {
-	background-color: #e54d42;
+	background-color: #FE3B39;
 	color: #ffffff;
 }
 
 .bg-orange {
-	background-color: #f37b1d;
+	background-color: #FF8F1F;
 	color: #ffffff;
 }
 
 .bg-yellow {
 	background-color: #fbbd08;
-	color: #333333;
+	color: #ffffff;
 }
 
 .bg-olive {
-	background-color: #8dc63f;
+	background-color: #76CB68;
 	color: #ffffff;
 }
 
@@ -3429,12 +3433,12 @@ scroll-view.cu-steps .cu-item {
 }
 
 .bg-cyan {
-	background-color: #1cbbb4;
+	background-color: #07B9B9;
 	color: #ffffff;
 }
 
 .bg-blue {
-	background-color: #0081ff;
+	background-color: #0081FF;
 	color: #ffffff;
 }
 
@@ -3744,6 +3748,9 @@ scroll-view.cu-steps .cu-item {
 /* ==================
           文本
  ==================== */
+.text-xxs {
+	font-size: 18upx;
+}
 
 .text-xs {
 	font-size: 20upx;
@@ -3821,46 +3828,53 @@ scroll-view.cu-steps .cu-item {
 	text-align: right;
 }
 
+.bg-red,
 .text-red,
 .line-red,
 .lines-red {
-	color: #e54d42;
+	color: #FE3B39;
 }
 
+.bg-orange,
 .text-orange,
 .line-orange,
 .lines-orange {
-	color: #f37b1d;
+	color: #FF8F1F;
 }
 
+.bg-yellow,
 .text-yellow,
 .line-yellow,
 .lines-yellow {
 	color: #fbbd08;
 }
 
+.bg-olive,
 .text-olive,
 .line-olive,
 .lines-olive {
-	color: #8dc63f;
+	color: #76CB68;
 }
 
+.bg-green,
 .text-green,
 .line-green,
 .lines-green {
 	color: #39b54a;
 }
 
+.bg-cyan,
 .text-cyan,
 .line-cyan,
 .lines-cyan {
-	color: #1cbbb4;
+	color: #07B9B9;
 }
 
+.bg-blue,
 .text-blue,
 .line-blue,
 .lines-blue {
-	color: #0081ff;
+	color: #0081FF;
 }
 
 .text-purple,
@@ -3902,11 +3916,17 @@ scroll-view.cu-steps .cu-item {
 .text-black,
 .line-black,
 .lines-black {
-	color: #333333;
+	color: #696969;
 }
 
 .text-white,
 .line-white,
 .lines-white {
 	color: #ffffff;
+}
+
+.text-gray2,
+.line-gray2,
+.lines-gray2 {
+	color: #d8d8d8;
 }

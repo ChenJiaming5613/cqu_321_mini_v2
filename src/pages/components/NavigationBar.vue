@@ -1,9 +1,7 @@
 <template>
   <image class="button-back" :src="getSvgPath('back')" @click="handleBack"/>
-  <view class="bg-white bar-background">
-    <view class="bar-title text-xl
-
-">{{pageTitle}}</view>
+  <view class="bg-white bar-background " :class="isFixed ? 'fixed-position' : ''">
+    <view class="bar-title text-xl text-black">{{pageTitle}}</view>
     <image class="cqu-buildings" :src="getSvgPath('cqu_buildings')"/>
   </view>
 </template>
@@ -14,7 +12,11 @@ const handleBack = () => {
   uni.navigateBack();
 }
 defineProps<{
-  pageTitle: string
+  pageTitle: string,
+  isFixed: {
+    type: Boolean,
+    default: true,
+  },
 }>();
 </script>
 
@@ -22,9 +24,9 @@ defineProps<{
 .cqu-buildings {
   height: 80rpx;
   width: 432rpx;
+  top: 100rpx;
   margin: 0 auto;
-  margin-top: auto; /* 将图片推到底部 */
-  z-index: 1; /* 确保图片在导航背景下方，但在标题下方 */
+  z-index: 1;
 }
 
 .button-back {
@@ -46,10 +48,17 @@ defineProps<{
 
 .bar-title {
   position: absolute;
-  top: 110rpx;
+  top: 114rpx;
   left: 50%;
   transform: translate(-50%, -50%); /* 使标题居中 */
   z-index: 2; /* 使标题浮在图片上面 */
+}
+
+.fixed-position {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
 }
 
 </style>

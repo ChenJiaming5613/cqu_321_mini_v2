@@ -1,4 +1,5 @@
 <template>
+  <NavigationBar pageTitle="常用信息"/>
   <view class="std-bg-primary padding-top-sm padding-bottom-xl">
     <InfoCard title="重庆大学学生服务大厅">
       <InfoItem value="https://my.cqu.edu.cn/workspace/home" info-way="网站" />
@@ -22,6 +23,7 @@
 </template>
 
 <script setup lang="ts">
+  import NavigationBar from "@/pages/components/NavigationBar.vue";
   import InfoItem from "@/pages/general_info/InfoItem.vue";
   import InfoCard from "@/pages/general_info/InfoCard.vue";
 </script>

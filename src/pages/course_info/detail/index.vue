@@ -1,5 +1,5 @@
 <template>
-  <NavigationBar/>
+  <NavigationBar pageTitle="查课详情"/>
   <view class="std-bg-primary padding-bottom-xl padding">
     <TitleCard :name="courseDetail.name" :code="courseDetail.code"/>
     <DetailItem

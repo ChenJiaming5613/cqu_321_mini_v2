@@ -1,4 +1,5 @@
 <template>
+  <NavigationBar pageTitle="生活"/>
   <view>
     <LifeCard life-card-type="一卡通" :info="info" :balance-list="yktList"/>
     <LifeCard life-card-type="水电费" info="兰园一栋 614" :balance-list="sdfList"/>
@@ -6,6 +7,7 @@
 </template>
 
 <script setup lang="ts">
+  import NavigationBar from "@/pages/components/NavigationBar.vue";
   import LifeCard from "@/pages/life/LifeCard.vue";
   import {ref} from "vue";
   import stdUser from "@/core/StdUser";

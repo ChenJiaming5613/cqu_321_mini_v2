@@ -32,7 +32,7 @@
 <style scoped>
   .header {
     position: fixed;
-    top: 0;
+    top: 180rpx;
     width: 100%;
     height: 100rpx;
     z-index: 100;

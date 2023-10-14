@@ -30,6 +30,11 @@
     box-shadow: 0 6rpx 18rpx 0 rgba(0, 0, 0, 0.12);
 }
 
+.std-text-shadow {
+    text-shadow: 2rpx 2rpx 5rpx rgba(0, 0, 0, 0.20);
+}
+
+
 .std-border-radius {
     border-radius: 25rpx;
 }
@@ -50,6 +55,8 @@
 .std-bottom-margin-wide {
     margin-bottom: 36rpx;
 }
+
+
 
 /* 解决markdown组件显示文本时文字不换行溢出问题 */
 view {

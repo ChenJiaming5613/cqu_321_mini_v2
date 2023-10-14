@@ -1,11 +1,13 @@
 <template>
+  <NavigationBar pageTitle="课表" :isFixed="true"/>
   <Header :curr-date="currDate" :day-of-week="dayOfWeek"/>
   <CourseTable
       :table-items="tableItems"
       :curr-date="currDate"
       :curr-week-of-term="weekOfTerm"
       :fixed-week-of-term="fixedWeekOfTerm"
-      @on-tap-detail="onTapDetail"/>
+      @on-tap-detail="onTapDetail
+  "/>
   <Footer
     :week-of-term="weekOfTerm"
     @update-course-info="updateCourseInfo"
@@ -22,6 +24,7 @@
 </template>
 
 <script setup lang="ts">
+  import NavigationBar from "@/pages/components/NavigationBar.vue";
   import CourseModel, {TermOffset} from "@/models/CourseModel";
   import {onShow} from "@dcloudio/uni-app";
   import {computed, ref} from "vue";
