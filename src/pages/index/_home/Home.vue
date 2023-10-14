@@ -1,7 +1,7 @@
 <template>
   <view>
-    <NavigationBar_home />
-    <ActivityCard  :activity-items="activityItems"/>
+    <NavigationBarHome />
+    <ActivityCard />
     <CardTitle class="std-bottom-margin-narrow" content="课程提醒 Course Reminders"/>
     <CourseCard curriculum-page-url="/pages/curriculum/index"/>
     <CardTitle content="百宝箱 Treasure Chests"/>
@@ -31,10 +31,7 @@
   import CourseCard from "@/pages/curriculum/CourseCard.vue";
   import ActivityCard from "@/pages/index/_home/ActivityCard.vue";
   import CardTitle from "@/pages/index/_home/CardTitle.vue";
-  import NavigationBar_home from "@/pages/components/NavigationBar_home.vue";
-  import {ActivityItem} from "@/models/ActivityModel";
-
-  defineProps<{ activityItems: ActivityItem[] }>();
+  import NavigationBarHome from "@/pages/components/NavigationBarHome.vue";
 
   function navToPage(pageName: string) {
     return uni.navigateTo({url: `/pages/${pageName}/index`});

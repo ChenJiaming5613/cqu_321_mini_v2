@@ -18,9 +18,13 @@
 </template>
 
 <script setup lang="ts">
-  import {ActivityItem} from "@/models/ActivityModel";
+  import ActivityModel, {ActivityInfo, ActivityItem} from "@/models/ActivityModel";
+  import {computed, onMounted, ref} from "vue";
 
-  defineProps<{ activityItems: ActivityItem[] }>();
+  const activityModel = ActivityModel.getInstance();
+  const activityInfo = ref<ActivityInfo | null>(null);
+  const activityItems = computed<ActivityItem[]>(() => activityInfo.value?.pictures || []);
+  onMounted(async () => { activityInfo.value = await activityModel.get() });
 
   async function navToDetail(activityItem: ActivityItem) {
     await uni.navigateTo({ url: '/pages/index/content/index?url=' + activityItem.contentUrl });
