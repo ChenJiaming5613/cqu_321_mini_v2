@@ -13,7 +13,8 @@
 </template>
 
 <script setup lang="ts">
-  import LibraryModel, {BookInfo} from "@/models/LibraryModel";
+  import LibraryModel from "@/models/LibraryModel";
+  import type {BookInfo} from "@/models/LibraryModel";
   import {ref} from "vue";
   import BookInfoCard from "@/pages/library/BookInfoCard.vue";
   import TabBar from "@/pages/library/TabBar.vue";

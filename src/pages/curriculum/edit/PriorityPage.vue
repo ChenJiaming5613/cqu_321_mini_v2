@@ -11,7 +11,8 @@
 </template>
 <script setup lang="ts">
   import Hint from "@/pages/curriculum/edit/Hint.vue";
-  import {CourseTag, PriorityCardData} from "@/pages/curriculum/edit/util";
+  import {CourseTag} from "@/pages/curriculum/edit/util";
+  import type {PriorityCardData} from "@/pages/curriculum/edit/util";
   import {onMounted, ref} from "vue";
   import CourseModel, {TermOffset} from "@/models/CourseModel";
   import PriorityCard from "@/pages/curriculum/edit/PriorityCard.vue";

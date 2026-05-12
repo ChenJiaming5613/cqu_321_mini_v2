@@ -13,7 +13,8 @@
   import NavigationBar from "@/pages/components/NavigationBar.vue";
   import {onLoad} from "@dcloudio/uni-app";
   import {ref} from "vue";
-  import CourseInfoModel, {CourseDetail} from "@/models/CourseInfoModel";
+  import CourseInfoModel from "@/models/CourseInfoModel";
+  import type {CourseDetail} from "@/models/CourseInfoModel";
   import TitleCard from "@/pages/course_info/detail/TitleCard.vue";
   import DetailItem from "@/pages/course_info/detail/DetailItem.vue";
   const courseDetail = ref<CourseDetail>({} as CourseDetail);

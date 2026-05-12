@@ -46,7 +46,8 @@
   import {computed, onMounted, ref} from "vue";
   import {calcDayOfWeek, calcWeeksBetweenDates, stringToDateInChinaTime} from "@/utils/datetime";
   import {formatTextOverflow} from "@/utils/util";
-  import {calcCurrPeriod, UniCourse} from "./util";
+  import {calcCurrPeriod} from "./util";
+  import type {UniCourse} from "./util";
   import {getTimeText} from "@/utils/course";
   import CustomCourseModel from "@/models/CustomCourseModel";
   import {getSvgPath} from "@/utils/resource";

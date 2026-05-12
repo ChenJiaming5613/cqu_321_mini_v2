@@ -1,29 +1,39 @@
 <template>
-  <NavigationBar pageTitle="排考"/>
-  <TabBar
+  <NavigationBar pageTitle="考试安排" show-refresh @refresh="onTapUpdate"/>
+  <view class="tabs-shell">
+    <TabBar
       :tab-cur="tabCur"
       @on-tap-tab="newTabCur => tabCur = newTabCur"
-      @on-tap-update="onTapUpdate"
-      @on-tap-add="onTapAdd"
-  />
-  <view class="std-bg-primary padding-top padding-bottom-xl" style="margin-top: 80rpx;">
-    <Empty v-if="currExamInfoList.length === 0" message="暂无考试安排" icon-type="success" hint="请尝试刷新"/>
-    <ExamItem
-        v-for="examInfo in currExamInfoList"
-        :key="examInfo.name"
-        :exam-info="examInfo"
-        :days="calcDays(examInfo)"
-        :is-over="tabCur !== 0"
-        :is-self="examModel.isSelfExam(examInfo.name)"
-        @click="onTapExamItem"
     />
+  </view>
+  <view class="page">
+    <Empty
+        v-if="currExamInfoList.length === 0"
+        message="暂无考试安排"
+        icon-type="warning"
+        hint="请先完善账号信息"
+        button-text="刷新考试安排"
+        @action="onTapUpdate"
+    />
+    <view v-else>
+      <ExamItem
+          v-for="examInfo in currExamInfoList"
+          :key="examInfo.name"
+          :exam-info="examInfo"
+          :days="calcDays(examInfo)"
+          :is-over="tabCur !== 0"
+          :is-self="examModel.isSelfExam(examInfo.name)"
+          @click="onTapExamItem"
+      />
+    </view>
+    <view class="custom-entry" @click="onTapAdd">添加自定义考试</view>
   </view>
 </template>
 
 <script setup lang="ts">
   import NavigationBar from "@/pages/components/NavigationBar.vue";
   import Empty from "@/pages/components/Empty.vue";
-  import ExamModel, {ExamInfo} from "@/models/ExamModel";
+  import ExamModel, {type ExamInfo} from "@/models/ExamModel";
   import {onShow} from "@dcloudio/uni-app";
   import {computed, ref} from "vue";
   import ExamItem from "@/pages/exam/ExamItem.vue";
@@ -83,3 +93,26 @@
     });
   }
 </script>
+
+<style scoped>
+.page {
+  min-height: calc(100vh - 260rpx);
+  padding: 26rpx 0 80rpx;
+  background: #f7f7f7;
+}
+
+.tabs-shell {
+  padding-top: 180rpx;
+  background: #fff;
+}
+
+.custom-entry {
+  margin: 24rpx auto 0;
+  width: 220rpx;
+  height: 54rpx;
+  line-height: 54rpx;
+  color: #999;
+  font-size: 24rpx;
+  text-align: center;
+}
+</style>

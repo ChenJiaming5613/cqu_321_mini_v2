@@ -1,35 +1,38 @@
 <template>
-  <NavigationBar pageTitle="查课"/>
-  <TabBar :search-type="searchType" @click="(newSearchType: SearchType) => { searchType = newSearchType; }"/>
-  <view class="std-bg-primary" >
-    <view class="margin std-box-shadow std-border-radius bg-white padding">
-      <view class="cu-bar search">
-        <view class="search-form round">
-          <text class="cuIcon-search"></text>
-          <input
-              type="text"
-              :placeholder="'请输入' + (searchType === SearchType.CourseName ? '课程' : '教师') + '名称'"
-              v-model="queryInfo"
-          />
-        </view>
+  <NavigationBar pageTitle="查课" show-refresh @refresh="onTapQuery"/>
+  <view class="tabs-shell">
+    <TabBar :search-type="searchType" @click="(newSearchType: SearchType) => { searchType = newSearchType; }"/>
+  </view>
+  <view class="page">
+    <view class="search-panel">
+      <view class="search-form">
+        <input
+            type="text"
+            :placeholder="'请输入' + (searchType === SearchType.CourseName ? '课程' : '老师') + '的名称'"
+            v-model="queryInfo"
+            confirm-type="search"
+            @confirm="onTapQuery"
+        />
+        <text class="cuIcon-search search-icon"></text>
       </view>
-      <view class="padding-top padding-bottom" style="display: flex; justify-content: center;">
-        <button class="cu-btn btn lg std-c std-bg-gradient" @click="onTapQuery" style="width: 50%;">查询</button>
+      <view class="query-row">
+        <button class="cu-btn query-btn" @click="onTapQuery">查询</button>
       </view>
     </view>
     <view v-if="searchType === SearchType.CourseName">
       <view v-if="dataByCourseName.length > 0">
+        <ScoreLegend />
         <CourseItem
             v-for="(courseAbstract, index) in dataByCourseName"
             :key="index"
             :course-abstract="courseAbstract"
-            @click="onTapDetail"
         />
       </view>
       <Tip v-else/>
     </view>
     <view v-else>
       <view v-if="dataByTeacherName.length > 0">
+        <ScoreLegend />
         <TeacherCourse
             v-for="([teacherName, courseAbstractList], index) in dataByTeacherName"
             :teacher-name="teacherName"
@@ -46,12 +49,13 @@
 <script setup lang="ts">
   import NavigationBar from "@/pages/components/NavigationBar.vue";
   import TabBar from "@/pages/course_info/TabBar.vue";
-  import CourseInfoModel, {CourseAbstract, SearchType} from "@/models/CourseInfoModel";
+  import CourseInfoModel, {type CourseAbstract, SearchType} from "@/models/CourseInfoModel";
   import {ref} from "vue";
   import CourseItem from "@/pages/course_info/CourseItem.vue";
   import {arrayGroupBy} from "@/utils/util";
   import TeacherCourse from "@/pages/course_info/TeacherCourse.vue";
   import Tip from "@/pages/course_info/Tip.vue";
+  import ScoreLegend from "@/pages/course_info/ScoreLegend.vue";
   const searchType = ref(SearchType.CourseName);
   const dataByCourseName = ref<CourseAbstract[]>([]);
   const dataByTeacherName = ref<[string, CourseAbstract[]][]>([]);
@@ -81,8 +85,56 @@
 </script>
 
 <style scoped>
-  .btn {
-    color: white;
-    font-weight: bold;
-  }
+.page {
+  min-height: calc(100vh - 260rpx);
+  padding: 28rpx 0 60rpx;
+  background: #f7f7f7;
+}
+
+.tabs-shell {
+  padding-top: 180rpx;
+  background: #fff;
+}
+
+.search-panel {
+  padding: 0 62rpx;
+}
+
+.search-form {
+  display: flex;
+  align-items: center;
+  height: 50rpx;
+  padding: 0 18rpx;
+  border: 1rpx solid #d8d8d8;
+  border-radius: 6rpx;
+  background: #fff;
+}
+
+.search-form input {
+  flex: 1;
+  height: 48rpx;
+  color: #555;
+  font-size: 24rpx;
+}
+
+.search-icon {
+  color: #777;
+  font-size: 34rpx;
+}
+
+.query-row {
+  display: flex;
+  justify-content: center;
+  padding: 34rpx 0 8rpx;
+}
+
+.query-btn {
+  width: 190rpx;
+  height: 58rpx;
+  line-height: 58rpx;
+  border-radius: 14rpx;
+  background: #ff3d46;
+  color: #fff;
+  font-size: 26rpx;
+}
 </style>

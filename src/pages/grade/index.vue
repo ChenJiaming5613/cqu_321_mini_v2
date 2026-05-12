@@ -1,29 +1,58 @@
 <template>
-  <NavigationBar page-title="成绩查询"/>
-  <Header :term-names="termNames" :tab-cur="tabCur" @on-tab-select="(newTabCur) => {tabCur = newTabCur}"/>
-  <view class="std-bg-primary padding" style="margin-top: 90rpx;">
-    <view v-if="tabCur !== 0">
-      <TermOverview :term-avg-gpa="termAvgGpa"/>
-      <GradeItem
-        v-for="item in scoreItems"
-        :key="item.moreInfo.code"
-        :score-item="item"
-      />
+  <view
+    class="page"
+    @touchstart="onTouchStart"
+    @touchmove="onTouchMove"
+    @touchend="onTouchEnd"
+    @touchcancel="resetPullState"
+  >
+    <NavigationBar page-title="成绩管理"/>
+    <view
+      v-if="pullDistance > 0 || isLoading"
+      class="pull-indicator"
+      :style="{transform: `translateY(${Math.min(pullDistance, 80)}rpx)`}"
+    >
+      {{isLoading ? '刷新中' : pullDistance >= pullRefreshThreshold ? '释放刷新' : '下拉刷新'}}
     </view>
-    <view v-else class="bg-white padding std-box-shadow">
-      <Overview v-if="gpaInfo !== null" :gpa-info="gpaInfo" />
-      <Empty v-else icon-type="warning" message="请尝试更新数据" />
-      <view @click="updateGradeInfo" class="cu-btn block round lg" :class="isLoading ? 'bg-green' : 'bg-blue'"  style="width: max-content; margin: 0 auto;">
-        <text v-if="isLoading" class="cuIcon-loading1 text-bold cuIconfont-spin margin-right"></text>
-        <view>{{isLoading ? '更新中...' : '更新'}}</view>
+    <view v-if="hasGradeData" class="content">
+      <Overview
+        v-if="gpaInfo !== null"
+        :gpa-info="gpaInfo"
+        :is-loading="isLoading"
+        @update="updateGradeInfo"
+      />
+      <view class="terms">
+        <TermOverview
+          v-for="term in termGroups"
+          :key="term.name"
+          :term-name="term.name"
+          :credit="term.credit"
+          :term-avg-gpa="term.gpa"
+          :is-expand="expandedTerms.has(term.name)"
+          @toggle="toggleTerm(term.name)"
+        >
+          <GradeItem
+            v-for="(item, index) in term.items"
+            :key="`${item.moreInfo.code}-${index}`"
+            :score-item="item"
+            :show-new="index === 0"
+          />
+        </TermOverview>
       </view>
     </view>
+    <Empty
+      v-else
+      class="empty"
+      icon-type="warning"
+      message="暂未登录"
+      hint="无法查看功能，请登录后操作"
+    />
   </view>
 </template>
 
 <script setup lang="ts">
-  import GradeModel, {GpaType, GradeInfo} from "@/models/GradeModel";
-  import {onShow} from "@dcloudio/uni-app";
+  import GradeModel, {GpaType, type GradeInfo, type ScoreItem} from "@/models/GradeModel";
+  import {onPullDownRefresh, onShow} from "@dcloudio/uni-app";
   import {computed, ref} from "vue";
   import {
     convertToTermName,
@@ -31,65 +60,184 @@
     scoreToNumber,
     scoreToPoint
   } from "@/pages/grade/util";
-  import Header from "@/pages/grade/Header.vue";
-import Overview from "@/pages/grade/Overview.vue";
-import TermOverview from "@/pages/grade/TermOverview.vue";
-import GradeItem from "@/pages/grade/GradeItem.vue";
+  import Overview from "@/pages/grade/Overview.vue";
+  import TermOverview from "@/pages/grade/TermOverview.vue";
+  import GradeItem from "@/pages/grade/GradeItem.vue";
   import Empty from "@/pages/components/Empty.vue";
   import NavigationBar from "@/pages/components/NavigationBar.vue";
 
   const gradeModel = GradeModel.getInstance();
 
-  const tabCur = ref(0);
   // 成绩信息
   const gradeInfo = ref<GradeInfo | null>(null);
   const isLoading = ref(false);
+  const expandedTerms = ref(new Set<string>());
+  const pullStartY = ref<number | null>(null);
+  const pullDistance = ref(0);
+  const pullRefreshThreshold = 80;
 
   onShow(async () => {
     gradeInfo.value = await gradeModel.get();
     isLoading.value = false;
+    expandFirstTerm();
+  });
+  onPullDownRefresh(async () => {
+    try {
+      await updateGradeInfo();
+    } finally {
+      uni.stopPullDownRefresh();
+    }
   });
 
-  // 所有学期名称
-  const termNames = computed<string[]>(() => {
-    const names = new Set<string>();
-    gradeInfo.value?.scoreItems.forEach(it => { names.add(convertToTermName(it.session)); });
-    const nameList = Array.from(names);
-    nameList.unshift('总览');
-    return nameList;
+  const hasGradeData = computed(() => {
+    return gpaInfo.value !== null || (gradeInfo.value?.scoreItems.length ?? 0) > 0;
   });
-  // 当前学期的成绩项
-  const scoreItems = computed(() => {
-    return gradeInfo.value?.scoreItems
-        .filter(it => convertToTermName(it.session) === termNames.value[tabCur.value])
-        .reverse();
-  });
-  // 当前学期的绩点
-  const termAvgGpa = computed<{four: number, five: number}>(() => {
-    let allCredit = 0;
-    let avgGpa = {four: 0, five: 0};
-    scoreItems.value?.filter(filterCourseWhenCalcGpa)
-      .forEach(it => {
-        allCredit += it.credit;
-        avgGpa.four += it.credit * scoreToPoint(scoreToNumber(it.score), GpaType.FOUR);
-        avgGpa.five += it.credit * scoreToPoint(scoreToNumber(it.score), GpaType.FIVE);
+  const termGroups = computed(() => {
+    const termMap = new Map<string, ScoreItem[]>();
+    gradeInfo.value?.scoreItems.forEach(item => {
+      const name = convertToTermName(item.session);
+      const items = termMap.get(name) ?? [];
+      items.push(item);
+      termMap.set(name, items);
+    });
+    return Array.from(termMap.entries())
+      .sort((a, b) => termSortValue(b[0]) - termSortValue(a[0]))
+      .map(([name, items]) => {
+        const sortedItems = [...items].reverse();
+        return {
+          name,
+          items: sortedItems,
+          credit: calcCredit(sortedItems),
+          gpa: calcTermGpa(sortedItems)
+        };
       });
-    avgGpa.four = Number((avgGpa.four / allCredit).toFixed(4));
-    avgGpa.five = Number((avgGpa.five / allCredit).toFixed(4));
-    return avgGpa;
   });
   // 总览信息
   const gpaInfo = computed(() => gradeInfo.value?.gpaInfo || null);
 
+  function calcTermGpa(scoreItems: ScoreItem[]): {four: number, five: number} {
+    let allCredit = 0;
+    let avgGpa = {four: 0, five: 0};
+    const candidates = scoreItems.filter(filterCourseWhenCalcGpa);
+    const calcItems = candidates.length > 0
+      ? candidates
+      : scoreItems.filter(it => it.credit > 0 && scoreToNumber(it.score) >= 0);
+    calcItems.forEach(it => {
+        allCredit += it.credit;
+        avgGpa.four += it.credit * scoreToPoint(scoreToNumber(it.score), GpaType.FOUR);
+        avgGpa.five += it.credit * scoreToPoint(scoreToNumber(it.score), GpaType.FIVE);
+      });
+    if (allCredit === 0) return avgGpa;
+    avgGpa.four = Number((avgGpa.four / allCredit).toFixed(4));
+    avgGpa.five = Number((avgGpa.five / allCredit).toFixed(4));
+    return avgGpa;
+  }
+
+  function calcCredit(scoreItems: ScoreItem[]) {
+    return scoreItems
+      .filter(it => it.credit > 0)
+      .reduce((sum, item) => sum + item.credit, 0);
+  }
+
+  function termSortValue(termName: string) {
+    const year = Number(termName.slice(0, 4));
+    return year * 2 + (termName.endsWith('秋') ? 1 : 0);
+  }
+
+  function toggleTerm(termName: string) {
+    const next = new Set(expandedTerms.value);
+    if (next.has(termName)) next.delete(termName);
+    else next.add(termName);
+    expandedTerms.value = next;
+  }
+
+  function expandFirstTerm() {
+    if (expandedTerms.value.size > 0 || termGroups.value.length === 0) return;
+    expandedTerms.value = new Set([termGroups.value[0].name]);
+  }
+
+  function onTouchStart(event: TouchEvent) {
+    if (isLoading.value || getScrollTop() > 0) return;
+    pullStartY.value = event.touches[0]?.clientY ?? null;
+  }
+
+  function onTouchMove(event: TouchEvent) {
+    if (pullStartY.value === null || isLoading.value) return;
+    const currentY = event.touches[0]?.clientY ?? pullStartY.value;
+    const distance = currentY - pullStartY.value;
+    if (distance <= 0) {
+      pullDistance.value = 0;
+      return;
+    }
+    pullDistance.value = Math.min(Math.round(distance / 2), 120);
+  }
+
+  async function onTouchEnd() {
+    if (pullStartY.value === null) return;
+    const shouldRefresh = pullDistance.value >= pullRefreshThreshold;
+    resetPullState();
+    if (shouldRefresh) await updateGradeInfo();
+  }
+
+  function resetPullState() {
+    pullStartY.value = null;
+    pullDistance.value = 0;
+  }
+
+  function getScrollTop() {
+    // H5 预览使用 window 滚动；小程序端不存在 window 时回落为 0。
+    if (typeof window === "undefined") return 0;
+    return window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0;
+  }
+
   // 更新成绩
   async function updateGradeInfo() {
+    if (isLoading.value) return;
     isLoading.value = true;
-    await gradeModel.update();
-    isLoading.value = false;
-    gradeInfo.value = await gradeModel.get();
-    await uni.showToast({
-      title: "更新完成",
-      icon: "success"
-    });
+    try {
+      await gradeModel.update();
+      gradeInfo.value = await gradeModel.get();
+      expandFirstTerm();
+      await uni.showToast({
+        title: "更新完成",
+        icon: "success"
+      });
+    } finally {
+      isLoading.value = false;
+    }
   }
 </script>
+
+<style scoped>
+.page {
+  min-height: 100vh;
+  background: #f7f7f7;
+}
+
+.content {
+  padding: 212rpx 32rpx 48rpx;
+}
+
+.pull-indicator {
+  position: fixed;
+  top: 180rpx;
+  left: 0;
+  right: 0;
+  height: 48rpx;
+  line-height: 48rpx;
+  color: #e6505f;
+  font-size: 24rpx;
+  text-align: center;
+  z-index: 99;
+  pointer-events: none;
+  transition: transform 0.16s ease;
+}
+
+.terms {
+  margin-top: 24rpx;
+}
+
+.empty {
+  margin-top: 180rpx;
+}
+</style>

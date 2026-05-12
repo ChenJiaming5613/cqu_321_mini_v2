@@ -1,17 +1,17 @@
 <template>
-  <view class="header flex text-center text-lg std-color-secondary bg-white solid-bottom shadow">
-    <view class="flex flex-direction justify-center" style="width: 50rpx;">
+  <view class="header flex text-center bg-white">
+    <view class="month-cell flex flex-direction justify-center">
       <view>{{formatNumber(currDate.getMonth() + 1)}}</view>
       <view>月</view>
     </view>
-    <view class="flex" style="width: 700rpx;">
+    <view class="weekday-row flex">
       <view
-          class="flex-sub flex flex-direction justify-center"
-          :class="dayOfWeek === index ? 'text-bold std-color-primary' : ''"
+          class="weekday-cell flex-sub flex flex-direction justify-center"
+          :class="dayOfWeek === index ? 'active' : ''"
           :key="index"
           v-for="(item, index) in weekDayNames">
         <view>{{item}}</view>
-        <view>{{formatNumber(weekDates[index])}}日</view>
+        <view class="date-text">{{formatNumber(weekDates[index])}}</view>
       </view>
     </view>
   </view>
@@ -32,9 +32,40 @@
 <style scoped>
   .header {
     position: fixed;
-    top: 180rpx;
+    top: 262rpx;
     width: 100%;
-    height: 100rpx;
+    height: 108rpx;
     z-index: 100;
+    border-bottom: 1rpx solid #ececec;
+    color: #555;
+    font-size: 27rpx;
+  }
+
+  .month-cell {
+    width: 50rpx;
+    color: #8d8d8d;
+    font-size: 22rpx;
+  }
+
+  .weekday-row {
+    width: 700rpx;
+  }
+
+  .weekday-cell {
+    line-height: 34rpx;
+  }
+
+  .weekday-cell.active {
+    color: #ef4f5f;
+    font-weight: bold;
+  }
+
+  .date-text {
+    font-size: 22rpx;
+    color: #8d8d8d;
+  }
+
+  .weekday-cell.active .date-text {
+    color: #ef4f5f;
   }
 </style>

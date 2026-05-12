@@ -1,5 +1,17 @@
 <template>
-  <NavigationBar pageTitle="课表" :isFixed="true"/>
+  <NavigationBar
+    pageTitle="课程表"
+    :isFixed="true"
+    :show-refresh="true"
+    @refresh="updateCourseInfo"
+  />
+  <Footer
+    :week-of-term="weekOfTerm"
+    @on-tap-prev-week="onTapPrevWeek"
+    @on-tap-next-week="onTapNextWeek"
+    @on-tap-switch-term="onTapSwitchTerm"
+    @on-tap-more-func="onTapMoreFunc"
+  />
   <Header :curr-date="currDate" :day-of-week="dayOfWeek"/>
   <CourseTable
       :table-items="tableItems"
@@ -8,14 +20,6 @@
       :fixed-week-of-term="fixedWeekOfTerm"
       @on-tap-detail="onTapDetail
   "/>
-  <Footer
-    :week-of-term="weekOfTerm"
-    @update-course-info="updateCourseInfo"
-    @on-tap-prev-week="onTapPrevWeek"
-    @on-tap-next-week="onTapNextWeek"
-    @on-tap-switch-term="onTapSwitchTerm"
-    @on-tap-more-func="onTapMoreFunc"
-  />
   <CourseDetail
     :courses="activeCourses"
     :is-show="isShowDetail"
@@ -28,7 +32,8 @@
   import CourseModel, {TermOffset} from "@/models/CourseModel";
   import {onShow} from "@dcloudio/uni-app";
   import {computed, ref} from "vue";
-  import {getCourseCells, makeColorMap, makeCoursesMatrix, UniCourse} from "@/pages/curriculum/util";
+  import {getCourseCells, makeColorMap, makeCoursesMatrix} from "@/pages/curriculum/util";
+  import type {UniCourse} from "@/pages/curriculum/util";
   import {
     calcDateAfterNDays,
     calcDayOfWeek,
@@ -46,7 +51,7 @@
   const customCourseModel = CustomCourseModel.getInstance();
   // CONST
   let colorMap: Map<string, string> = new Map<string, string>();
-  let fixedWeekOfTerm: number = 0;
+  const fixedWeekOfTerm = ref(0);
   // STATUS
   const termOffset = ref<TermOffset>(TermOffset.CurrTerm);
   const termName = ref<string>("unknown");
@@ -84,7 +89,7 @@
     if (coursesData !== null) {
       termName.value = coursesData.termName;
       startDate.value = stringToDateInChinaTime(coursesData.startDate);
-      fixedWeekOfTerm = weekOfTerm.value;
+      fixedWeekOfTerm.value = weekOfTerm.value;
       const tmpCourses: UniCourse[] = [...coursesData.courses];
       tmpCourses.push(...await customCourseModel.get());
       colorMap = makeColorMap(tmpCourses);
