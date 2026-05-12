@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="700" height="350" viewBox="0 0 700 350">
+  <rect width="700" height="350" rx="28" fill="#fff4f5"/>
+  <circle cx="470" cy="178" r="86" fill="#ff5a66"/>
+  <circle cx="560" cy="108" r="48" fill="none" stroke="#8a8f99" stroke-width="5"/>
+  <path d="M452 88 588 42 543 146 509 118 478 154z" fill="#ff3d46"/>
+  <text x="58" y="132" font-size="58" font-weight="700" fill="#30343b">321CQU</text>
+  <text x="58" y="192" font-size="48" font-weight="700" fill="#30343b">页面验收</text>
+  <text x="58" y="232" font-size="22" fill="#7d838c">Mock data preview</text>
+</svg>
