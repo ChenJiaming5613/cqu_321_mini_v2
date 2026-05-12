@@ -15,7 +15,8 @@
 		{
 			"path": "pages/grade/index",
 			"style": {
-				"navigationBarTitleText": "成绩查询"
+				"navigationBarTitleText": "成绩查询",
+				"enablePullDownRefresh": true
 			}
 		},
 		{

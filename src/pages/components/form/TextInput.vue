@@ -11,7 +11,7 @@
         :value="value"
         :placeholder="placeholder"
         :password="type === TextInputType.PASSWORD"
-        @input="$emit('update:value', $event.target.value)"
+        @input="onInput"
         @focus="isFocus = true"
         @blur="isFocus = false"
     />
@@ -29,10 +29,13 @@
     isRequired?: boolean
     check?: boolean
   }>();
-  defineEmits<{ (e: "update:value", newValue: string): void }>();
+  const emits = defineEmits<{ (e: "update:value", newValue: string): void }>();
   const isFocus = ref(false);
   function checkPass() {
     return !props.check || props.value.length > 0;
+  }
+  function onInput(event: any) {
+    emits("update:value", event.detail?.value ?? "");
   }
 </script>
 

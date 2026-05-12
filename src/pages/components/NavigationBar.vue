@@ -1,5 +1,6 @@
 <template>
   <image class="button-back" :src="getSvgPath('back')" @click="handleBack"/>
+  <text v-if="showRefresh" class="button-refresh cuIcon-refresh" @click="$emit('refresh')"></text>
   <view class="bg-white bar-background " :class="isFixed ? 'fixed-position' : ''">
     <view class="bar-title text-xl text-black">{{pageTitle}}</view>
     <image class="cqu-buildings" :src="getSvgPath('cqu_buildings')"/>
@@ -11,12 +12,16 @@ import {getSvgPath} from "@/utils/resource";
 const handleBack = () => {
   uni.navigateBack();
 }
-defineProps<{
-  pageTitle: string,
-  isFixed: {
-    type: Boolean,
-    default: true,
-  },
+withDefaults(defineProps<{
+  pageTitle: string
+  isFixed?: boolean
+  showRefresh?: boolean
+}>(), {
+  isFixed: true,
+  showRefresh: false
+});
+defineEmits<{
+  (e: 'refresh'): void
 }>();
 </script>
 
@@ -36,6 +41,16 @@ defineProps<{
   top: 90rpx;
   left: 40rpx;
   z-index: 1024;
+}
+
+.button-refresh {
+  position: fixed;
+  top: 92rpx;
+  right: 48rpx;
+  z-index: 1024;
+  color: #ff3b3b;
+  font-size: 42rpx;
+  line-height: 50rpx;
 }
 
 .bar-background {

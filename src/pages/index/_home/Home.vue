@@ -16,9 +16,9 @@
         <Icon2nd title="常用信息" icon-name="xinxi" @click="navToPage('general_info')" />
         <Icon2nd title="图书馆" icon-name="tushuguan" @click="navToPage('library')"/>
         <Icon2nd title="生活" icon-name="shenghuo" @click="navToPage('life')" />
-<!--        <Icon2nd title="空教室" icon-name="cuIcon-location" />-->
-        <Icon2nd title="体测查询" icon-name="tice" disabled />
-        <Icon2nd title="空教室" icon-name="kongjiaoshi" @click="navToPage('empty_room')"/>
+        <Icon2nd title="体测查询" icon-name="tice" @click="showComingSoon"/>
+        <Icon2nd title="志愿时长" icon-name="xinxi" @click="showComingSoon"/>
+        <Icon2nd title="空教室" icon-name="kongjiaoshi" @click="showComingSoon"/>
       </view>
     </view>
     <ad-custom unit-id="adunit-67019180b6466026"></ad-custom>
@@ -36,6 +36,14 @@
   function navToPage(pageName: string) {
     return uni.navigateTo({url: `/pages/${pageName}/index`});
   }
+  function showComingSoon() {
+    uni.showModal({
+      title: "敬请期待",
+      content: "该功能正在规划中，后续版本开放。",
+      showCancel: false,
+      confirmText: "知道了"
+    });
+  }
 </script>
 
 <style scoped>
@@ -47,6 +55,8 @@
   }
   .icons-1st {
     display: flex;
+    flex-wrap: wrap;
+    row-gap: 12rpx;
     justify-content: space-evenly;
     border-radius: 20rpx;
   }
