@@ -1,26 +1,91 @@
 <template>
-  <view class="text-center card bg-white margin padding std-box-shadow">
-    <view v-if="info !== null">
-      <view class="text-bold text-black text-xxl padding">Hi, {{info.name}} 🎉</view>
-      <view class="text-lg text-grey">{{info.sid}}</view>
-      <button class="cu-btn bg-red text-lg margin-top" @click="navToLogin">退出登录</button>
+  <view class="account-card">
+    <view class="page-title">Account</view>
+    <view class="avatar">
+      <image v-if="info !== null" class="avatar-img" :src="getSvgPath('default_avator')" mode="aspectFill"/>
+      <text v-else class="avatar-icon cuIcon-people"></text>
     </view>
-    <view v-else>
-      <view class="text-grey text-xxl padding">您还没有登录 😉</view>
-      <button class="cu-btn bg-blue text-lg margin-top" @click="navToLogin">去登录</button>
+    <view class="account-name">{{info?.name || '绑定信息'}}</view>
+    <view v-if="info !== null" class="account-meta">
+      <text class="status-dot"></text>
+      <text>统一身份认证</text>
     </view>
+    <view v-else class="account-hint">绑定校园账号后可使用成绩、课表、考试等功能</view>
   </view>
 </template>
 
 <script setup lang="ts">
-  import {UserInfo} from "@/core/StdUser";
+  import type {UserInfo} from "@/core/StdUser";
+  import {getSvgPath} from "@/utils/resource";
+
   defineProps<{ info: UserInfo | null }>();
-  async function navToLogin() { await uni.navigateTo({ url: "/pages/index/login/index" }); }
 </script>
 
 <style scoped>
-  .card {
-    border-radius: 10rpx;
-    /*background-image: linear-gradient(to top, #dad4ec 0%, #dad4ec 1%, #f3e7e9 100%);*/
-  }
+.account-card {
+  padding: 126rpx 48rpx 42rpx;
+  text-align: center;
+}
+
+.page-title {
+  color: #111;
+  font-size: 38rpx;
+  line-height: 48rpx;
+  font-weight: 700;
+}
+
+.avatar {
+  width: 174rpx;
+  height: 174rpx;
+  margin: 56rpx auto 24rpx;
+  border-radius: 50%;
+  background: #d8d8d8;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar-img {
+  width: 100%;
+  height: 100%;
+}
+
+.avatar-icon {
+  color: #fff;
+  font-size: 92rpx;
+}
+
+.account-name {
+  color: #666;
+  font-size: 34rpx;
+  font-weight: 700;
+  line-height: 48rpx;
+}
+
+.account-meta {
+  margin-top: 26rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  font-size: 32rpx;
+  font-weight: 700;
+}
+
+.status-dot {
+  width: 14rpx;
+  height: 14rpx;
+  margin-right: 20rpx;
+  border-radius: 50%;
+  background: #69c66d;
+}
+
+.account-hint {
+  max-width: 520rpx;
+  margin: 22rpx auto 0;
+  color: #999;
+  font-size: 24rpx;
+  line-height: 36rpx;
+}
 </style>
