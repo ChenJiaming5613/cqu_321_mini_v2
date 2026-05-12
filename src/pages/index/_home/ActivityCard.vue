@@ -18,7 +18,8 @@
 </template>
 
 <script setup lang="ts">
-  import ActivityModel, {ActivityInfo, ActivityItem} from "@/models/ActivityModel";
+  import ActivityModel from "@/models/ActivityModel";
+  import type {ActivityInfo, ActivityItem} from "@/models/ActivityModel";
   import {computed, onMounted, ref} from "vue";
 
   const activityModel = ActivityModel.getInstance();
@@ -27,6 +28,7 @@
   onMounted(async () => { activityInfo.value = await activityModel.get() });
 
   async function navToDetail(activityItem: ActivityItem) {
+    if (activityItem.jumpType === "NONE" || activityItem.contentUrl.length === 0) return;
     await uni.navigateTo({ url: '/pages/index/content/index?url=' + activityItem.contentUrl });
   }
   // TODO: 检测活动是否需要更新（目前的策略是缓存中没有活动数据采取更新）

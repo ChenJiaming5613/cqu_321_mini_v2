@@ -2,10 +2,6 @@
   <TabBar :tab-cur="tabCur" @on-tap-tab="onTapTab" />
   <view class="std-bg-primary" style="padding: 120rpx 0;">
     <view v-if="tabCur === 0">
-      <view class="padding bg-white flex justify-around">
-        <button @click="onTapPull" class="btn cu-btn bg-blue cuIcon-pulldown"></button>
-        <button @click="onTapPush" class="btn cu-btn bg-green cuIcon-pullup"></button>
-      </view>
       <view v-if="customCourses.length === 0">
         <Empty icon-type="warning" message="暂无自定义课程"/>
         <view class="text-center bg-white padding-bottom">
@@ -77,38 +73,4 @@
     await init();
     tabCur.value = 0;
   }
-  async function onTapPull() {
-    uni.showModal({
-      title: "是否拉取云数据",
-      success: async result => {
-        if (result.confirm) {
-          await uni.showLoading({ title: '拉取中' });
-          await customCourseModel.pull();
-          uni.hideLoading();
-          await uni.showToast({ title: "拉取成功", icon: "success" });
-          await init();
-        }
-      }
-    });
-  }
-  async function onTapPush() {
-    uni.showModal({
-      title: "是否存储到云",
-      success: async result => {
-        if (result.confirm) {
-          await uni.showLoading({ title: '推送中' });
-          await customCourseModel.push();
-          uni.hideLoading();
-          await uni.showToast({ title: "存储成功", icon: "success" });
-        }
-      }
-    });
-  }
 </script>
-
-<style scoped>
-  .btn {
-    padding: 40rpx 60rpx;
-    font-size: 50rpx;
-  }
-</style>

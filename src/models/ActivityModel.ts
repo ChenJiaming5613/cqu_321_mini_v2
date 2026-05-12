@@ -1,8 +1,7 @@
 import StdModel from "@/core/StdModel";
-import type {StdOldResponse} from "@/core/old";
 import {calcDaysBetweenDates, formatTime, stringToDateInChinaTime} from "@/utils/datetime";
 import {downloadAndSaveFile, stdGetStorage, stdSetStorage} from "@/core/storage";
-import {getImgUrl} from "@/core/old";
+import {stdRequest} from "@/core/network";
 
 export type ActivityInfo = {
     lastCheck: Date
@@ -17,6 +16,8 @@ export type ActivityItem = {
     jumpType: string
 }
 
+const API_ASSET_BASE_URL = "https://api.321cqu.com";
+
 class ActivityModel extends StdModel {
     private static STORAGE_KEY = "ActivityInfo";
     private static _instance: ActivityModel | null = null;
@@ -29,36 +30,35 @@ class ActivityModel extends StdModel {
     }
     public clear(): void { this._activityInfo = null; }
     private async _update() {
-        const res = await uni.request({
-            url: 'https://www.zhulegend.com/321CQU/homepage',
-            data: { 'Key': 'CQUz5321', 'Version': '2.1'},
-            method: "POST"
-        });
-        if (res.statusCode !== 200) {
+        try {
+            const response = await stdRequest<_HomepageResponse>({
+                url: "/important_info/homepages",
+                method: "GET",
+                needToken: false
+            });
+            return {
+                lastCheck: formatTime(new Date()),
+                lastUpdate: formatTime(new Date()),
+                pictures: response.homepages.map(it => {
+                    return {
+                        url: resolveHomepageImageUrl(it.img_url, it.img_pos),
+                        contentUrl: it.jump_param || "",
+                        jumpType: it.jump_type,
+                        localUrl: null
+                    } as ActivityItem;
+                })
+            } as _RawActivityInfo;
+        } catch (e) {
             await uni.showToast({
                 title: "获取活动失败",
                 icon: "error"
             });
             return null;
         }
-        const response = res.data as StdOldResponse<_ActivityInfo>;
-        if (response.Statue !== 1) return null;
-        return {
-            lastCheck: formatTime(new Date()),
-            lastUpdate: response.data.LastUpdate,
-            pictures: response.data.Pictures.map(it => {
-                return {
-                    url: it.Url,
-                    contentUrl: it.ContentUrl,
-                    jumpType: it.JumpType,
-                    localUrl: null
-                } as ActivityItem;
-            })
-        } as _RawActivityInfo;
     }
     private async _downloadImages(rawActivityInfo: _RawActivityInfo) {
         rawActivityInfo.pictures = await Promise.all(rawActivityInfo.pictures.map(async it => {
-            if (it.localUrl === null) it.localUrl = await downloadAndSaveFile(getImgUrl(it.url));
+            if (it.localUrl === null) it.localUrl = await downloadAndSaveFile(it.url);
             return it;
         }));
         return rawActivityInfo;
@@ -122,13 +122,15 @@ class ActivityModel extends StdModel {
     }
 }
 
-type _ActivityInfo = {
-    LastUpdate: string
-    Pictures: {
-        Url: string
-        ContentUrl: string
-        JumpType: string
-    }[]
+type _HomepageResponse = {
+    homepages: _HomepageInfo[]
+}
+
+type _HomepageInfo = {
+    img_url: string
+    img_pos: "LOCAL" | "COS"
+    jump_type: "NONE" | "MD" | "URL"
+    jump_param: string | null
 }
 
 type _RawActivityInfo = {
@@ -137,5 +139,11 @@ type _RawActivityInfo = {
     pictures: ActivityItem[]
 }
 
+function resolveHomepageImageUrl(imgUrl: string, imgPos: _HomepageInfo["img_pos"]) {
+    if (/^https?:\/\//.test(imgUrl)) return imgUrl;
+    if (imgUrl.startsWith("//")) return "https:" + imgUrl;
+    if (imgPos === "LOCAL") return API_ASSET_BASE_URL + (imgUrl.startsWith("/") ? imgUrl : "/" + imgUrl);
+    return imgUrl;
+}
 
 export default ActivityModel;

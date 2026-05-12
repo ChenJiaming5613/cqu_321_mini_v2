@@ -1,35 +1,6 @@
 import StdModel from "@/core/StdModel";
-import {oldRequestV1} from "@/core/old";
 import type {DayTime} from "@/models/CourseModel";
-import {getWeeksText, parseWeeksText} from "@/utils/course";
 import {stdGetStorage, stdSetStorage} from "@/core/storage";
-
-class CustomCourseCloudService {
-    private static async _getCode() {
-        const res = await uni.login();
-        return res.code;
-    }
-    public static async push(customCourses: CustomCourse[]) {
-        const code = await this._getCode();
-        await oldRequestV1({
-            url: "/course_table/push_custom_event",
-            data: {
-                'Code': code,
-                'Events': customCourses.map(customCourseToEvent),
-            }
-        });
-    }
-    public static async pull() {
-        const code = await this._getCode();
-        const res = await oldRequestV1({
-            url: "/course_table/pull_custom_event",
-            data: {
-                'Code': code,
-            }
-        });
-        return (res.Events as _Event[]).map(eventToCustomCourse);
-    }
-}
 
 class CustomCourseModel extends StdModel {
     private static _instance: CustomCourseModel | null = null;
@@ -68,49 +39,11 @@ class CustomCourseModel extends StdModel {
         await stdSetStorage(CustomCourseModel.STORAGE_KEY, this._courses);
     }
     public async pull() {
-        const curr = [...this._courses];
-        this._courses = await CustomCourseCloudService.pull();
-        const codes = this._courses.map(it => it.code);
-        curr.forEach(it => {
-            if (!codes.includes(it.code)) this._courses.push(it);
-        });
-        await stdSetStorage(CustomCourseModel.STORAGE_KEY, this._courses);
+        return false;
     }
     public async push() {
-        await CustomCourseCloudService.push(this._courses);
+        return false;
     }
-}
-
-function customCourseToEvent(customCourse: CustomCourse) {
-    return {
-        CEname: customCourse.name,
-        CEcode: customCourse.code,
-        TeachingWeekFormat: getWeeksText(customCourse.weeks).replace(/\s+/g, ''),
-        PeriodFormat: `${customCourse.dayTime.period.start}-${customCourse.dayTime.period.end}`,
-        WeekdayFormat: '一二三四五六日'.split('')[customCourse.dayTime.weekday],
-        Content: customCourse.content
-    } as _Event;
-}
-
-function eventToCustomCourse(event: _Event) {
-    return {
-        name: event.CEname,
-        code: event.CEcode,
-        content: event.Content,
-        weeks: parseWeeksText(event.TeachingWeekFormat),
-        dayTime: {
-            weekday: '一二三四五六日'.indexOf(event.WeekdayFormat),
-            period: parsePeriod(event.PeriodFormat)
-        }
-    } as CustomCourse;
-}
-
-function parsePeriod(period: string) {
-    const tmp = period.split('-');
-    return {
-        start: parseInt(tmp[0]),
-        end: parseInt(tmp[1])
-    };
 }
 
 export default CustomCourseModel;
@@ -121,15 +54,6 @@ export type CustomCourse = {
     weeks: number[]
     dayTime: DayTime
     content: string
-}
-
-type _Event = {
-    CEcode: string
-    CEname: string
-    PeriodFormat: string
-    TeachingWeekFormat: string
-    WeekdayFormat: string
-    Content: string
 }
 
 // public async getCustom() {
