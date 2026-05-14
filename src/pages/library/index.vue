@@ -1,12 +1,18 @@
 <template>
   <TabBar v-model:tab-cur="tabCur"/>
   <view class="page std-bg-primary padding-top padding-bottom-xl">
-    <view v-if="tabCur === 0">
-      <Empty v-if="currBookInfos.length === 0" icon-type="success" message="暂无借阅"/>
+    <PageState
+      v-if="pageState !== 'ready'"
+      :state="pageState"
+      empty-message="暂无借阅"
+      empty-hint="当前账号暂时没有可展示的借阅数据"
+      error-message="借阅信息加载失败"
+      @retry="loadLibraryInfo"
+    />
+    <view v-else-if="tabCur === 0">
       <BookInfoCard v-for="(bookInfo, index) in currBookInfos" :key="index" :book-info="bookInfo"/>
     </view>
     <view v-else-if="tabCur === 1">
-      <Empty v-if="prevBookInfos.length === 0" icon-type="success" message="暂无借阅"/>
       <BookInfoCard v-for="(bookInfo, index) in prevBookInfos" :key="index" :book-info="bookInfo"/>
     </view>
   </view>
@@ -18,19 +24,31 @@
   import {ref} from "vue";
   import BookInfoCard from "@/pages/library/BookInfoCard.vue";
   import TabBar from "@/pages/library/TabBar.vue";
-  import Empty from "@/pages/components/Empty.vue";
-  import {onShow} from "@dcloudio/uni-app";
+  import PageState from "@/pages/components/PageState.vue";
+  import {useAuthorizedPageData} from "@/composables/useAuthorizedPageData";
 
   const tabCur = ref(0);
   const currBookInfos = ref<BookInfo[]>([]);
   const prevBookInfos = ref<BookInfo[]>([]);
 
-  onShow(async () => {
-    await uni.showLoading({ title: "加载中" });
-    currBookInfos.value = await new LibraryModel().update(true);
-    prevBookInfos.value = await new LibraryModel().update(false);
-    uni.hideLoading();
-    await uni.showToast({ title: "查询成功", icon: "success" });
+  const { pageState, loadPageData: loadLibraryInfo } = useAuthorizedPageData({
+    hasReadyData: () => tabCur.value === 0 ? currBookInfos.value.length > 0 : prevBookInfos.value.length > 0,
+    hasInitialData: () => currBookInfos.value.length > 0 || prevBookInfos.value.length > 0,
+    loadData: async () => {
+      const libraryModel = new LibraryModel();
+      const [currBooks, prevBooks] = await Promise.all([
+        libraryModel.update(true),
+        libraryModel.update(false)
+      ]);
+      currBookInfos.value = currBooks;
+      prevBookInfos.value = prevBooks;
+    },
+    clearData: () => {
+      currBookInfos.value = [];
+      prevBookInfos.value = [];
+    },
+    logTag: "LibraryPage",
+    registerOnShow: true
   });
 </script>
 
