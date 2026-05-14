@@ -1,6 +1,7 @@
 import stdToken, {type TokenInfo} from "@/core/StdToken";
 import stdUser, {type UserInfo} from "@/core/StdUser";
 import {StdUserInfoError} from "@/core/error/StdUserInfoError";
+import {StdNetworkError} from "@/core/error/StdNetworkError";
 
 const BASE_URL = 'https://api.321cqu.com/v1';
 
@@ -30,16 +31,34 @@ export async function stdRequest<ResType> (options: StdRequestOptions) {
     const tokenInfo = await handleToken(options.tokenType || "user");
     header["Authorization"] = "Bearer " + tokenInfo.token;
   }
-  const res = await uni.request({
-    url: BASE_URL + options.url,
-    method: options.method,
-    header: header,
-    data: options.data
-  });
-  if (res.statusCode !== 200) { throw res; }
-  const response = res.data as StdResponse<ResType>;
-  if (response.status !== 1) { throw res; }
-  return response.data;
+  const url = BASE_URL + options.url;
+  let res: UniApp.RequestSuccessCallbackResult;
+  try {
+    res = await uni.request({
+      url: url,
+      method: options.method,
+      header: header,
+      data: options.data
+    });
+  } catch (e: any) {
+    throw new StdNetworkError<ResType>({
+      url,
+      statusCode: 0,
+      errMsg: e?.errMsg || e?.message || "网络请求失败",
+      requestParams: options.data
+    });
+  }
+  const response = res.data as Partial<StdResponse<ResType>>;
+  if (!StdNetworkError.test(res.statusCode, response)) {
+    throw new StdNetworkError<ResType>({
+      url,
+      statusCode: res.statusCode,
+      errMsg: res.errMsg || "请求失败",
+      requestParams: options.data,
+      responseData: response
+    });
+  }
+  return response.data as ResType;
 }
 
 async function getToken(username: string | null = null, password: string | null = null) {
