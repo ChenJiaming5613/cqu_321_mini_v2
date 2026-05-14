@@ -136,7 +136,7 @@
           await uni.showToast({ title: "已删除", icon: "success" });
         }
         else {
-          await uni.navigateTo({ url: './edit/index?name=' + examInfo.name });
+          await uni.navigateTo({ url: './edit/index?name=' + encodeURIComponent(examInfo.name) });
         }
       }
     });

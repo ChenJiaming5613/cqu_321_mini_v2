@@ -4,7 +4,7 @@ import {stdRequestHelper} from "@/core/common";
 class LibraryModel extends StdModel {
 
     public async update(isCurr=true) {
-        const res = await stdRequestHelper({
+        const res = await stdRequestHelper<LibraryBorrowResponse>({
             requestOptions: {
                 url: "/library/borrow",
                 data: { is_curr: isCurr },
@@ -12,12 +12,17 @@ class LibraryModel extends StdModel {
             },
             showError: true
         });
+        if (res === null) return [];
         return convertToBookInfos(res);
     }
 }
 export default LibraryModel;
 
-function convertToBookInfos(res: any): BookInfo[] {
+type LibraryBorrowResponse = {
+    book_infos: any[]
+}
+
+function convertToBookInfos(res: LibraryBorrowResponse): BookInfo[] {
     return res.book_infos.map((it: any) => {
        return {
            borrowTime: it.borrow_time,

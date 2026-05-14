@@ -19,8 +19,10 @@
   import DetailItem from "@/pages/course_info/detail/DetailItem.vue";
   const courseDetail = ref<CourseDetail>({} as CourseDetail);
   onLoad(async (option: any) => {
-    courseDetail.value = await CourseInfoModel.queryDetail(option.code);
-    courseDetail.value.name = option.name;
-    courseDetail.value.code = option.code;
+    const code = decodeURIComponent(option.code || "");
+    const name = decodeURIComponent(option.name || "");
+    courseDetail.value = await CourseInfoModel.queryDetail(code);
+    courseDetail.value.name = name;
+    courseDetail.value.code = code;
   });
 </script>

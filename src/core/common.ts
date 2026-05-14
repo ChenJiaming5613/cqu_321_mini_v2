@@ -21,10 +21,23 @@ export async function stdRequestHelper<ResType>(options: {
     }
 }
 
-export async function stdShowErrorToast<T>(res: UniApp.RequestSuccessCallbackResult) {
-    let text = '';
-    if (res.statusCode !== 200) text += `【${res.statusCode}】`;
-    const response = res.data as StdResponse<any>;
-    if (response.status === 0) text += ` ${response.msg}`;
+export async function stdShowErrorToast(res: unknown) {
+    let text = "操作失败";
+    if (isRequestResult(res)) {
+        const response = res.data as Partial<StdResponse<any>> | undefined;
+        const statusText = res.statusCode !== 200 ? `【${res.statusCode}】` : "";
+        const msg = response && typeof response.msg === "string" ? response.msg : "";
+        text = [statusText, msg].filter(Boolean).join(" ") || "请求失败";
+    }
+    else if (res instanceof Error) {
+        text = res.message || text;
+    }
+    else if (typeof res === "string") {
+        text = res;
+    }
     await uni.showToast({ title: text, icon: "none" });
+}
+
+function isRequestResult(res: unknown): res is UniApp.RequestSuccessCallbackResult {
+    return typeof res === "object" && res !== null && "statusCode" in res && "data" in res;
 }

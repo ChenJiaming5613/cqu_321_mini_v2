@@ -30,11 +30,11 @@ export async function stdClearAllStorage() {
  */
 export async function stdSaveFile(tempFilePath: string) {
   const fs = uni.getFileSystemManager();
-  return new Promise<string>((resolve) => {
+  return new Promise<string>((resolve, reject) => {
     fs.saveFile({
       tempFilePath: tempFilePath,
       success: result => { resolve(result.savedFilePath); },
-      fail: err => { throw err.errMsg; }
+      fail: err => { reject(err); }
     });
   });
 }

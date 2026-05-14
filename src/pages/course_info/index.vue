@@ -80,7 +80,9 @@
     }
   }
   async function onTapDetail(courseAbstract: CourseAbstract) {
-    await uni.navigateTo({ url: `./detail/index?name=${courseAbstract.name}&code=${courseAbstract.code}` });
+    const name = encodeURIComponent(courseAbstract.name);
+    const code = encodeURIComponent(courseAbstract.code);
+    await uni.navigateTo({ url: `./detail/index?name=${name}&code=${code}` });
   }
 </script>
 

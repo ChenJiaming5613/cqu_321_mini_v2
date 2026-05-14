@@ -40,7 +40,8 @@
   const isCheck = ref(false);
   onLoad((option: any) => {
     if (option.name) {
-      const info = examModel.getByName(option.name);
+      const name = decodeURIComponent(option.name);
+      const info = examModel.getByName(name);
       if (info) examInfo.value = { ...info };
     }
   });
