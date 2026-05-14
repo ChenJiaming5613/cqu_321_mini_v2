@@ -36,17 +36,13 @@
   import NavigationBar from "@/pages/components/NavigationBar.vue";
   import PageState from "@/pages/components/PageState.vue";
   import ExamModel, {type ExamInfo} from "@/models/ExamModel";
-  import {onPullDownRefresh, onShow} from "@dcloudio/uni-app";
   import {computed, ref} from "vue";
-  import stdUser from "@/core/StdUser";
   import ExamItem from "@/pages/exam/ExamItem.vue";
   import TabBar from "@/pages/exam/TabBar.vue";
   import {calcDaysBetweenDates, stringToDateInChinaTime, truncDate} from "@/utils/datetime";
+  import {useAuthorizedPageData} from "@/composables/useAuthorizedPageData";
   const examModel = ExamModel.getInstance();
   const examInfoList = ref<ExamInfo[]>([]);
-  const hasUserInfo = ref(false);
-  const hasLoadError = ref(false);
-  const isLoading = ref(false);
   const tabCur = ref(0);
   const currDate = ref(new Date());
 
@@ -65,63 +61,27 @@
             - stringToDateInChinaTime(a.date + ' ' + a.endTime).getTime();
       })
   );
-  const pageState = computed<"loading" | "unauthorized" | "empty" | "error" | "ready">(() => {
-    if (isLoading.value && examInfoList.value.length === 0) return "loading";
-    if (!hasUserInfo.value) return "unauthorized";
-    if (hasLoadError.value) return "error";
-    if (currExamInfoList.value.length === 0) return "empty";
-    return "ready";
-  });
-
-  onShow(async () => {
-    await loadExamInfo();
-  });
-  onPullDownRefresh(async () => {
-    try {
-      await onTapUpdate();
-    } finally {
-      uni.stopPullDownRefresh();
-    }
-  });
-  async function loadExamInfo() {
-    isLoading.value = true;
-    try {
-      hasLoadError.value = false;
-      hasUserInfo.value = await stdUser.getUserInfo(false) !== null;
-      if (!hasUserInfo.value) {
-        examInfoList.value = [];
-        return;
-      }
+  const {
+    pageState,
+    loadPageData: loadExamInfo,
+    refreshPageData: onTapUpdate
+  } = useAuthorizedPageData({
+    hasReadyData: () => currExamInfoList.value.length > 0,
+    hasInitialData: () => examInfoList.value.length > 0,
+    loadData: async () => {
       examInfoList.value = await examModel.get();
       currDate.value = new Date();
-    } catch (e) {
-      console.error("[ExamPage] load failed", e);
+    },
+    refreshData: () => examModel.update(),
+    clearData: () => {
       examInfoList.value = [];
-      hasLoadError.value = true;
-    } finally {
-      isLoading.value = false;
-    }
-  }
-  async function onTapUpdate() {
-    hasUserInfo.value = await stdUser.getUserInfo(false) !== null;
-    if (!hasUserInfo.value) return;
-    isLoading.value = true;
-    try {
-      hasLoadError.value = false;
-      const isUpdated = await examModel.update();
-      if (!isUpdated) {
-        hasLoadError.value = true;
-        return;
-      }
-      examInfoList.value = await examModel.get();
-      await uni.showToast({ title: "更新完成", icon: "success" });
-    } catch (e) {
-      console.error("[ExamPage] update failed", e);
-      hasLoadError.value = true;
-    } finally {
-      isLoading.value = false;
-    }
-  }
+    },
+    logTag: "ExamPage",
+    successMessage: "更新完成",
+    registerOnShow: true,
+    registerPullDownRefresh: true
+  });
+
   function calcDays(examInfo: ExamInfo) {
     const examDate = stringToDateInChinaTime(examInfo.date);
     return calcDaysBetweenDates(truncDate(currDate.value), examDate);
