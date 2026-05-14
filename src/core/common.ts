@@ -1,5 +1,6 @@
 import type {StdRequestOptions, StdResponse} from "@/core/network";
 import {stdRequest} from "@/core/network";
+import {err, ok} from "@/core/result";
 
 
 export async function stdRequestHelper<ResType>(options: {
@@ -13,11 +14,11 @@ export async function stdRequestHelper<ResType>(options: {
     try {
         const res = await stdRequest<ResType>(options.requestOptions);
         if (options.showLoading) uni.hideLoading();
-        return res;
+        return ok(res);
     } catch (e: any) {
         if (options.showLoading) uni.hideLoading();
         if (options.showError) await stdShowErrorToast(e);
-        return null;
+        return err(e);
     }
 }
 

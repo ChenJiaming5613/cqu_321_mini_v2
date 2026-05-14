@@ -12,8 +12,8 @@ class LibraryModel extends StdModel {
             },
             showError: true
         });
-        if (res === null) return [];
-        return convertToBookInfos(res);
+        if (!res.ok) return [];
+        return convertToBookInfos(res.data);
     }
 }
 export default LibraryModel;

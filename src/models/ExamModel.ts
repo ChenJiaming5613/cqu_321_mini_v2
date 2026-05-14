@@ -28,7 +28,7 @@ class ExamModel extends StdModel {
     const info = await stdUser.getUserInfo();
     if (info === null) return false;
     const sid = info.sid;
-    const res: any = await stdRequestHelper({
+    const res = await stdRequestHelper<{exams: any[]}>({
       requestOptions: {
         url: "/edu_admin_center/fetchExam",
         data: { "sid": sid }
@@ -37,8 +37,8 @@ class ExamModel extends StdModel {
       showError: true,
       loadingText: "更新中"
     });
-    if (res === null) return false;
-    const exams: any[] = res.exams;
+    if (!res.ok) return false;
+    const exams: any[] = res.data.exams;
     this._examInfoList = exams.map(it => {
       return {
         name: it.course.name,

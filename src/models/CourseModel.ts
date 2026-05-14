@@ -52,12 +52,12 @@ class CourseModel extends StdModel {
       showError: true,
       loadingText: "更新中"
     });
-    if (_courses === null) return false;
+    if (!_courses.ok) return false;
     await this._setCoursesData(termOffset, {
-      termName: _courses.session_name,
-      startDate: _courses.start_date,
-      endDate: _courses.end_date,
-      courses: _courses.timetables.map(it => convertCourses(it))
+      termName: _courses.data.session_name,
+      startDate: _courses.data.start_date,
+      endDate: _courses.data.end_date,
+      courses: _courses.data.timetables.map(it => convertCourses(it))
     });
     return true;
   }
