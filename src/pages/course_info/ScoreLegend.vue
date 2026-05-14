@@ -22,8 +22,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin: 22rpx 60rpx 48rpx;
-  color: #8d8d8d;
+  margin: 22rpx 48rpx 34rpx;
+  color: #667381;
   font-size: 20rpx;
 }
 
@@ -38,5 +38,19 @@
   height: 18rpx;
   margin-right: 8rpx;
   border-radius: 3rpx;
+}
+
+@media screen and (min-width: 600px) {
+  .score-legend {
+    margin: 18px 6px 24px;
+    font-size: 13px;
+  }
+
+  .legend-dot {
+    width: 10px;
+    height: 10px;
+    margin-right: 6px;
+    border-radius: 2px;
+  }
 }
 </style>

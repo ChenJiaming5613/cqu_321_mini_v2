@@ -119,20 +119,21 @@
 <style scoped>
 .page {
   min-height: 100vh;
-  background: #f7f7f7;
+  background: #f5f7fb;
 }
 
 .content {
-  padding: 228rpx 56rpx 64rpx;
+  padding: 214rpx 42rpx 64rpx;
 }
 
 .avatar {
-  width: 172rpx;
-  height: 172rpx;
-  margin: 0 auto 38rpx;
+  width: 148rpx;
+  height: 148rpx;
+  margin: 0 auto 32rpx;
   border-radius: 50%;
-  background: #d8d8d8;
+  background: #1f2935;
   overflow: hidden;
+  box-shadow: 0 16rpx 34rpx rgba(31, 43, 58, 0.16);
 }
 
 .avatar-img {
@@ -145,7 +146,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #666;
+  color: #1f2935;
   font-size: 34rpx;
   font-weight: 700;
 }
@@ -165,11 +166,16 @@
   display: flex;
   flex-direction: column;
   gap: 28rpx;
+  padding: 30rpx;
+  border-radius: 28rpx;
+  background: #fff;
+  border: 1rpx solid rgba(219, 225, 235, 0.95);
+  box-shadow: 0 16rpx 42rpx rgba(31, 43, 58, 0.07);
 }
 
 .label {
   margin: 0 0 14rpx 24rpx;
-  color: #666;
+  color: #52606f;
   font-size: 28rpx;
   font-weight: 700;
 }
@@ -177,8 +183,9 @@
 .input-wrap {
   height: 92rpx;
   padding: 0 30rpx 0 36rpx;
-  border-radius: 28rpx;
-  background: #fff;
+  border-radius: 22rpx;
+  background: #f9fafc;
+  border: 1rpx solid #e7ebf1;
   display: flex;
   align-items: center;
 }
@@ -186,23 +193,23 @@
 .input-wrap input {
   flex: 1;
   min-width: 0;
-  color: #555;
+  color: #1f2935;
   font-size: 27rpx;
 }
 
 .placeholder {
-  color: #d5d5d5;
+  color: #aeb6c2;
 }
 
 .input-icon {
   margin-left: 18rpx;
-  color: #777;
+  color: #98a1ad;
   font-size: 34rpx;
 }
 
 .error {
   margin: 10rpx 0 0 24rpx;
-  color: #ff3b3b;
+  color: #de3f4a;
   font-size: 22rpx;
 }
 
@@ -216,7 +223,7 @@
 .identity-option {
   display: flex;
   align-items: center;
-  color: #666;
+  color: #52606f;
   font-size: 32rpx;
   font-weight: 700;
 }
@@ -226,14 +233,14 @@
   height: 44rpx;
   margin-left: 18rpx;
   border-radius: 50%;
-  border: 3rpx solid #d5d5d5;
+  border: 3rpx solid #d6dde7;
   background: #fff;
 }
 
 .identity-option.active .radio {
-  border-color: #ff3b3b;
+  border-color: #de3f4a;
   box-shadow: inset 0 0 0 10rpx #fff;
-  background: #ff3b3b;
+  background: #de3f4a;
 }
 
 .bind-btn {
@@ -241,8 +248,8 @@
   height: 82rpx;
   margin: 8rpx auto 0;
   padding: 0;
-  border-radius: 14rpx;
-  background: #ff3b3b;
+  border-radius: 20rpx;
+  background: #de3f4a;
   color: #fff;
   font-size: 34rpx;
   font-weight: 700;
@@ -254,13 +261,13 @@
 }
 
 .bind-btn[disabled] {
-  background: #ff8d8d;
+  background: #f2a0a6;
   color: #fff;
 }
 
 .privacy-note {
   margin-top: 30rpx;
-  color: #aaa;
+  color: #8a95a3;
   font-size: 22rpx;
   line-height: 34rpx;
   text-align: center;

@@ -14,7 +14,7 @@
     >
       {{isLoading ? '刷新中' : pullDistance >= pullRefreshThreshold ? '释放刷新' : '下拉刷新'}}
     </view>
-    <view v-if="hasGradeData" class="content">
+    <view v-if="pageState === 'ready'" class="content">
       <Overview
         v-if="gpaInfo !== null"
         :gpa-info="gpaInfo"
@@ -40,13 +40,15 @@
         </TermOverview>
       </view>
     </view>
-    <Empty
-      v-else
-      class="empty"
-      icon-type="warning"
-      message="暂未登录"
-      hint="无法查看功能，请登录后操作"
-    />
+    <view v-else class="state-wrap">
+      <PageState
+        :state="pageState"
+        empty-message="暂无成绩"
+        empty-hint="当前账号暂时没有可展示的成绩数据"
+        error-message="成绩加载失败"
+        @retry="loadGradeInfo"
+      />
+    </view>
   </view>
 </template>
 
@@ -54,6 +56,7 @@
   import GradeModel, {GpaType, type GradeInfo, type ScoreItem} from "@/models/GradeModel";
   import {onPullDownRefresh, onShow} from "@dcloudio/uni-app";
   import {computed, ref} from "vue";
+  import stdUser from "@/core/StdUser";
   import {
     convertToTermName,
     filterCourseWhenCalcGpa,
@@ -63,13 +66,15 @@
   import Overview from "@/pages/grade/Overview.vue";
   import TermOverview from "@/pages/grade/TermOverview.vue";
   import GradeItem from "@/pages/grade/GradeItem.vue";
-  import Empty from "@/pages/components/Empty.vue";
+  import PageState from "@/pages/components/PageState.vue";
   import NavigationBar from "@/pages/components/NavigationBar.vue";
 
   const gradeModel = GradeModel.getInstance();
 
   // 成绩信息
   const gradeInfo = ref<GradeInfo | null>(null);
+  const hasUserInfo = ref(false);
+  const hasLoadError = ref(false);
   const isLoading = ref(false);
   const expandedTerms = ref(new Set<string>());
   const pullStartY = ref<number | null>(null);
@@ -77,9 +82,7 @@
   const pullRefreshThreshold = 80;
 
   onShow(async () => {
-    gradeInfo.value = await gradeModel.get();
-    isLoading.value = false;
-    expandFirstTerm();
+    await loadGradeInfo();
   });
   onPullDownRefresh(async () => {
     try {
@@ -91,6 +94,13 @@
 
   const hasGradeData = computed(() => {
     return gpaInfo.value !== null || (gradeInfo.value?.scoreItems.length ?? 0) > 0;
+  });
+  const pageState = computed<"loading" | "unauthorized" | "empty" | "error" | "ready">(() => {
+    if (isLoading.value && gradeInfo.value === null) return "loading";
+    if (!hasUserInfo.value) return "unauthorized";
+    if (hasLoadError.value) return "error";
+    if (!hasGradeData.value) return "empty";
+    return "ready";
   });
   const termGroups = computed(() => {
     const termMap = new Map<string, ScoreItem[]>();
@@ -156,6 +166,26 @@
     expandedTerms.value = new Set([termGroups.value[0].name]);
   }
 
+  async function loadGradeInfo() {
+    isLoading.value = true;
+    try {
+      hasLoadError.value = false;
+      hasUserInfo.value = await stdUser.getUserInfo(false) !== null;
+      if (!hasUserInfo.value) {
+        gradeInfo.value = null;
+        return;
+      }
+      gradeInfo.value = await gradeModel.get();
+      expandFirstTerm();
+    } catch (e) {
+      console.error("[GradePage] load failed", e);
+      gradeInfo.value = null;
+      hasLoadError.value = true;
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
   function onTouchStart(event: TouchEvent) {
     if (isLoading.value || getScrollTop() > 0) return;
     pullStartY.value = event.touches[0]?.clientY ?? null;
@@ -193,8 +223,11 @@
   // 更新成绩
   async function updateGradeInfo() {
     if (isLoading.value) return;
+    hasUserInfo.value = await stdUser.getUserInfo(false) !== null;
+    if (!hasUserInfo.value) return;
     isLoading.value = true;
     try {
+      hasLoadError.value = false;
       await gradeModel.update();
       gradeInfo.value = await gradeModel.get();
       expandFirstTerm();
@@ -211,11 +244,11 @@
 <style scoped>
 .page {
   min-height: 100vh;
-  background: #f7f7f7;
+  background: #f5f7fb;
 }
 
 .content {
-  padding: 212rpx 32rpx 48rpx;
+  padding: 208rpx 28rpx 54rpx;
 }
 
 .pull-indicator {
@@ -225,7 +258,7 @@
   right: 0;
   height: 48rpx;
   line-height: 48rpx;
-  color: #e6505f;
+  color: #de3f4a;
   font-size: 24rpx;
   text-align: center;
   z-index: 99;
@@ -234,10 +267,40 @@
 }
 
 .terms {
-  margin-top: 24rpx;
+  margin-top: 28rpx;
 }
 
-.empty {
-  margin-top: 180rpx;
+.state-wrap {
+  padding-top: 180rpx;
+}
+
+@media screen and (min-width: 600px) {
+  .content {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 180px 28px 64px;
+    box-sizing: border-box;
+  }
+
+  .terms {
+    margin-top: 24px;
+  }
+
+  .state-wrap {
+    max-width: 720px;
+    margin: 0 auto;
+    padding-top: 154px;
+  }
+}
+
+@media screen and (min-width: 900px) {
+  .content {
+    max-width: 980px;
+    padding-top: 112px;
+  }
+
+  .state-wrap {
+    padding-top: 90px;
+  }
 }
 </style>

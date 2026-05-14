@@ -75,11 +75,30 @@
 <style scoped>
 .settings-page {
   min-height: calc(100vh - 100rpx);
-  padding-bottom: 140rpx;
-  background: #f7f7f7;
+  padding: 0 28rpx 160rpx;
+  background: #f5f7fb;
 }
 
 .menu-list {
-  padding-top: 12rpx;
+  margin-top: 22rpx;
+  overflow: hidden;
+  border-radius: 24rpx;
+  background: #fff;
+  border: 1rpx solid rgba(219, 225, 235, 0.95);
+  box-shadow: 0 16rpx 40rpx rgba(31, 43, 58, 0.07);
+}
+
+@media screen and (min-width: 600px) {
+  .settings-page {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 28px 110px;
+    box-sizing: border-box;
+  }
+
+  .menu-list {
+    margin-top: 22px;
+    border-radius: 18px;
+  }
 }
 </style>

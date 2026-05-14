@@ -7,15 +7,17 @@
     />
   </view>
   <view class="page">
-    <Empty
-        v-if="currExamInfoList.length === 0"
-        message="暂无考试安排"
-        icon-type="warning"
-        hint="请先完善账号信息"
-        button-text="刷新考试安排"
-        @action="onTapUpdate"
+    <PageState
+        v-if="pageState !== 'ready'"
+        :state="pageState"
+        empty-message="暂无考试安排"
+        empty-hint="当前账号暂时没有可展示的考试安排"
+        empty-action-text="刷新考试安排"
+        error-message="考试安排加载失败"
+        @empty-action="onTapUpdate"
+        @retry="loadExamInfo"
     />
-    <view v-else>
+    <view v-else class="exam-list">
       <ExamItem
           v-for="examInfo in currExamInfoList"
           :key="examInfo.name"
@@ -32,15 +34,19 @@
 
 <script setup lang="ts">
   import NavigationBar from "@/pages/components/NavigationBar.vue";
-  import Empty from "@/pages/components/Empty.vue";
+  import PageState from "@/pages/components/PageState.vue";
   import ExamModel, {type ExamInfo} from "@/models/ExamModel";
-  import {onShow} from "@dcloudio/uni-app";
+  import {onPullDownRefresh, onShow} from "@dcloudio/uni-app";
   import {computed, ref} from "vue";
+  import stdUser from "@/core/StdUser";
   import ExamItem from "@/pages/exam/ExamItem.vue";
   import TabBar from "@/pages/exam/TabBar.vue";
   import {calcDaysBetweenDates, stringToDateInChinaTime, truncDate} from "@/utils/datetime";
   const examModel = ExamModel.getInstance();
   const examInfoList = ref<ExamInfo[]>([]);
+  const hasUserInfo = ref(false);
+  const hasLoadError = ref(false);
+  const isLoading = ref(false);
   const tabCur = ref(0);
   const currDate = ref(new Date());
 
@@ -59,15 +65,58 @@
             - stringToDateInChinaTime(a.date + ' ' + a.endTime).getTime();
       })
   );
+  const pageState = computed<"loading" | "unauthorized" | "empty" | "error" | "ready">(() => {
+    if (isLoading.value && examInfoList.value.length === 0) return "loading";
+    if (!hasUserInfo.value) return "unauthorized";
+    if (hasLoadError.value) return "error";
+    if (currExamInfoList.value.length === 0) return "empty";
+    return "ready";
+  });
 
   onShow(async () => {
-    examInfoList.value = await examModel.get();
-    currDate.value = new Date();
+    await loadExamInfo();
   });
+  onPullDownRefresh(async () => {
+    try {
+      await onTapUpdate();
+    } finally {
+      uni.stopPullDownRefresh();
+    }
+  });
+  async function loadExamInfo() {
+    isLoading.value = true;
+    try {
+      hasLoadError.value = false;
+      hasUserInfo.value = await stdUser.getUserInfo(false) !== null;
+      if (!hasUserInfo.value) {
+        examInfoList.value = [];
+        return;
+      }
+      examInfoList.value = await examModel.get();
+      currDate.value = new Date();
+    } catch (e) {
+      console.error("[ExamPage] load failed", e);
+      examInfoList.value = [];
+      hasLoadError.value = true;
+    } finally {
+      isLoading.value = false;
+    }
+  }
   async function onTapUpdate() {
-    await examModel.update();
-    examInfoList.value = await examModel.get();
-    await uni.showToast({ title: "更新完成", icon: "success" });
+    hasUserInfo.value = await stdUser.getUserInfo(false) !== null;
+    if (!hasUserInfo.value) return;
+    isLoading.value = true;
+    try {
+      hasLoadError.value = false;
+      await examModel.update();
+      examInfoList.value = await examModel.get();
+      await uni.showToast({ title: "更新完成", icon: "success" });
+    } catch (e) {
+      console.error("[ExamPage] update failed", e);
+      hasLoadError.value = true;
+    } finally {
+      isLoading.value = false;
+    }
   }
   function calcDays(examInfo: ExamInfo) {
     const examDate = stringToDateInChinaTime(examInfo.date);
@@ -98,12 +147,13 @@
 .page {
   min-height: calc(100vh - 260rpx);
   padding: 26rpx 0 80rpx;
-  background: #f7f7f7;
+  background: #f5f7fb;
 }
 
 .tabs-shell {
   padding-top: 180rpx;
   background: #fff;
+  border-bottom: 1rpx solid #eef1f5;
 }
 
 .custom-entry {
@@ -111,8 +161,36 @@
   width: 220rpx;
   height: 54rpx;
   line-height: 54rpx;
-  color: #999;
+  color: #667381;
   font-size: 24rpx;
   text-align: center;
+}
+
+@media screen and (min-width: 600px) {
+  .page {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 24px 28px 72px;
+    box-sizing: border-box;
+  }
+
+  .tabs-shell {
+    padding-top: 154px;
+  }
+
+  .exam-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 18px;
+    row-gap: 18px;
+  }
+
+  .custom-entry {
+    margin-top: 22px;
+    width: 160px;
+    height: 38px;
+    line-height: 38px;
+    font-size: 15px;
+  }
 }
 </style>

@@ -23,7 +23,8 @@
   height: 52rpx;
   padding: 2rpx;
   border-radius: 28rpx;
-  background: #efefef;
+  background: #f1f4f8;
+  border: 1rpx solid #e7ebf1;
 }
 
 .tab {
@@ -31,14 +32,14 @@
   height: 48rpx;
   line-height: 48rpx;
   border-radius: 26rpx;
-  color: #777;
+  color: #667381;
   font-size: 24rpx;
   text-align: center;
 }
 
 .active {
-  color: #e95b67;
+  color: #de3f4a;
   background: #fff;
-  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4rpx 12rpx rgba(31, 43, 58, 0.08);
 }
 </style>

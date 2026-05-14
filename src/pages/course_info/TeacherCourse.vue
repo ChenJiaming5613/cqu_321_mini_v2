@@ -34,18 +34,19 @@
 
 <style scoped>
 .teacher-card {
-  margin: 0 56rpx 28rpx;
+  margin: 0 42rpx 28rpx;
   overflow: hidden;
-  border-radius: 8rpx;
+  border-radius: 24rpx;
   background: #fff;
-  box-shadow: 0 3rpx 12rpx rgba(0, 0, 0, 0.04);
+  border: 1rpx solid rgba(219, 225, 235, 0.95);
+  box-shadow: 0 14rpx 34rpx rgba(31, 43, 58, 0.06);
 }
 
 .teacher-head,
 .course-row {
   display: flex;
   align-items: center;
-  min-height: 86rpx;
+  min-height: 96rpx;
   padding: 0 28rpx 0 20rpx;
 }
 
@@ -61,13 +62,13 @@
   height: 12rpx;
   margin-right: 24rpx;
   border-radius: 50%;
-  background: #ff5661;
+  background: #de3f4a;
 }
 
 .teacher-name,
 .course-name {
   overflow: hidden;
-  color: #666;
+  color: #1f2935;
   font-size: 26rpx;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -76,13 +77,13 @@
 .course-count,
 .course-code {
   margin-left: 20rpx;
-  color: #c9c9c9;
+  color: #98a1ad;
   font-size: 24rpx;
 }
 
 .fold-icon {
   margin-left: 28rpx;
-  color: #e95b67;
+  color: #de3f4a;
   font-size: 34rpx;
   font-weight: 700;
 }
@@ -91,12 +92,50 @@
   min-height: 74rpx;
   margin: 0 20rpx;
   padding-right: 8rpx;
-  border-top: 1rpx solid #f1f1f1;
+  border-top: 1rpx solid #eef1f5;
 }
 
 .course-name {
   flex: 1;
-  color: #777;
+  color: #52606f;
   font-size: 24rpx;
+}
+
+@media screen and (min-width: 600px) {
+  .teacher-card {
+    margin: 0 0 22px;
+    border-radius: 18px;
+  }
+
+  .teacher-head,
+  .course-row {
+    min-height: 70px;
+    padding: 0 20px 0 16px;
+  }
+
+  .red-dot {
+    width: 8px;
+    height: 8px;
+    margin-right: 16px;
+  }
+
+  .teacher-name,
+  .course-name {
+    font-size: 17px;
+  }
+
+  .course-count,
+  .course-code {
+    font-size: 14px;
+  }
+
+  .fold-icon {
+    margin-left: 18px;
+    font-size: 24px;
+  }
+
+  .course-row {
+    min-height: 52px;
+  }
 }
 </style>

@@ -15,10 +15,15 @@ export type RefreshTokenInfo = {
 
 class StdToken extends StdModel {
   private _tokenInfo: TokenInfo = {token: "", tokenExpireTime: -1};
+  private _appTokenInfo: TokenInfo = {token: "", tokenExpireTime: -1};
   public get tokenInfo() { return this._tokenInfo; }
   public set tokenInfo(info: TokenInfo) {
     this._tokenInfo = info;
     // console.log("TokenInfo", this._tokenInfo);
+  }
+  public get appTokenInfo() { return this._appTokenInfo; }
+  public set appTokenInfo(info: TokenInfo) {
+    this._appTokenInfo = info;
   }
   public async getRefreshTokenInfo() {
     try {
@@ -29,7 +34,18 @@ class StdToken extends StdModel {
     }
   }
   public async setRefreshTokenInfo(info: RefreshTokenInfo) { await stdSetStorage("RefreshTokenInfo", info); }
-  public clear() { this._tokenInfo = {token: "", tokenExpireTime: -1}; }
+  public async getAppRefreshTokenInfo() {
+    try {
+      return await stdGetStorage<RefreshTokenInfo>("AppRefreshTokenInfo");
+    } catch (e) {
+      return null;
+    }
+  }
+  public async setAppRefreshTokenInfo(info: RefreshTokenInfo) { await stdSetStorage("AppRefreshTokenInfo", info); }
+  public clear() {
+    this._tokenInfo = {token: "", tokenExpireTime: -1};
+    this._appTokenInfo = {token: "", tokenExpireTime: -1};
+  }
 }
 
 export default new StdToken();

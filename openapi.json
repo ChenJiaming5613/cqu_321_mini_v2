@@ -1,0 +1,3104 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "API",
+    "version": "1.0.0",
+    "contact": {
+
+    }
+  },
+  "paths": {
+    "/v1/notification/bindOpenId": {
+      "post": {
+        "operationId": "post~Notification.bind_openid",
+        "summary": "绑定用户openid",
+        "description": "**仅支持微信小程序调用**",
+        "tags": [
+          "Notification"
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseApiResponse_Dict"
+                }
+              }
+            },
+            "description": "Default Response"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BindOpenIdRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/notification/updateSubscribe": {
+      "post": {
+        "operationId": "post~Notification.update_subscribe",
+        "summary": "更新通知订阅设置",
+        "tags": [
+          "Notification"
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseApiResponse_Dict"
+                }
+              }
+            },
+            "description": "Default Response"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateSubscribeRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/notification/setApns": {
+      "post": {
+        "operationId": "post~Notification.set_user_apns",
+        "summary": "设置APNs(Apple Push Notification Service)调用",
+        "description": "**仅支持IOS客户端调用**",
+        "tags": [
+          "Notification"
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseApiResponse_Dict"
+                }
+              }
+            },
+            "description": "Default Response"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetUserApnsRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/notification/fetchSubscribeInfo": {
+      "post": {
+        "operationId": "post~Notification.fetch_subscribe_info",
+        "summary": "获取订阅信息",
+        "tags": [
+          "Notification"
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseApiResponse__FetchSubscribeInfoResponse"
+                }
+              }
+            },
+            "description": "Default Response"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FetchSubscribeInfoRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/authorization/login": {
+      "post": {
+        "operationId": "post~Authorization.login",
+        "summary": "获取token",
+        "description": "小程序与APP调用时应将将统一身份认证账号密码作为参数上传以支持需要统一身份认证的相关API调用",
+        "tags": [
+          "Authorization"
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseApiResponse__LoginResponse"
+                }
+              }
+            },
+            "description": "Default Response"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/authorization/refreshToken": {
+      "post": {
+        "operationId": "post~Authorization.refresh_token",
+        "summary": "刷新token",
+        "tags": [
+          "Authorization"
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseApiResponse__RefreshTokenResponse"
+                }
+              }
+            },
+            "description": "Default Response"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefreshTokenRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/edu_admin_center/fetchScore": {
+      "post": {
+        "operationId": "post~EduAdminCenter.fetch_score",
+        "summary": "成绩查询",
+        "tags": [
+          "EduAdminCenter"
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseApiResponse__FetchScoreResponse"
+                }
+              }
+            },
+            "description": "Default Response"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FetchScoreRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/edu_admin_center/validateAuth": {
+      "post": {
+        "operationId": "post~EduAdminCenter.validate_auth",
+        "summary": "账号验证",
+        "tags": [
+          "EduAdminCenter"
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseApiResponse__ValidateAuthResponse"
+                }
+              }
+            },
+            "description": "Default Response"
+          }
+        }
+      }
+    },
+    "/v1/edu_admin_center/fetchExam": {
+      "post": {
+        "operationId": "post~EduAdminCenter.fetch_exam",
+        "summary": "考试安排",
+        "tags": [
+          "EduAdminCenter"
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseApiResponse__FetchExamResponse"
+                }
+              }
+            },
+            "description": "Default Response"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FetchExamRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/edu_admin_center/fetchEnrollCourseInfo": {
+      "post": {
+        "operationId": "post~EduAdminCenter.fetch_enroll_course_info",
+        "summary": "可选课程查询",
+        "description": "**仅支持IOS客户端调用**",
+        "tags": [
+          "EduAdminCenter"
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseApiResponse__FetchEnrollCourseInfoResponse"
+                }
+              }
+            },
+            "description": "Default Response"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FetchEnrollCourseInfoRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/edu_admin_center/fetchCourseTimetable": {
+      "post": {
+        "operationId": "post~EduAdminCenter.fetch_course_timetable",
+        "summary": "课表查询",
+        "tags": [
+          "EduAdminCenter"
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseApiResponse__FetchCourseTimetableResponse"
+                }
+              }
+            },
+            "description": "Default Response"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FetchCourseTimetableRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/edu_admin_center/fetchEnrollCourseItem": {
+      "post": {
+        "operationId": "post~EduAdminCenter.fetch_enroll_course_item",
+        "summary": "可选课程信息查询",
+        "description": "**仅支持IOS客户端调用**",
+        "tags": [
+          "EduAdminCenter"
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseApiResponse__FetchEnrollCourseItemResponse"
+                }
+              }
+            },
+            "description": "Default Response"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FetchEnrollCourseItemRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/edu_admin_center/fetchGpaRanking": {
+      "post": {
+        "operationId": "post~EduAdminCenter.fetch_gpa_ranking",
+        "summary": "绩点排名查询",
+        "tags": [
+          "EduAdminCenter"
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseApiResponse_GpaRanking"
+                }
+              }
+            },
+            "description": "Default Response"
+          }
+        }
+      }
+    },
+    "/v1/course_score_query/course": {
+      "get": {
+        "operationId": "get~CourseScoreQuery.find_course_by_name",
+        "summary": "通过关键词搜索课程",
+        "tags": [
+          "CourseScoreQuery"
+        ],
+        "parameters": [
+          {
+            "name": "course_name",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "description": "课程名关键词",
+            "in": "query"
+          },
+          {
+            "name": "teacher_name",
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "description": "教师名关键词",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseApiResponse__FindCourseByNameResponse"
+                }
+              }
+            },
+            "description": "Default Response"
+          }
+        }
+      }
+    },
+    "/v1/campus_lift/bill/dorm_energy": {
+      "get": {
+        "operationId": "get~CampusLift.fetch_dorm_energy",
+        "summary": "获取宿舍水电费信息",
+        "tags": [
+          "CampusLift"
+        ],
+        "parameters": [
+          {
+            "name": "is_huxi",
+            "schema": {
+              "type": "boolean"
+            },
+            "description": "是否为虎溪校区",
+            "in": "query"
+          },
+          {
+            "name": "room",
+            "schema": {
+              "type": "string"
+            },
+            "description": "宿舍代码",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseApiResponse_EnergyFees"
+                }
+              }
+            },
+            "description": "Default Response"
+          }
+        }
+      }
+    },
+    "/v1/campus_lift/card": {
+      "get": {
+        "operationId": "get~CampusLift.fetch_card",
+        "summary": "获取校园卡信息",
+        "tags": [
+          "CampusLift"
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseApiResponse_Card"
+                }
+              }
+            },
+            "description": "Default Response"
+          }
+        }
+      }
+    },
+    "/v1/campus_lift/bill/card": {
+      "get": {
+        "operationId": "get~CampusLift.fetch_bill",
+        "summary": "获取最近30天的账单信息",
+        "tags": [
+          "CampusLift"
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseApiResponse_FetchBillsResponse"
+                }
+              }
+            },
+            "description": "Default Response"
+          }
+        }
+      }
+    },
+    "/v1/recruit/score": {
+      "get": {
+        "operationId": "get~Recruit.fetch_score",
+        "summary": "获取成绩信息",
+        "tags": [
+          "Recruit"
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseApiResponse__FetchScoreResponse"
+                }
+              }
+            },
+            "description": "Default Response"
+          }
+        }
+      }
+    },
+    "/v1/library/borrow": {
+      "get": {
+        "operationId": "get~Library.fetch_borrow_book",
+        "summary": "获取书籍借阅信息",
+        "tags": [
+          "Library"
+        ],
+        "parameters": [
+          {
+            "name": "is_curr",
+            "schema": {
+              "type": "boolean"
+            },
+            "description": "是否获取当前借阅列表（为false则获取历史借阅列表）",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseApiResponse_FetchBorrowBookResponse"
+                }
+              }
+            },
+            "description": "Default Response"
+          }
+        }
+      },
+      "post": {
+        "operationId": "post~Library.renew_book",
+        "summary": "续借书籍",
+        "tags": [
+          "Library"
+        ],
+        "parameters": [
+          {
+            "name": "book_id",
+            "schema": {
+              "type": "string"
+            },
+            "description": "续借书籍ID",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseApiResponse_Dict"
+                }
+              }
+            },
+            "description": "Default Response"
+          }
+        }
+      }
+    },
+    "/v1/important_info/homepages": {
+      "get": {
+        "operationId": "get~ImportantInfo.get_homepage",
+        "summary": "获取首页轮播图",
+        "tags": [
+          "ImportantInfo"
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseApiResponse__HomepageResponse"
+                }
+              }
+            },
+            "description": "Default Response"
+          }
+        }
+      }
+    },
+    "/v1/321CQU/school_info/get_vacant_room": {
+      "post": {
+        "operationId": "post~LegacyCompat.legacy_get_vacant_room",
+        "summary": "Legacy Get Vacant Room",
+        "tags": [
+          "LegacyCompat"
+        ],
+        "responses": {
+          "default": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/v1/321CQU/library/get_borrow_list": {
+      "post": {
+        "operationId": "post~LegacyCompat.legacy_get_borrow_list",
+        "summary": "借阅列表",
+        "tags": [
+          "LegacyCompat"
+        ],
+        "responses": {
+          "default": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/v1/321CQU/homepage": {
+      "post": {
+        "operationId": "post~LegacyCompat.legacy_homepage",
+        "summary": "首页轮播图",
+        "tags": [
+          "LegacyCompat"
+        ],
+        "responses": {
+          "default": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/v1/321CQU/student/get_gpa_ranking": {
+      "post": {
+        "operationId": "post~LegacyCompat.legacy_get_gpa_ranking",
+        "summary": "绩点排名（v1.0/v2.0 字段名不同）",
+        "tags": [
+          "LegacyCompat"
+        ],
+        "responses": {
+          "default": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/v1/321CQU/student/get_enroll_detail": {
+      "post": {
+        "operationId": "post~LegacyCompat.legacy_get_enroll_detail",
+        "summary": "可选课程详情（仅 v2.0）",
+        "tags": [
+          "LegacyCompat"
+        ],
+        "responses": {
+          "default": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/v1/321CQU/school_info/get_card": {
+      "post": {
+        "operationId": "post~LegacyCompat.legacy_get_card",
+        "summary": "校园卡信息",
+        "tags": [
+          "LegacyCompat"
+        ],
+        "responses": {
+          "default": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/v1/321CQU/student/get_exam": {
+      "post": {
+        "operationId": "post~LegacyCompat.legacy_get_exam",
+        "summary": "考试安排",
+        "tags": [
+          "LegacyCompat"
+        ],
+        "responses": {
+          "default": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/v1/321CQU/student/get_course": {
+      "post": {
+        "operationId": "post~LegacyCompat.legacy_get_course",
+        "summary": "课表查询（v1.0/v2.0 字段名不同）",
+        "tags": [
+          "LegacyCompat"
+        ],
+        "responses": {
+          "default": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/v1/321CQU/school_info/get_course_list": {
+      "post": {
+        "operationId": "post~LegacyCompat.legacy_get_course_list",
+        "summary": "搜索课程 — 按课程名或教师名",
+        "tags": [
+          "LegacyCompat"
+        ],
+        "responses": {
+          "default": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/v1/321CQU/message/subscribe": {
+      "post": {
+        "operationId": "post~LegacyCompat.legacy_subscribe_message",
+        "summary": "消息订阅",
+        "tags": [
+          "LegacyCompat"
+        ],
+        "responses": {
+          "default": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/v1/321CQU/user/login": {
+      "post": {
+        "operationId": "post~LegacyCompat.legacy_login",
+        "summary": "Legacy Login",
+        "tags": [
+          "LegacyCompat"
+        ],
+        "responses": {
+          "default": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/v1/321CQU/school_info/get_course_detail": {
+      "post": {
+        "operationId": "post~LegacyCompat.legacy_get_course_detail",
+        "summary": "课程详情/历年成绩",
+        "tags": [
+          "LegacyCompat"
+        ],
+        "responses": {
+          "default": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/v1/321CQU/student/StuVal": {
+      "post": {
+        "operationId": "post~LegacyCompat.legacy_stu_val",
+        "summary": "账号验证",
+        "tags": [
+          "LegacyCompat"
+        ],
+        "responses": {
+          "default": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/v1/321CQU/student/get_enroll_list": {
+      "post": {
+        "operationId": "post~LegacyCompat.legacy_get_enroll_list",
+        "summary": "可选课程列表（仅 v2.0）",
+        "tags": [
+          "LegacyCompat"
+        ],
+        "responses": {
+          "default": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/v1/321CQU/school_info/get_fees": {
+      "post": {
+        "operationId": "post~LegacyCompat.legacy_get_fees",
+        "summary": "水电费 / 账单",
+        "tags": [
+          "LegacyCompat"
+        ],
+        "responses": {
+          "default": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/v1/321CQU/student/get_score": {
+      "post": {
+        "operationId": "post~LegacyCompat.legacy_get_score",
+        "summary": "成绩查询（v1.0/v2.0 格式不同）",
+        "tags": [
+          "LegacyCompat"
+        ],
+        "responses": {
+          "default": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/v1/321CQU/library/renew_book": {
+      "post": {
+        "operationId": "post~LegacyCompat.legacy_renew_book",
+        "summary": "续借书籍",
+        "tags": [
+          "LegacyCompat"
+        ],
+        "responses": {
+          "default": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/metrics": {
+      "get": {
+        "operationId": "get~metrics",
+        "summary": "Metrics",
+        "responses": {
+          "default": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/v1/course_score_query/course/{cid}": {
+      "get": {
+        "operationId": "get~CourseScoreQuery.fetch_layered_score_detail",
+        "summary": "通过course id查询分级的课程往年成绩",
+        "tags": [
+          "CourseScoreQuery"
+        ],
+        "parameters": [
+          {
+            "name": "cid",
+            "schema": {
+              "type": "string"
+            },
+            "description": "课程ID",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseApiResponse__FetchLayeredScoreDetailResponse"
+                }
+              }
+            },
+            "description": "Default Response"
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Notification"
+    },
+    {
+      "name": "Authorization"
+    },
+    {
+      "name": "EduAdminCenter"
+    },
+    {
+      "name": "CourseScoreQuery"
+    },
+    {
+      "name": "CampusLift"
+    },
+    {
+      "name": "Recruit"
+    },
+    {
+      "name": "Library"
+    },
+    {
+      "name": "ImportantInfo"
+    },
+    {
+      "name": "LegacyCompat"
+    }
+  ],
+  "servers": [],
+  "security": [],
+  "components": {
+    "schemas": {
+      "_LoginResponse": {
+        "properties": {
+          "token": {
+            "description": "有效时间为15分钟",
+            "title": "请求token",
+            "type": "string"
+          },
+          "refreshToken": {
+            "description": "有效时间为7天",
+            "title": "刷新token",
+            "type": "string"
+          },
+          "tokenExpireTime": {
+            "title": "请求token过期时间戳",
+            "type": "integer"
+          },
+          "refreshTokenExpireTime": {
+            "title": "刷新token过期时间戳",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "token",
+          "refreshToken",
+          "tokenExpireTime",
+          "refreshTokenExpireTime"
+        ],
+        "title": "登陆回传值",
+        "type": "object"
+      },
+      "BaseApiResponse__LoginResponse": {
+        "properties": {
+          "status": {
+            "description": "成功时为1，失败时为0",
+            "title": "响应状态",
+            "type": "integer"
+          },
+          "msg": {
+            "description": "成功时为`success`，失败时为相关错误提示",
+            "title": "响应信息",
+            "type": "string"
+          },
+          "data": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/_LoginResponse"
+              },
+              {
+                "type": "object"
+              }
+            ],
+            "title": "数据"
+          }
+        },
+        "required": [
+          "status",
+          "msg",
+          "data"
+        ],
+        "title": "BaseApiResponse[_LoginResponse]",
+        "type": "object"
+      },
+      "LoginApplyType": {
+        "description": "Api请求类型",
+        "enum": [
+          "WX_Mini_APP",
+          "IOS_APP",
+          "Announcement_Website",
+          "Recruit"
+        ],
+        "title": "LoginApplyType",
+        "type": "string"
+      },
+      "LoginRequest": {
+        "properties": {
+          "apiKey": {
+            "title": "api 请求密钥",
+            "type": "string"
+          },
+          "applyType": {
+            "$ref": "#/components/schemas/LoginApplyType",
+            "title": "请求类型"
+          },
+          "username": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "用户账户"
+          },
+          "password": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "用户密码"
+          }
+        },
+        "required": [
+          "apiKey",
+          "applyType"
+        ],
+        "title": "登陆请求值",
+        "type": "object"
+      },
+      "_RefreshTokenResponse": {
+        "properties": {
+          "token": {
+            "title": "请求token",
+            "type": "string"
+          },
+          "tokenExpireTime": {
+            "title": "请求token过期时间戳",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "token",
+          "tokenExpireTime"
+        ],
+        "title": "刷新token回传值",
+        "type": "object"
+      },
+      "BaseApiResponse__RefreshTokenResponse": {
+        "properties": {
+          "status": {
+            "description": "成功时为1，失败时为0",
+            "title": "响应状态",
+            "type": "integer"
+          },
+          "msg": {
+            "description": "成功时为`success`，失败时为相关错误提示",
+            "title": "响应信息",
+            "type": "string"
+          },
+          "data": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/_RefreshTokenResponse"
+              },
+              {
+                "type": "object"
+              }
+            ],
+            "title": "数据"
+          }
+        },
+        "required": [
+          "status",
+          "msg",
+          "data"
+        ],
+        "title": "BaseApiResponse[_RefreshTokenResponse]",
+        "type": "object"
+      },
+      "RefreshTokenRequest": {
+        "properties": {
+          "refreshToken": {
+            "title": "刷新token",
+            "type": "string"
+          }
+        },
+        "required": [
+          "refreshToken"
+        ],
+        "title": "刷新token请求值",
+        "type": "object"
+      },
+      "BaseApiResponse_Dict": {
+        "properties": {
+          "status": {
+            "description": "成功时为1，失败时为0",
+            "title": "响应状态",
+            "type": "integer"
+          },
+          "msg": {
+            "description": "成功时为`success`，失败时为相关错误提示",
+            "title": "响应信息",
+            "type": "string"
+          },
+          "data": {
+            "title": "数据",
+            "type": "object"
+          }
+        },
+        "required": [
+          "status",
+          "msg",
+          "data"
+        ],
+        "title": "BaseApiResponse[Dict]",
+        "type": "object"
+      },
+      "NotificationEvent": {
+        "description": "通知中心订阅类",
+        "enum": [0],
+        "title": "NotificationEvent",
+        "type": "integer"
+      },
+      "UpdateSubscribeRequest": {
+        "description": "更新订阅信息请求值",
+        "properties": {
+          "uid": {
+            "title": "用户身份标识符",
+            "type": "string"
+          },
+          "event": {
+            "$ref": "#/components/schemas/NotificationEvent",
+            "description": "0: 定时查询成绩，比较数据库以获取新出的成绩并发送通知; \n",
+            "title": "欲操作事件类型"
+          },
+          "is_subscribe": {
+            "title": "是否为订阅操作，true为订阅，false为取消订阅",
+            "type": "boolean"
+          },
+          "extra_data": {
+            "anyOf": [
+              {
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "订阅事件可能需要的额外信息，任意字典"
+          }
+        },
+        "required": [
+          "uid",
+          "event",
+          "is_subscribe"
+        ],
+        "title": "_UpdateSubscribeRequest",
+        "type": "object"
+      },
+      "_FetchSubscribeInfoResponse": {
+        "description": "获取订阅信息响应值",
+        "properties": {
+          "events": {
+            "description": "0: 定时查询成绩，比较数据库以获取新出的成绩并发送通知; \n",
+            "items": {
+              "$ref": "#/components/schemas/NotificationEvent"
+            },
+            "title": "已订阅的事件列表",
+            "type": "array"
+          }
+        },
+        "required": [
+          "events"
+        ],
+        "title": "_FetchSubscribeInfoResponse",
+        "type": "object"
+      },
+      "BaseApiResponse__FetchSubscribeInfoResponse": {
+        "properties": {
+          "status": {
+            "description": "成功时为1，失败时为0",
+            "title": "响应状态",
+            "type": "integer"
+          },
+          "msg": {
+            "description": "成功时为`success`，失败时为相关错误提示",
+            "title": "响应信息",
+            "type": "string"
+          },
+          "data": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/_FetchSubscribeInfoResponse"
+              },
+              {
+                "type": "object"
+              }
+            ],
+            "title": "数据"
+          }
+        },
+        "required": [
+          "status",
+          "msg",
+          "data"
+        ],
+        "title": "BaseApiResponse[_FetchSubscribeInfoResponse]",
+        "type": "object"
+      },
+      "FetchSubscribeInfoRequest": {
+        "description": "获取订阅信息请求值",
+        "properties": {
+          "uid": {
+            "title": "用户身份标识符",
+            "type": "string"
+          }
+        },
+        "required": [
+          "uid"
+        ],
+        "title": "_FetchSubscribeInfoRequest",
+        "type": "object"
+      },
+      "SetUserApnsRequest": {
+        "description": "设置用户Apns请求值",
+        "properties": {
+          "uid": {
+            "title": "用户身份标识",
+            "type": "string"
+          },
+          "apn": {
+            "title": "设备apn代码",
+            "type": "string"
+          }
+        },
+        "required": [
+          "uid",
+          "apn"
+        ],
+        "title": "_SetUserApnsRequest",
+        "type": "object"
+      },
+      "BindOpenIdRequest": {
+        "properties": {
+          "uid": {
+            "title": "用户身份标识符",
+            "type": "string"
+          },
+          "code": {
+            "title": "openid获取码",
+            "type": "string"
+          }
+        },
+        "required": [
+          "uid",
+          "code"
+        ],
+        "title": "BindOpenIdRequest",
+        "type": "object"
+      },
+      "_ValidateAuthResponse": {
+        "properties": {
+          "sid": {
+            "title": "学号",
+            "type": "string"
+          },
+          "auth": {
+            "title": "统一身份认证号",
+            "type": "string"
+          },
+          "name": {
+            "title": "姓名",
+            "type": "string"
+          },
+          "uid": {
+            "title": "用户身份标识",
+            "type": "string"
+          }
+        },
+        "required": [
+          "sid",
+          "auth",
+          "name",
+          "uid"
+        ],
+        "title": "验证账号回传值",
+        "type": "object"
+      },
+      "BaseApiResponse__ValidateAuthResponse": {
+        "properties": {
+          "status": {
+            "description": "成功时为1，失败时为0",
+            "title": "响应状态",
+            "type": "integer"
+          },
+          "msg": {
+            "description": "成功时为`success`，失败时为相关错误提示",
+            "title": "响应信息",
+            "type": "string"
+          },
+          "data": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/_ValidateAuthResponse"
+              },
+              {
+                "type": "object"
+              }
+            ],
+            "title": "数据"
+          }
+        },
+        "required": [
+          "status",
+          "msg",
+          "data"
+        ],
+        "title": "BaseApiResponse[_ValidateAuthResponse]",
+        "type": "object"
+      },
+      "CQUSession": {
+        "description": "重大的某一学期",
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "学期ID"
+          },
+          "year": {
+            "title": "主要行课年份",
+            "type": "integer"
+          },
+          "is_autumn": {
+            "title": "是否为秋冬季学期",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "year",
+          "is_autumn"
+        ],
+        "title": "重大的某一学期",
+        "type": "object"
+      },
+      "Course": {
+        "description": "与具体行课时间无关的课程信息",
+        "properties": {
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "课程名称"
+          },
+          "code": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "课程代码"
+          },
+          "course_num": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "在无法获取时（如考表Exam中）为None",
+            "title": "教学班号"
+          },
+          "dept": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "在无法获取时（如成绩Score中）为None",
+            "title": "开课学院"
+          },
+          "credit": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "在无法获取时（如考表Exam中）为None",
+            "title": "学分"
+          },
+          "instructor": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "教师"
+          },
+          "session": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CQUSession"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "在无法获取时为None",
+            "title": "学期"
+          }
+        },
+        "title": "与具体行课时间无关的课程信息",
+        "type": "object"
+      },
+      "EnrollCourseInfo": {
+        "description": "可选课程信息",
+        "properties": {
+          "id": {
+            "title": "可选课程id",
+            "type": "string"
+          },
+          "course": {
+            "$ref": "#/components/schemas/Course",
+            "title": "可选课程信息"
+          },
+          "category": {
+            "description": "公共基础课，主修专业课，非限制选修课等",
+            "title": "可选课程类型",
+            "type": "string"
+          },
+          "type": {
+            "description": "主修专业课，通识教育课程等",
+            "title": "课程类别",
+            "type": "string"
+          },
+          "enroll_sign": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "已选，已选满等",
+            "title": "选课标识"
+          },
+          "course_nature": {
+            "description": "必修，选修等",
+            "title": "课程属性",
+            "type": "string"
+          },
+          "campus": {
+            "description": "如['D区'], ['A区', 'D区']等",
+            "items": {
+              "type": "string"
+            },
+            "title": "可选校区",
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "course",
+          "category",
+          "type",
+          "course_nature",
+          "campus"
+        ],
+        "title": "可选课程信息",
+        "type": "object"
+      },
+      "_FetchEnrollCourseInfoResponse": {
+        "properties": {
+          "result": {
+            "additionalProperties": {
+              "items": {
+                "$ref": "#/components/schemas/EnrollCourseInfo"
+              },
+              "type": "array"
+            },
+            "description": "按照课程类别、课程方式组织，如{'主修课程': [...]}",
+            "title": "搜索结果",
+            "type": "object"
+          }
+        },
+        "required": [
+          "result"
+        ],
+        "title": "获取可选课程信息回传值",
+        "type": "object"
+      },
+      "BaseApiResponse__FetchEnrollCourseInfoResponse": {
+        "properties": {
+          "status": {
+            "description": "成功时为1，失败时为0",
+            "title": "响应状态",
+            "type": "integer"
+          },
+          "msg": {
+            "description": "成功时为`success`，失败时为相关错误提示",
+            "title": "响应信息",
+            "type": "string"
+          },
+          "data": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/_FetchEnrollCourseInfoResponse"
+              },
+              {
+                "type": "object"
+              }
+            ],
+            "title": "数据"
+          }
+        },
+        "required": [
+          "status",
+          "msg",
+          "data"
+        ],
+        "title": "BaseApiResponse[_FetchEnrollCourseInfoResponse]",
+        "type": "object"
+      },
+      "FetchEnrollCourseInfoRequest": {
+        "properties": {
+          "is_major": {
+            "title": "是否获取主修课程",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "is_major"
+        ],
+        "title": "获取可选课程信息请求值",
+        "type": "object"
+      },
+      "CourseDayTime": {
+        "description": "课程一次的星期和节次",
+        "properties": {
+          "weekday": {
+            "description": "0 为周一，6 为周日",
+            "title": "星期",
+            "type": "integer"
+          },
+          "period": {
+            "$ref": "#/components/schemas/Period",
+            "title": "节次"
+          }
+        },
+        "required": [
+          "weekday",
+          "period"
+        ],
+        "title": "课程一次的星期和节次",
+        "type": "object"
+      },
+      "EnrollCourseItem": {
+        "description": "可选具体课程，包含课程上课时间、上课教师、教室可容纳学生等信息",
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "每个可选具体课程具有唯一id，部分从属课程该值为`None`",
+            "title": "可选具体课程id"
+          },
+          "session_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "部分从属课程该值为`None`",
+            "title": "可选具体课程所在学期ID"
+          },
+          "checked": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "部分从属课程该值为`None`",
+            "title": "是否已经选择该课程"
+          },
+          "course_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "部分从属课程该值为`None`",
+            "title": "该具体课程所属课程ID"
+          },
+          "course": {
+            "$ref": "#/components/schemas/Course",
+            "title": "课程信息"
+          },
+          "type": {
+            "description": "理论、实验",
+            "title": "具体课程类别",
+            "type": "string"
+          },
+          "selected_num": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "部分从属课程该值为`None`",
+            "title": "已选课程学生"
+          },
+          "capacity": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "部分从属课程该值为`None`",
+            "title": "该课程容量上限"
+          },
+          "children": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/EnrollCourseItem"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "一般为理论课程的实验课",
+            "title": "该课程从属课程列表"
+          },
+          "campus": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "如D区，部分从属课程该值为`None`",
+            "title": "所属校区"
+          },
+          "parent_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "如果不存在从属关系，该值为None",
+            "title": "所从属具体课程id"
+          },
+          "timetables": {
+            "items": {
+              "$ref": "#/components/schemas/EnrollCourseTimetable"
+            },
+            "title": "具体课程上课时间表",
+            "type": "array"
+          }
+        },
+        "required": [
+          "course",
+          "type",
+          "timetables"
+        ],
+        "title": "可选具体课程，包含课程上课时间、上课教师、教室可容纳学生等信息",
+        "type": "object"
+      },
+      "EnrollCourseTimetable": {
+        "description": "可选具体课程上课时间、上课地点信息",
+        "properties": {
+          "weeks": {
+            "items": {
+              "$ref": "#/components/schemas/Period"
+            },
+            "title": "上课周数",
+            "type": "array"
+          },
+          "time": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CourseDayTime"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "上课时间"
+          },
+          "pos": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "上课地点"
+          }
+        },
+        "required": [
+          "weeks"
+        ],
+        "title": "可选具体课程上课时间、上课地点信息",
+        "type": "object"
+      },
+      "Period": {
+        "description": "时间段，用于课程节数、周数区间等",
+        "properties": {
+          "start": {
+            "title": "起始值",
+            "type": "integer"
+          },
+          "end": {
+            "title": "终止值",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "start",
+          "end"
+        ],
+        "title": "时间段",
+        "type": "object"
+      },
+      "_FetchEnrollCourseItemResponse": {
+        "properties": {
+          "enroll_course_items": {
+            "items": {
+              "$ref": "#/components/schemas/EnrollCourseItem"
+            },
+            "title": "可选课程信息",
+            "type": "array"
+          }
+        },
+        "required": [
+          "enroll_course_items"
+        ],
+        "title": "获取可选具体课程信息回传值",
+        "type": "object"
+      },
+      "BaseApiResponse__FetchEnrollCourseItemResponse": {
+        "properties": {
+          "status": {
+            "description": "成功时为1，失败时为0",
+            "title": "响应状态",
+            "type": "integer"
+          },
+          "msg": {
+            "description": "成功时为`success`，失败时为相关错误提示",
+            "title": "响应信息",
+            "type": "string"
+          },
+          "data": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/_FetchEnrollCourseItemResponse"
+              },
+              {
+                "type": "object"
+              }
+            ],
+            "title": "数据"
+          }
+        },
+        "required": [
+          "status",
+          "msg",
+          "data"
+        ],
+        "title": "BaseApiResponse[_FetchEnrollCourseItemResponse]",
+        "type": "object"
+      },
+      "FetchEnrollCourseItemRequest": {
+        "properties": {
+          "id": {
+            "title": "需要获取的课程ID（非Course Code）",
+            "type": "string"
+          },
+          "is_major": {
+            "title": "是否获取主修可选课程",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "is_major"
+        ],
+        "title": "获取可选具体课程信息请求值",
+        "type": "object"
+      },
+      "Exam": {
+        "description": "考试信息",
+        "properties": {
+          "course": {
+            "$ref": "#/components/schemas/Course",
+            "description": "学分`credit`、教师`instructor`、教学班号`course_num` 可能无法获取（其值会设置为`None`）",
+            "title": "考试对应的课程"
+          },
+          "batch": {
+            "description": "如: 非集中考试周",
+            "title": "考试批次",
+            "type": "string"
+          },
+          "batch_id": {
+            "title": "选课系统中考试批次的内部id",
+            "type": "integer"
+          },
+          "building": {
+            "title": "考场楼栋",
+            "type": "string"
+          },
+          "floor": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "考场楼层"
+          },
+          "room": {
+            "title": "考场地点",
+            "type": "string"
+          },
+          "stu_num": {
+            "title": "考场人数",
+            "type": "integer"
+          },
+          "date": {
+            "format": "date",
+            "title": "考试日期",
+            "type": "string"
+          },
+          "start_time": {
+            "format": "time",
+            "title": "考试开始时间",
+            "type": "string"
+          },
+          "end_time": {
+            "format": "time",
+            "title": "考试结束时间",
+            "type": "string"
+          },
+          "week": {
+            "title": "周次",
+            "type": "integer"
+          },
+          "weekday": {
+            "description": "0为周一，6为周日",
+            "title": "星期",
+            "type": "integer"
+          },
+          "stu_id": {
+            "title": "考生学号",
+            "type": "string"
+          },
+          "seat_num": {
+            "title": "考生座号",
+            "type": "integer"
+          },
+          "chief_invi": {
+            "items": {
+              "$ref": "#/components/schemas/Invigilator"
+            },
+            "title": "监考员",
+            "type": "array"
+          },
+          "asst_invi": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/Invigilator"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "副监考员"
+          }
+        },
+        "required": [
+          "course",
+          "batch",
+          "batch_id",
+          "building",
+          "room",
+          "stu_num",
+          "date",
+          "start_time",
+          "end_time",
+          "week",
+          "weekday",
+          "stu_id",
+          "seat_num",
+          "chief_invi"
+        ],
+        "title": "考试信息",
+        "type": "object"
+      },
+      "Invigilator": {
+        "description": "监考员信息",
+        "properties": {
+          "name": {
+            "title": "监考员姓名",
+            "type": "string"
+          },
+          "dept": {
+            "title": "监考员所在学院",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "dept"
+        ],
+        "title": "监考员信息",
+        "type": "object"
+      },
+      "_FetchExamResponse": {
+        "properties": {
+          "exams": {
+            "items": {
+              "$ref": "#/components/schemas/Exam"
+            },
+            "title": "考试列表",
+            "type": "array"
+          }
+        },
+        "required": [
+          "exams"
+        ],
+        "title": "考表获取回传值",
+        "type": "object"
+      },
+      "BaseApiResponse__FetchExamResponse": {
+        "properties": {
+          "status": {
+            "description": "成功时为1，失败时为0",
+            "title": "响应状态",
+            "type": "integer"
+          },
+          "msg": {
+            "description": "成功时为`success`，失败时为相关错误提示",
+            "title": "响应信息",
+            "type": "string"
+          },
+          "data": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/_FetchExamResponse"
+              },
+              {
+                "type": "object"
+              }
+            ],
+            "title": "数据"
+          }
+        },
+        "required": [
+          "status",
+          "msg",
+          "data"
+        ],
+        "title": "BaseApiResponse[_FetchExamResponse]",
+        "type": "object"
+      },
+      "FetchExamRequest": {
+        "properties": {
+          "sid": {
+            "title": "学号",
+            "type": "string"
+          }
+        },
+        "required": [
+          "sid"
+        ],
+        "title": "考表获取请求值",
+        "type": "object"
+      },
+      "CourseTimetable": {
+        "description": "课表对象，一个对象存储有相同课程、相同行课节次和相同星期的一批行课安排",
+        "properties": {
+          "course": {
+            "$ref": "#/components/schemas/Course",
+            "title": "对应的课程"
+          },
+          "stu_num": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "学生数"
+          },
+          "classroom": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "行课地点"
+          },
+          "weeks": {
+            "items": {
+              "$ref": "#/components/schemas/Period"
+            },
+            "title": "行课周数",
+            "type": "array"
+          },
+          "day_time": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CourseDayTime"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "若时间是整周（如真实地占用整周的军训和某些实习、虚拟地使用一周的思修实践）则为None",
+            "title": "行课的星期和节次"
+          },
+          "whole_week": {
+            "description": "如军训和某些实习是真实地占用、思修实践是“虚拟地占用”",
+            "title": "是否真实地占用整周",
+            "type": "boolean"
+          },
+          "classroom_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "行课教室名称"
+          },
+          "expr_projects": {
+            "items": {
+              "type": "string"
+            },
+            "title": "实验课各次实验内容",
+            "type": "array"
+          }
+        },
+        "required": [
+          "course",
+          "weeks",
+          "whole_week",
+          "expr_projects"
+        ],
+        "title": "课表对象，一个对象存储有相同课程、相同行课节次和相同星期的一批行课安排",
+        "type": "object"
+      },
+      "_FetchCourseTimetableResponse": {
+        "properties": {
+          "timetables": {
+            "items": {
+              "$ref": "#/components/schemas/CourseTimetable"
+            },
+            "title": "课表信息",
+            "type": "array"
+          },
+          "start_date": {
+            "title": "学期起始日期，'yyyy-mm-dd'格式",
+            "type": "string"
+          },
+          "end_date": {
+            "title": "学期结束日期，'yyyy-mm-dd'格式",
+            "type": "string"
+          },
+          "session_name": {
+            "title": "学期名称，如'2023秋'",
+            "type": "string"
+          }
+        },
+        "required": [
+          "timetables",
+          "start_date",
+          "end_date",
+          "session_name"
+        ],
+        "title": "课表查询回传值",
+        "type": "object"
+      },
+      "BaseApiResponse__FetchCourseTimetableResponse": {
+        "properties": {
+          "status": {
+            "description": "成功时为1，失败时为0",
+            "title": "响应状态",
+            "type": "integer"
+          },
+          "msg": {
+            "description": "成功时为`success`，失败时为相关错误提示",
+            "title": "响应信息",
+            "type": "string"
+          },
+          "data": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/_FetchCourseTimetableResponse"
+              },
+              {
+                "type": "object"
+              }
+            ],
+            "title": "数据"
+          }
+        },
+        "required": [
+          "status",
+          "msg",
+          "data"
+        ],
+        "title": "BaseApiResponse[_FetchCourseTimetableResponse]",
+        "type": "object"
+      },
+      "FetchCourseTimetableRequest": {
+        "properties": {
+          "code": {
+            "title": "学/工号",
+            "type": "string"
+          },
+          "offset": {
+            "description": "为0表示本学期，1表示下学期，应小于等于1",
+            "title": "学期偏移量",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "code",
+          "offset"
+        ],
+        "title": "课表查询请求值",
+        "type": "object"
+      },
+      "Score": {
+        "description": "成绩对象",
+        "properties": {
+          "session": {
+            "$ref": "#/components/schemas/CQUSession",
+            "title": "学期"
+          },
+          "course": {
+            "$ref": "#/components/schemas/Course",
+            "title": "课程"
+          },
+          "score": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "可能为数字，也可能为字符（优、良等）",
+            "title": "成绩"
+          },
+          "study_nature": {
+            "title": "初修/重修",
+            "type": "string"
+          },
+          "course_nature": {
+            "title": "必修/选修",
+            "type": "string"
+          }
+        },
+        "required": [
+          "session",
+          "course",
+          "study_nature",
+          "course_nature"
+        ],
+        "title": "成绩对象",
+        "type": "object"
+      },
+      "_FetchScoreResponse": {
+        "properties": {
+          "scores": {
+            "items": {
+              "$ref": "#/components/schemas/Score"
+            },
+            "title": "成绩",
+            "type": "array"
+          }
+        },
+        "required": [
+          "scores"
+        ],
+        "title": "成绩查询回传值",
+        "type": "object"
+      },
+      "BaseApiResponse__FetchScoreResponse": {
+        "properties": {
+          "status": {
+            "description": "成功时为1，失败时为0",
+            "title": "响应状态",
+            "type": "integer"
+          },
+          "msg": {
+            "description": "成功时为`success`，失败时为相关错误提示",
+            "title": "响应信息",
+            "type": "string"
+          },
+          "data": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/_FetchScoreResponse"
+              },
+              {
+                "type": "object"
+              }
+            ],
+            "title": "数据"
+          }
+        },
+        "required": [
+          "status",
+          "msg",
+          "data"
+        ],
+        "title": "BaseApiResponse[_FetchScoreResponse]",
+        "type": "object"
+      },
+      "FetchScoreRequest": {
+        "properties": {
+          "sid": {
+            "title": "学号",
+            "type": "string"
+          },
+          "is_minor": {
+            "title": "是否获取辅修成绩",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "sid",
+          "is_minor"
+        ],
+        "title": "成绩查询请求值",
+        "type": "object"
+      },
+      "GpaRanking": {
+        "description": "绩点对象",
+        "properties": {
+          "gpa": {
+            "title": "学生总绩点",
+            "type": "number"
+          },
+          "major_ranking": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "专业排名"
+          },
+          "grade_ranking": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "年级排名"
+          },
+          "class_ranking": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "班级排名"
+          },
+          "weighted_avg": {
+            "default": null,
+            "title": "加权平均分",
+            "type": "number"
+          },
+          "minor_weighted_avg": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "辅修加权平均分"
+          },
+          "minor_gpa": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "辅修绩点"
+          }
+        },
+        "required": [
+          "gpa"
+        ],
+        "title": "绩点对象",
+        "type": "object"
+      },
+      "BaseApiResponse_GpaRanking": {
+        "properties": {
+          "status": {
+            "description": "成功时为1，失败时为0",
+            "title": "响应状态",
+            "type": "integer"
+          },
+          "msg": {
+            "description": "成功时为`success`，失败时为相关错误提示",
+            "title": "响应信息",
+            "type": "string"
+          },
+          "data": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/GpaRanking"
+              },
+              {
+                "type": "object"
+              }
+            ],
+            "title": "数据"
+          }
+        },
+        "required": [
+          "status",
+          "msg",
+          "data"
+        ],
+        "title": "BaseApiResponse[GpaRanking]",
+        "type": "object"
+      },
+      "_FindCourseByNameResponse": {
+        "description": "通过关键词搜索课程返回值",
+        "properties": {
+          "courses": {
+            "items": {
+              "$ref": "#/components/schemas/Course"
+            },
+            "title": "Courses",
+            "type": "array"
+          }
+        },
+        "required": [
+          "courses"
+        ],
+        "title": "_FindCourseByNameResponse",
+        "type": "object"
+      },
+      "BaseApiResponse__FindCourseByNameResponse": {
+        "properties": {
+          "status": {
+            "description": "成功时为1，失败时为0",
+            "title": "响应状态",
+            "type": "integer"
+          },
+          "msg": {
+            "description": "成功时为`success`，失败时为相关错误提示",
+            "title": "响应信息",
+            "type": "string"
+          },
+          "data": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/_FindCourseByNameResponse"
+              },
+              {
+                "type": "object"
+              }
+            ],
+            "title": "数据"
+          }
+        },
+        "required": [
+          "status",
+          "msg",
+          "data"
+        ],
+        "title": "BaseApiResponse[_FindCourseByNameResponse]",
+        "type": "object"
+      },
+      "_FetchLayeredScoreDetailResponse": {
+        "description": "通过course id查询分级的课程往年成绩返回值",
+        "properties": {
+          "course_code": {
+            "title": "课程ID",
+            "type": "string"
+          },
+          "course_name": {
+            "title": "课程名",
+            "type": "string"
+          },
+          "score_details": {
+            "items": {
+              "$ref": "#/components/schemas/_LayeredScoreDetail"
+            },
+            "title": "分层的课程信息",
+            "type": "array"
+          }
+        },
+        "required": [
+          "course_code",
+          "course_name",
+          "score_details"
+        ],
+        "title": "_FetchLayeredScoreDetailResponse",
+        "type": "object"
+      },
+      "_LayeredScoreDetail": {
+        "description": "分层的课程成绩信息",
+        "properties": {
+          "teacher_name": {
+            "title": "教师姓名",
+            "type": "string"
+          },
+          "details": {
+            "items": {
+              "$ref": "#/components/schemas/_LayeredTermScoreDetail"
+            },
+            "title": "该教师每学期成绩",
+            "type": "array"
+          }
+        },
+        "required": [
+          "teacher_name",
+          "details"
+        ],
+        "title": "_LayeredScoreDetail",
+        "type": "object"
+      },
+      "_LayeredTermScoreDetail": {
+        "description": "该课程某一学期的成绩分布",
+        "properties": {
+          "term": {
+            "$ref": "#/components/schemas/CQUSession",
+            "title": "学期"
+          },
+          "is_hierarchy": {
+            "title": "是否为等级制度",
+            "type": "boolean"
+          },
+          "max": {
+            "title": "最高成绩 (无法获取时为-1)",
+            "type": "number"
+          },
+          "min": {
+            "title": "最低成绩 (无法获取时为-1)",
+            "type": "number"
+          },
+          "average": {
+            "title": "平均成绩 (无法获取时为-1)",
+            "type": "number"
+          },
+          "num": {
+            "title": "已知成绩人数",
+            "type": "integer"
+          },
+          "level1_num": {
+            "title": "等级1成绩人数 (90~100 或 优)",
+            "type": "integer"
+          },
+          "level2_num": {
+            "title": "等级2成绩人数 (80~90 或 良)",
+            "type": "integer"
+          },
+          "level3_num": {
+            "title": "等级3成绩人数 (70~80 或 中)",
+            "type": "integer"
+          },
+          "level4_num": {
+            "title": "等级4成绩人数 (60~70 或 及格)",
+            "type": "integer"
+          },
+          "level5_num": {
+            "title": "等级5成绩人数 (0~60 或 不及格)",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "term",
+          "is_hierarchy",
+          "max",
+          "min",
+          "average",
+          "num",
+          "level1_num",
+          "level2_num",
+          "level3_num",
+          "level4_num",
+          "level5_num"
+        ],
+        "title": "_LayeredTermScoreDetail",
+        "type": "object"
+      },
+      "BaseApiResponse__FetchLayeredScoreDetailResponse": {
+        "properties": {
+          "status": {
+            "description": "成功时为1，失败时为0",
+            "title": "响应状态",
+            "type": "integer"
+          },
+          "msg": {
+            "description": "成功时为`success`，失败时为相关错误提示",
+            "title": "响应信息",
+            "type": "string"
+          },
+          "data": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/_FetchLayeredScoreDetailResponse"
+              },
+              {
+                "type": "object"
+              }
+            ],
+            "title": "数据"
+          }
+        },
+        "required": [
+          "status",
+          "msg",
+          "data"
+        ],
+        "title": "BaseApiResponse[_FetchLayeredScoreDetailResponse]",
+        "type": "object"
+      },
+      "Card": {
+        "description": "校园卡及其账单信息",
+        "properties": {
+          "id": {
+            "title": "校园卡id",
+            "type": "string"
+          },
+          "amount": {
+            "title": "账户余额",
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "amount"
+        ],
+        "title": "校园卡及其账单信息",
+        "type": "object"
+      },
+      "BaseApiResponse_Card": {
+        "properties": {
+          "status": {
+            "description": "成功时为1，失败时为0",
+            "title": "响应状态",
+            "type": "integer"
+          },
+          "msg": {
+            "description": "成功时为`success`，失败时为相关错误提示",
+            "title": "响应信息",
+            "type": "string"
+          },
+          "data": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Card"
+              },
+              {
+                "type": "object"
+              }
+            ],
+            "title": "数据"
+          }
+        },
+        "required": [
+          "status",
+          "msg",
+          "data"
+        ],
+        "title": "BaseApiResponse[Card]",
+        "type": "object"
+      },
+      "Bill": {
+        "description": "某次消费账单信息",
+        "properties": {
+          "name": {
+            "title": "交易名称",
+            "type": "string"
+          },
+          "date": {
+            "format": "date-time",
+            "title": "交易时间",
+            "type": "string"
+          },
+          "place": {
+            "title": "交易地点",
+            "type": "string"
+          },
+          "tran_amount": {
+            "title": "交易金额",
+            "type": "number"
+          },
+          "acc_amount": {
+            "title": "账户余额",
+            "type": "number"
+          }
+        },
+        "required": [
+          "name",
+          "date",
+          "place",
+          "tran_amount",
+          "acc_amount"
+        ],
+        "title": "某次消费账单信息",
+        "type": "object"
+      },
+      "FetchBillsResponse": {
+        "description": "获取账单信息回传值",
+        "properties": {
+          "bills": {
+            "items": {
+              "$ref": "#/components/schemas/Bill"
+            },
+            "title": "最近30天的账单信息",
+            "type": "array"
+          }
+        },
+        "required": [
+          "bills"
+        ],
+        "title": "FetchBillsResponse",
+        "type": "object"
+      },
+      "BaseApiResponse_FetchBillsResponse": {
+        "properties": {
+          "status": {
+            "description": "成功时为1，失败时为0",
+            "title": "响应状态",
+            "type": "integer"
+          },
+          "msg": {
+            "description": "成功时为`success`，失败时为相关错误提示",
+            "title": "响应信息",
+            "type": "string"
+          },
+          "data": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/FetchBillsResponse"
+              },
+              {
+                "type": "object"
+              }
+            ],
+            "title": "数据"
+          }
+        },
+        "required": [
+          "status",
+          "msg",
+          "data"
+        ],
+        "title": "BaseApiResponse[FetchBillsResponse]",
+        "type": "object"
+      },
+      "EnergyFees": {
+        "description": "某宿舍的水电费相关信息",
+        "properties": {
+          "balance": {
+            "title": "账户余额",
+            "type": "number"
+          },
+          "electricity_subsidy": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "电剩余补助（仅虎溪校区拥有）"
+          },
+          "water_subsidy": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "水剩余补助（仅虎溪校区拥有）"
+          },
+          "subsidies": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "补助余额（仅老校区拥有）"
+          }
+        },
+        "required": [
+          "balance"
+        ],
+        "title": "某宿舍的水电费相关信息",
+        "type": "object"
+      },
+      "BaseApiResponse_EnergyFees": {
+        "properties": {
+          "status": {
+            "description": "成功时为1，失败时为0",
+            "title": "响应状态",
+            "type": "integer"
+          },
+          "msg": {
+            "description": "成功时为`success`，失败时为相关错误提示",
+            "title": "响应信息",
+            "type": "string"
+          },
+          "data": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/EnergyFees"
+              },
+              {
+                "type": "object"
+              }
+            ],
+            "title": "数据"
+          }
+        },
+        "required": [
+          "status",
+          "msg",
+          "data"
+        ],
+        "title": "BaseApiResponse[EnergyFees]",
+        "type": "object"
+      },
+      "BookInfo": {
+        "description": "图书馆书籍相关信息",
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "书籍id"
+          },
+          "title": {
+            "title": "书籍名称",
+            "type": "string"
+          },
+          "call_no": {
+            "title": "书籍检索号",
+            "type": "string"
+          },
+          "library_name": {
+            "title": "所属图书馆（如虎溪图书馆自然科学阅览室等）",
+            "type": "string"
+          },
+          "borrow_time": {
+            "format": "date-time",
+            "title": "借出时间",
+            "type": "string"
+          },
+          "should_return_time": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "应归还日期"
+          },
+          "is_return": {
+            "title": "是否被归还",
+            "type": "boolean"
+          },
+          "return_time": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "归还时间"
+          },
+          "renew_count": {
+            "title": "续借次数",
+            "type": "integer"
+          },
+          "can_renew": {
+            "title": "是否可被续借",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "title",
+          "call_no",
+          "library_name",
+          "borrow_time",
+          "is_return",
+          "renew_count",
+          "can_renew"
+        ],
+        "title": "图书馆书籍相关信息",
+        "type": "object"
+      },
+      "FetchBorrowBookResponse": {
+        "properties": {
+          "book_infos": {
+            "items": {
+              "$ref": "#/components/schemas/BookInfo"
+            },
+            "title": "借阅列表",
+            "type": "array"
+          }
+        },
+        "required": [
+          "book_infos"
+        ],
+        "title": "FetchBorrowBookResponse",
+        "type": "object"
+      },
+      "BaseApiResponse_FetchBorrowBookResponse": {
+        "properties": {
+          "status": {
+            "description": "成功时为1，失败时为0",
+            "title": "响应状态",
+            "type": "integer"
+          },
+          "msg": {
+            "description": "成功时为`success`，失败时为相关错误提示",
+            "title": "响应信息",
+            "type": "string"
+          },
+          "data": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/FetchBorrowBookResponse"
+              },
+              {
+                "type": "object"
+              }
+            ],
+            "title": "数据"
+          }
+        },
+        "required": [
+          "status",
+          "msg",
+          "data"
+        ],
+        "title": "BaseApiResponse[FetchBorrowBookResponse]",
+        "type": "object"
+      },
+      "ImgPos": {
+        "description": "图片存储位置",
+        "enum": [
+          "LOCAL",
+          "COS"
+        ],
+        "title": "ImgPos",
+        "type": "string"
+      },
+      "JumpType": {
+        "description": "跳转信息",
+        "enum": [
+          "NONE",
+          "MD",
+          "URL"
+        ],
+        "title": "JumpType",
+        "type": "string"
+      },
+      "_HomepageInfo": {
+        "properties": {
+          "img_url": {
+            "title": "图片URL，无路径前缀，如：/static/img/xxx.png",
+            "type": "string"
+          },
+          "img_pos": {
+            "$ref": "#/components/schemas/ImgPos",
+            "title": "图片存储位置"
+          },
+          "jump_type": {
+            "$ref": "#/components/schemas/JumpType",
+            "title": "点击后跳转类型"
+          },
+          "jump_param": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "跳转参数，根据jump_type不同而不同"
+          }
+        },
+        "required": [
+          "img_url",
+          "img_pos",
+          "jump_type"
+        ],
+        "title": "_HomepageInfo",
+        "type": "object"
+      },
+      "_HomepageResponse": {
+        "properties": {
+          "homepages": {
+            "items": {
+              "$ref": "#/components/schemas/_HomepageInfo"
+            },
+            "title": "首页信息列表",
+            "type": "array"
+          }
+        },
+        "required": [
+          "homepages"
+        ],
+        "title": "_HomepageResponse",
+        "type": "object"
+      },
+      "BaseApiResponse__HomepageResponse": {
+        "properties": {
+          "status": {
+            "description": "成功时为1，失败时为0",
+            "title": "响应状态",
+            "type": "integer"
+          },
+          "msg": {
+            "description": "成功时为`success`，失败时为相关错误提示",
+            "title": "响应信息",
+            "type": "string"
+          },
+          "data": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/_HomepageResponse"
+              },
+              {
+                "type": "object"
+              }
+            ],
+            "title": "数据"
+          }
+        },
+        "required": [
+          "status",
+          "msg",
+          "data"
+        ],
+        "title": "BaseApiResponse[_HomepageResponse]",
+        "type": "object"
+      }
+    }
+  }
+}

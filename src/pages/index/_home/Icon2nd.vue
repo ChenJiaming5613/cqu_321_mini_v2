@@ -3,7 +3,9 @@
 <!--    <view class="icon-bg" :class="disabled ? 'disable' : 'able'">-->
 <!--      <text class="text-white icon" :class="iconName"></text>-->
 <!--    </view>-->
-    <image class="icon" :src="`/static/images/icon_${iconName}.svg`"/>
+    <view class="icon-shell">
+      <image class="icon" :src="`/static/images/icon_${iconName}.svg`"/>
+    </view>
     <view class="icon-text text-df">{{ title }}</view>
   </view>
 </template>
@@ -23,28 +25,44 @@ defineEmits<{
 .root {
   width: 120rpx;
 }
+.icon-shell {
+  width: 44rpx;
+  height: 44rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .icon {
-  width: 40rpx;
-  height: 40rpx;
-}
-.icon-bg {
-  width: 80rpx;
-  height: 80rpx;
-  border-radius: 50%;
-}
-.able {
-  background: linear-gradient(45deg, #FE3B39 30%, #FD8B8A 82%);
-}
-.disable {
-  background: linear-gradient(45deg, #808080 30%, #909090 82%);
-}
-.icon-bg > .icon {
-  line-height: 80rpx;
-  font-size: 50rpx;
+  width: 44rpx;
+  height: 44rpx;
+  filter: drop-shadow(0 5rpx 10rpx rgba(222, 63, 74, 0.1));
 }
 .icon-text {
   padding-top: 10rpx;
-  color: #696969;
+  color: #52606f;
   font-size: 24rpx;
+  font-weight: 600;
+}
+
+@media screen and (min-width: 600px) {
+  .root {
+    width: 78px;
+    margin-bottom: 14px;
+  }
+
+  .icon-shell {
+    width: 30px;
+    height: 30px;
+  }
+
+  .icon {
+    width: 30px;
+    height: 30px;
+  }
+
+  .icon-text {
+    padding-top: 6px;
+    font-size: 14px;
+  }
 }
 </style>

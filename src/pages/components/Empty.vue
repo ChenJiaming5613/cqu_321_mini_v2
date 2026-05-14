@@ -15,10 +15,10 @@
 <style scoped>
 .empty-state {
   min-height: 520rpx;
-  padding: 120rpx 48rpx 80rpx;
+  padding: 104rpx 48rpx 80rpx;
   text-align: center;
-  background: #f7f7f7;
-  color: #8d8d8d;
+  background: #f5f7fb;
+  color: #7d8794;
 }
 
 .illustration {
@@ -31,8 +31,9 @@
 .bubble {
   position: absolute;
   border-radius: 50%;
-  background: linear-gradient(145deg, #f8f9fc 0%, #dfe3ec 100%);
-  border: 2rpx solid rgba(200, 205, 216, 0.8);
+  background: linear-gradient(145deg, #ffffff 0%, #eef2f7 100%);
+  border: 2rpx solid rgba(219, 225, 235, 0.9);
+  box-shadow: 0 14rpx 30rpx rgba(31, 43, 58, 0.08);
 }
 
 .bubble-main {
@@ -71,14 +72,14 @@
 
 .message {
   font-size: 32rpx;
-  color: #6d6d6d;
-  font-weight: 500;
+  color: #1f2935;
+  font-weight: 700;
 }
 
 .hint {
   margin-top: 22rpx;
   font-size: 24rpx;
-  color: #a8a8a8;
+  color: #98a1ad;
   line-height: 1.7;
 }
 
@@ -87,7 +88,7 @@
   min-width: 200rpx;
   height: 72rpx;
   border-radius: 18rpx;
-  background: #6a6a6a;
+  background: #1f2935;
   color: white;
   font-size: 28rpx;
 }

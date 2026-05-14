@@ -23,11 +23,16 @@
 
 <style scoped>
 .menu-item {
-  min-height: 108rpx;
-  padding: 0 58rpx;
+  min-height: 112rpx;
+  padding: 0 30rpx;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  border-bottom: 1rpx solid #eef1f5;
+}
+
+.menu-item:last-child {
+  border-bottom: 0;
 }
 
 .item-main,
@@ -37,29 +42,58 @@
 }
 
 .item-icon {
-  width: 56rpx;
-  color: #ff3b3b;
-  font-size: 42rpx;
+  width: 62rpx;
+  height: 62rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #de3f4a;
+  background: #fff2ef;
+  border-radius: 18rpx;
+  font-size: 34rpx;
   line-height: 1;
 }
 
 .item-title {
-  margin-left: 34rpx;
-  color: #666;
-  font-size: 34rpx;
-  font-weight: 500;
+  margin-left: 24rpx;
+  color: #1f2935;
+  font-size: 30rpx;
+  font-weight: 600;
 }
 
 .item-value {
-  color: #666;
-  font-size: 32rpx;
+  color: #667381;
+  font-size: 28rpx;
   font-weight: 600;
 }
 
 .item-arrow {
   margin-left: 18rpx;
-  color: #666;
-  font-size: 44rpx;
+  color: #b3bbc6;
+  font-size: 36rpx;
   font-weight: 600;
+}
+
+@media screen and (min-width: 600px) {
+  .menu-item {
+    min-height: 78px;
+    padding: 0 24px;
+  }
+
+  .item-icon {
+    width: 46px;
+    height: 46px;
+    border-radius: 14px;
+    font-size: 25px;
+  }
+
+  .item-title {
+    margin-left: 18px;
+    font-size: 22px;
+  }
+
+  .item-arrow {
+    font-size: 28px;
+  }
 }
 </style>

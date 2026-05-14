@@ -15,7 +15,9 @@ export function getImgUrl(url: string) {
 }
 
 export function getMarkdownUrl(url: string) {
-    return 'https://www.zhulegend.com' + url;
+    if (/^https?:\/\//.test(url)) return url;
+    if (url.startsWith("//")) return "https:" + url;
+    return 'https://media.321cqu.com' + (url.startsWith("/") ? url : "/" + url);
 }
 
 export async function oldRequestV1(options: OldRequestOptions) {

@@ -1,5 +1,5 @@
 <template>
-  <view class="text std-color-gray std-page-margin std-bottom-margin-narrow">{{content}}</view>
+  <view class="text std-page-margin std-bottom-margin-narrow">{{content}}</view>
 </template>
 
 <script setup lang="ts">
@@ -10,6 +10,8 @@
 
 <style scoped>
   .text{
+    color: #667381;
     font-size: 24rpx;
+    font-weight: 700;
   }
 </style>

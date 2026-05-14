@@ -29,16 +29,41 @@
 
   async function navToDetail(activityItem: ActivityItem) {
     if (activityItem.jumpType === "NONE" || activityItem.contentUrl.length === 0) return;
-    await uni.navigateTo({ url: '/pages/index/content/index?url=' + activityItem.contentUrl });
+    if (activityItem.jumpType === "URL") {
+      await uni.navigateTo({ url: '/pages/index/content/index?url=' + encodeURIComponent(activityItem.contentUrl) });
+      return;
+    }
+    await uni.navigateTo({ url: '/pages/index/content/index?url=' + encodeURIComponent(activityItem.contentUrl) });
   }
   // TODO: 检测活动是否需要更新（目前的策略是缓存中没有活动数据采取更新）
 </script>
 
 <style scoped>
+.activity-card {
+  height: 350rpx;
+  width: 700rpx;
+  overflow: hidden;
+  border: 1rpx solid rgba(219, 225, 235, 0.95);
+  background: #fff;
+}
+
+@media screen and (min-width: 600px) {
   .activity-card {
-    height: 350rpx;
-    width: 700rpx;
+    width: 100%;
+    max-width: none;
+    height: auto;
+    aspect-ratio: 2 / 1;
+    margin-left: 0;
+    margin-right: 0;
+    border-radius: 16px;
   }
+}
+
+@media screen and (min-width: 900px) {
+  .activity-card {
+    max-width: 420px;
+  }
+}
 
   .img {
     width: 100%;

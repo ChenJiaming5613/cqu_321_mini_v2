@@ -22,7 +22,8 @@
 		{
 			"path": "pages/curriculum/index",
 			"style": {
-				"navigationBarTitleText": "课程表"
+				"navigationBarTitleText": "课程表",
+				"enablePullDownRefresh": true
 			}
 		},
 		{
@@ -64,7 +65,8 @@
 		{
 			"path": "pages/exam/index",
 			"style": {
-				"navigationBarTitleText": "考试安排"
+				"navigationBarTitleText": "考试安排",
+				"enablePullDownRefresh": true
 			}
 		},
 		{

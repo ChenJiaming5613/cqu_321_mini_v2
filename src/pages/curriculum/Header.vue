@@ -36,14 +36,15 @@
     width: 100%;
     height: 108rpx;
     z-index: 100;
-    border-bottom: 1rpx solid #ececec;
-    color: #555;
+    background: rgba(255, 255, 255, 0.98);
+    border-bottom: 1rpx solid #e7ebf1;
+    color: #52606f;
     font-size: 27rpx;
   }
 
   .month-cell {
     width: 50rpx;
-    color: #8d8d8d;
+    color: #98a1ad;
     font-size: 22rpx;
   }
 
@@ -56,16 +57,69 @@
   }
 
   .weekday-cell.active {
-    color: #ef4f5f;
+    color: #de3f4a;
     font-weight: bold;
   }
 
   .date-text {
     font-size: 22rpx;
-    color: #8d8d8d;
+    color: #98a1ad;
   }
 
   .weekday-cell.active .date-text {
-    color: #ef4f5f;
+    color: #de3f4a;
+  }
+
+  @media screen and (min-width: 600px) {
+    .header {
+      top: 214px;
+      height: 74px;
+      font-size: 17px;
+    }
+
+    .month-cell {
+      width: 58px;
+      font-size: 14px;
+    }
+
+    .weekday-row {
+      width: calc(100vw - 58px);
+      min-width: 700px;
+    }
+
+    .weekday-cell {
+      line-height: 24px;
+    }
+
+    .date-text {
+      font-size: 14px;
+    }
+  }
+
+  @media screen and (min-width: 900px) {
+    .weekday-row {
+      width: calc(100vw - 58px);
+    }
+  }
+
+  @media screen and (min-width: 900px) and (orientation: landscape) {
+    .header {
+      top: 140px;
+      height: 54px;
+      font-size: 15px;
+    }
+
+    .month-cell {
+      width: 58px;
+      font-size: 13px;
+    }
+
+    .weekday-cell {
+      line-height: 19px;
+    }
+
+    .date-text {
+      font-size: 12px;
+    }
   }
 </style>

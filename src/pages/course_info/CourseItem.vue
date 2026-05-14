@@ -81,17 +81,18 @@
 
 <style scoped>
 .course-card {
-  margin: 0 56rpx 40rpx;
+  margin: 0 42rpx 28rpx;
   overflow: hidden;
-  border-radius: 8rpx;
+  border-radius: 24rpx;
   background: #fff;
-  box-shadow: 0 3rpx 12rpx rgba(0, 0, 0, 0.04);
+  border: 1rpx solid rgba(219, 225, 235, 0.95);
+  box-shadow: 0 14rpx 34rpx rgba(31, 43, 58, 0.06);
 }
 
 .course-head {
   display: flex;
   align-items: center;
-  min-height: 86rpx;
+  min-height: 96rpx;
   padding: 0 28rpx 0 20rpx;
 }
 
@@ -107,12 +108,12 @@
   height: 12rpx;
   margin-right: 24rpx;
   border-radius: 50%;
-  background: #ff5661;
+  background: #de3f4a;
 }
 
 .course-name {
   overflow: hidden;
-  color: #666;
+  color: #1f2935;
   font-size: 26rpx;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -120,13 +121,13 @@
 
 .course-code {
   margin-left: 20rpx;
-  color: #d0d0d0;
+  color: #98a1ad;
   font-size: 24rpx;
 }
 
 .fold-icon {
   margin-left: 28rpx;
-  color: #e95b67;
+  color: #de3f4a;
   font-size: 34rpx;
   font-weight: 700;
 }
@@ -134,12 +135,12 @@
 .detail-area {
   margin: 0 18rpx 22rpx;
   padding-top: 18rpx;
-  border-top: 1rpx solid #f0f0f0;
+  border-top: 1rpx solid #eef1f5;
 }
 
 .loading {
   padding: 28rpx 0;
-  color: #a0a0a0;
+  color: #8a95a3;
   font-size: 24rpx;
   text-align: center;
 }
@@ -147,9 +148,9 @@
 .score-panel {
   margin: 0 8rpx 24rpx;
   padding: 20rpx 22rpx 24rpx;
-  border: 1rpx solid #eeeeee;
-  border-radius: 8rpx;
-  box-shadow: 0 2rpx 9rpx rgba(0, 0, 0, 0.03);
+  border: 1rpx solid #e7ebf1;
+  border-radius: 18rpx;
+  background: #f9fafc;
 }
 
 .teacher-line {
@@ -159,20 +160,20 @@
 }
 
 .teacher-name {
-  color: #666;
+  color: #1f2935;
   font-size: 26rpx;
 }
 
 .term-name {
   margin-left: 18rpx;
-  color: #e95b67;
+  color: #de3f4a;
   font-size: 20rpx;
 }
 
 .meta-grid {
   display: flex;
   flex-wrap: wrap;
-  color: #888;
+  color: #667381;
   font-size: 20rpx;
 }
 
@@ -196,5 +197,60 @@
   font-size: 14rpx;
   line-height: 18rpx;
   text-align: center;
+}
+
+@media screen and (min-width: 600px) {
+  .course-card {
+    margin: 0 0 22px;
+    border-radius: 18px;
+  }
+
+  .course-head {
+    min-height: 70px;
+    padding: 0 20px 0 16px;
+  }
+
+  .red-dot {
+    width: 8px;
+    height: 8px;
+    margin-right: 16px;
+  }
+
+  .course-name {
+    font-size: 17px;
+  }
+
+  .course-code {
+    margin-left: 14px;
+    font-size: 14px;
+  }
+
+  .fold-icon {
+    margin-left: 18px;
+    font-size: 24px;
+  }
+
+  .detail-area {
+    margin: 0 14px 16px;
+    padding-top: 14px;
+  }
+
+  .score-panel {
+    margin: 0 0 14px;
+    padding: 16px;
+    border-radius: 14px;
+  }
+
+  .teacher-name {
+    font-size: 17px;
+  }
+
+  .term-name {
+    font-size: 13px;
+  }
+
+  .meta-grid {
+    font-size: 13px;
+  }
 }
 </style>

@@ -1,8 +1,22 @@
 const path = require('path');
+const fs = require('fs');
 const { chromium } = require('playwright');
 
 const baseUrl = 'http://localhost:5173/';
 const outDir = path.resolve(__dirname, '../docs/页面验收截图');
+const isResponsiveMode = process.argv.includes('--responsive');
+const devices = isResponsiveMode
+  ? [
+      { name: 'phone-compact-360x780', viewport: { width: 360, height: 780 }, isMobile: true },
+      { name: 'phone-standard-452x950', viewport: { width: 452, height: 950 }, isMobile: true },
+      { name: 'phone-tall-430x932', viewport: { width: 430, height: 932 }, isMobile: true },
+      { name: 'phone-large-480x1040', viewport: { width: 480, height: 1040 }, isMobile: true },
+      { name: 'tablet-portrait-768x1024', viewport: { width: 768, height: 1024 }, isMobile: false },
+      { name: 'tablet-landscape-1024x768', viewport: { width: 1024, height: 768 }, isMobile: false }
+    ]
+  : [
+      { name: 'default', viewport: { width: 452, height: 950 }, isMobile: true }
+    ];
 
 const mockUser = {
   uid: 'mock-uid',
@@ -44,6 +58,8 @@ const mockCourses = {
     makeCourse('数据结构与算法', 'DYC202', 'D1134', 1, 1, 2, 'CS20001'),
     makeCourse('计算机系统', 'D1314', 'D1314', 1, 1, 2, 'CS20002'),
     makeCourse('数据库原理与设计', 'D1413', 'D1413', 1, 7, 9, 'CS20003'),
+    makeCourse('交互设计基础', 'D1208', '王老师', 2, 1, 2, 'ID20001'),
+    makeCourse('用户研究方法', 'D1321', '赵老师', 2, 6, 7, 'ID20002'),
     makeCourse('WEB开发技术', 'D1134', '陈老师', 2, 10, 12, 'WEB20001'),
     makeCourse('数学实验', '数学媒体实验室', 'D202', 3, 2, 4, 'MATH20001'),
     makeCourse('数据结构与算法', 'DYC202', 'D1134', 4, 6, 7, 'CS20001'),
@@ -112,8 +128,8 @@ async function seedStorage(page) {
     window.uni.setStorageSync('CustomCourse', []);
     window.uni.setStorageSync('ExamsInfo', mockExams);
     window.uni.setStorageSync('ActivityInfo', {
-      lastCheck: '2026-05-13 00:00:00',
-      lastUpdate: '2026-05-13 00:00:00',
+      lastCheck: '2026-05-13 11:00:00',
+      lastUpdate: '2026-05-13 11:00:00',
       pictures: [{
         url: '/static/images/mock_home_banner.svg',
         localUrl: '/static/images/mock_home_banner.svg',
@@ -124,28 +140,48 @@ async function seedStorage(page) {
   }, { mockUser, mockGrades, mockCourses, mockExams });
 }
 
-async function screenshot(page, url, name) {
+async function screenshot(page, url, name, targetDir) {
   await page.goto(url, { waitUntil: 'networkidle' });
   await page.waitForTimeout(2200);
-  await page.screenshot({ path: path.join(outDir, name), fullPage: false });
+  await page.screenshot({ path: path.join(targetDir, name), fullPage: false });
 }
 
-async function screenshotSettings(page) {
+async function screenshotSettings(page, targetDir) {
   await page.goto(baseUrl, { waitUntil: 'networkidle' });
   await page.waitForTimeout(1200);
   await page.locator('.bar .item').last().click();
   await page.waitForTimeout(1200);
-  await page.screenshot({ path: path.join(outDir, 'mock-settings.png'), fullPage: false });
+  await page.screenshot({ path: path.join(targetDir, 'mock-settings.png'), fullPage: false });
 }
 
 async function main() {
   const browser = await chromium.launch();
-  const context = await browser.newContext({
-    viewport: { width: 452, height: 950 },
-    deviceScaleFactor: 1
-  });
-  const page = await context.newPage();
+  for (const device of devices) {
+    const targetDir = isResponsiveMode
+      ? path.join(outDir, 'responsive', device.name)
+      : outDir;
+    fs.mkdirSync(targetDir, { recursive: true });
+    const context = await browser.newContext({
+      viewport: device.viewport,
+      isMobile: device.isMobile,
+      hasTouch: true,
+      deviceScaleFactor: 1
+    });
+    const page = await context.newPage();
+    await setupRoutes(page);
+    await page.goto(baseUrl, { waitUntil: 'networkidle' });
+    await page.waitForTimeout(2000);
+    await seedStorage(page);
+    await page.reload({ waitUntil: 'networkidle' });
+    await page.waitForTimeout(1000);
+    await screenshotAllPages(page, targetDir);
+    await context.close();
+  }
 
+  await browser.close();
+}
+
+async function setupRoutes(page) {
   await page.route('**/v1/authorization/login', async route => {
     await route.fulfill({
       status: 200,
@@ -217,17 +253,15 @@ async function main() {
       })
     });
   });
+}
 
-  await page.goto(baseUrl, { waitUntil: 'networkidle' });
-  await page.waitForTimeout(2000);
-  await seedStorage(page);
-
-  await screenshot(page, baseUrl, 'mock-home.png');
-  await screenshotSettings(page);
-  await screenshot(page, `${baseUrl}#/pages/index/login/index`, 'mock-bind-account.png');
-  await screenshot(page, `${baseUrl}#/pages/grade/index`, 'mock-grade.png');
-  await screenshot(page, `${baseUrl}#/pages/curriculum/index`, 'mock-curriculum.png');
-  await screenshot(page, `${baseUrl}#/pages/exam/index`, 'mock-exam.png');
+async function screenshotAllPages(page, targetDir) {
+  await screenshot(page, baseUrl, 'mock-home.png', targetDir);
+  await screenshotSettings(page, targetDir);
+  await screenshot(page, `${baseUrl}#/pages/index/login/index`, 'mock-bind-account.png', targetDir);
+  await screenshot(page, `${baseUrl}#/pages/grade/index`, 'mock-grade.png', targetDir);
+  await screenshot(page, `${baseUrl}#/pages/curriculum/index`, 'mock-curriculum.png', targetDir);
+  await screenshot(page, `${baseUrl}#/pages/exam/index`, 'mock-exam.png', targetDir);
 
   await page.goto(`${baseUrl}#/pages/course_info/index`, { waitUntil: 'networkidle' });
   await page.waitForTimeout(1000);
@@ -236,9 +270,7 @@ async function main() {
   await page.waitForTimeout(1000);
   await page.locator('.course-card').first().click();
   await page.waitForTimeout(1000);
-  await page.screenshot({ path: path.join(outDir, 'mock-course-info.png'), fullPage: false });
-
-  await browser.close();
+  await page.screenshot({ path: path.join(targetDir, 'mock-course-info.png'), fullPage: false });
 }
 
 main().catch(error => {

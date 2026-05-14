@@ -60,16 +60,16 @@
   }
 
   .root {
-    border-radius: 8rpx;
-    border: 2rpx solid #f1f1f1;
+    border-radius: 20rpx;
+    border: 1rpx solid #eef1f5;
     display: flex;
     flex-direction: row;
-    height: 112rpx;
+    min-height: 118rpx;
     align-items: center;
     background-color: white;
-    padding: 0 20rpx 0 14rpx;
+    padding: 0 18rpx 0 16rpx;
     justify-content: space-between;
-    box-shadow: 0 4rpx 14rpx rgba(0, 0, 0, 0.025);
+    box-shadow: 0 8rpx 20rpx rgba(31, 43, 58, 0.04);
   }
 
   .mark {
@@ -78,17 +78,19 @@
     min-width: 42rpx;
     display: flex;
     align-items: center;
+    justify-content: center;
   }
 
   .new-label {
     position: absolute;
     top: -26rpx;
-    left: 0;
+    left: 50%;
     color: #6fd66b;
     font-size: 16rpx;
     font-weight: 700;
-    transform: scale(0.82);
-    transform-origin: left center;
+    white-space: nowrap;
+    transform: translateX(-50%) scale(0.82);
+    transform-origin: center;
   }
 
   .dot {
@@ -105,7 +107,7 @@
   }
 
   .course > .name {
-    color: #575f69;
+    color: #1f2935;
     font-size: 28rpx;
     line-height: 36rpx;
     overflow: hidden;
@@ -120,24 +122,25 @@
   }
 
   .tags > .tag {
-    color: #c7c7c7;
+    color: #7d8794;
     font-size: 20rpx;
     line-height: 24rpx;
-    border-radius: 6rpx;
-    border: 1rpx solid #e5e5e5;
-    padding: 0 8rpx;
+    border-radius: 999rpx;
+    background: #f4f6f9;
+    border: 1rpx solid #e7ebf1;
+    padding: 1rpx 10rpx;
     margin-right: 8rpx;
   }
 
   .credit {
-    color: #384352;
+    color: #1f2935;
     display: flex;
     flex-direction: row;
     align-items: flex-end;
     font-weight: bold;
     width: 84rpx;
     justify-content: center;
-    border-right: 2rpx dotted #ececec;
+    border-right: 1rpx solid #eef1f5;
   }
 
   .credit > .value {
@@ -155,7 +158,7 @@
     font-size: 38rpx;
     width: 84rpx;
     text-align: center;
-    border-right: 2rpx dotted #ececec;
+    border-right: 1rpx solid #eef1f5;
   }
 
   .more {
@@ -163,10 +166,10 @@
     height: 48rpx;
     padding: 0;
     margin: 0 0 0 18rpx;
-    border: 2rpx solid #dcdcdc;
-    border-radius: 8rpx;
-    background: #fff;
-    color: #6f747b;
+    border: 1rpx solid #e7ebf1;
+    border-radius: 16rpx;
+    background: #f9fafc;
+    color: #667381;
     line-height: 44rpx;
     font-size: 30rpx;
     display: flex;
@@ -182,13 +185,14 @@
     position: absolute;
     left: 0;
     right: 0;
-    top: 96rpx;
+    top: 102rpx;
     min-height: 172rpx;
     padding: 24rpx 28rpx 22rpx 30rpx;
     background: #fff;
-    border-radius: 8rpx;
-    box-shadow: 0 10rpx 28rpx rgba(0, 0, 0, 0.16);
-    color: #5b6570;
+    border: 1rpx solid #e7ebf1;
+    border-radius: 20rpx;
+    box-shadow: 0 18rpx 42rpx rgba(31, 43, 58, 0.14);
+    color: #52606f;
     font-size: 26rpx;
   }
 
@@ -218,6 +222,121 @@
     row-gap: 18rpx;
     column-gap: 18rpx;
     line-height: 32rpx;
+  }
+
+  @media screen and (min-width: 600px) {
+    .item-wrap {
+      margin: 0;
+      min-width: 0;
+    }
+
+    .root {
+      min-height: 154px;
+      padding: 18px;
+      display: grid;
+      grid-template-columns: 18px minmax(0, 1fr) auto;
+      grid-template-rows: auto 1fr auto;
+      column-gap: 12px;
+      row-gap: 12px;
+      border-radius: 16px;
+      align-items: start;
+    }
+
+    .mark {
+      width: 18px;
+      min-width: 18px;
+      height: 24px;
+      align-items: center;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+    }
+
+    .new-label {
+      top: -19px;
+      font-size: 10px;
+      transform: translateX(-50%);
+    }
+
+    .course > .name {
+      font-size: 18px;
+      line-height: 24px;
+      white-space: normal;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
+
+    .course > .tags {
+      margin-top: 7px;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+
+    .tags > .tag {
+      margin-right: 0;
+      padding: 1px 7px;
+      font-size: 12px;
+      line-height: 18px;
+    }
+
+    .credit {
+      width: auto;
+      grid-column: 2 / 3;
+      grid-row: 3 / 4;
+      justify-content: flex-start;
+      border-right: 0;
+    }
+
+    .credit > .value {
+      font-size: 24px;
+      line-height: 28px;
+    }
+
+    .credit > .foot {
+      font-size: 11px;
+      line-height: 18px;
+    }
+
+    .score {
+      width: auto;
+      grid-column: 3 / 4;
+      grid-row: 1 / 3;
+      align-self: start;
+      min-width: 58px;
+      padding-left: 16px;
+      font-size: 34px;
+      line-height: 42px;
+      border-right: 0;
+      border-left: 1px solid #eef1f5;
+    }
+
+    .more {
+      grid-column: 3 / 4;
+      grid-row: 3 / 4;
+      justify-self: end;
+      width: 32px;
+      height: 32px;
+      margin: 0;
+      border-radius: 10px;
+      font-size: 20px;
+      line-height: 30px;
+    }
+
+    .detail {
+      top: 132px;
+      padding: 16px;
+      border-radius: 16px;
+      font-size: 14px;
+    }
+
+    .detail-grid {
+      row-gap: 10px;
+      column-gap: 12px;
+      line-height: 20px;
+    }
   }
 
 </style>

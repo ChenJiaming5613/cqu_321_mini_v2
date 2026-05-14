@@ -13,10 +13,10 @@ export type ActivityItem = {
     url: string
     localUrl: string | null
     contentUrl: string
-    jumpType: string
+    jumpType: "NONE" | "MD" | "URL"
 }
 
-const API_ASSET_BASE_URL = "https://api.321cqu.com";
+const MEDIA_ASSET_BASE_URL = "https://media.321cqu.com";
 
 class ActivityModel extends StdModel {
     private static STORAGE_KEY = "ActivityInfo";
@@ -34,7 +34,8 @@ class ActivityModel extends StdModel {
             const response = await stdRequest<_HomepageResponse>({
                 url: "/important_info/homepages",
                 method: "GET",
-                needToken: false
+                needToken: true,
+                tokenType: "app"
             });
             return {
                 lastCheck: formatTime(new Date()),
@@ -42,13 +43,14 @@ class ActivityModel extends StdModel {
                 pictures: response.homepages.map(it => {
                     return {
                         url: resolveHomepageImageUrl(it.img_url, it.img_pos),
-                        contentUrl: it.jump_param || "",
+                        contentUrl: resolveHomepageJumpUrl(it.jump_param),
                         jumpType: it.jump_type,
                         localUrl: null
                     } as ActivityItem;
                 })
             } as _RawActivityInfo;
         } catch (e) {
+            console.error("[ActivityModel] update failed", e);
             await uni.showToast({
                 title: "获取活动失败",
                 icon: "error"
@@ -85,7 +87,9 @@ class ActivityModel extends StdModel {
         }
     }
     private async update() {
-        await stdSetStorage(ActivityModel.STORAGE_KEY, await this._update());
+        const rawInfo = await this._update();
+        if (rawInfo === null) return;
+        await stdSetStorage(ActivityModel.STORAGE_KEY, rawInfo);
         await this._load();
     }
     public async get() {
@@ -142,8 +146,19 @@ type _RawActivityInfo = {
 function resolveHomepageImageUrl(imgUrl: string, imgPos: _HomepageInfo["img_pos"]) {
     if (/^https?:\/\//.test(imgUrl)) return imgUrl;
     if (imgUrl.startsWith("//")) return "https:" + imgUrl;
-    if (imgPos === "LOCAL") return API_ASSET_BASE_URL + (imgUrl.startsWith("/") ? imgUrl : "/" + imgUrl);
+    if (imgPos === "LOCAL") return MEDIA_ASSET_BASE_URL + (imgUrl.startsWith("/") ? imgUrl : "/" + imgUrl);
     return imgUrl;
+}
+
+function resolveHomepageJumpUrl(jumpParam: string | null) {
+    if (!jumpParam) return "";
+    try {
+        const parsed = JSON.parse(jumpParam) as {url?: string};
+        if (typeof parsed.url === "string") return parsed.url;
+    } catch (e) {
+        return jumpParam;
+    }
+    return "";
 }
 
 export default ActivityModel;

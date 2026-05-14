@@ -1,37 +1,65 @@
 <template>
-  <NavigationBar
-    pageTitle="课程表"
-    :isFixed="true"
-    :show-refresh="true"
-    @refresh="updateCourseInfo"
-  />
-  <Footer
-    :week-of-term="weekOfTerm"
-    @on-tap-prev-week="onTapPrevWeek"
-    @on-tap-next-week="onTapNextWeek"
-    @on-tap-switch-term="onTapSwitchTerm"
-    @on-tap-more-func="onTapMoreFunc"
-  />
-  <Header :curr-date="currDate" :day-of-week="dayOfWeek"/>
-  <CourseTable
-      :table-items="tableItems"
-      :curr-date="currDate"
-      :curr-week-of-term="weekOfTerm"
-      :fixed-week-of-term="fixedWeekOfTerm"
-      @on-tap-detail="onTapDetail
-  "/>
-  <CourseDetail
-    :courses="activeCourses"
-    :is-show="isShowDetail"
-    @click="isShowDetail = false"
-  />
+  <view class="page">
+    <NavigationBar
+      pageTitle="课程表"
+      :isFixed="true"
+      :show-refresh="true"
+      @refresh="updateCourseInfo"
+    />
+    <view v-if="isRefreshing" class="refresh-mask">
+      <text class="cuIcon-loading2 refresh-icon"></text>
+      <text>同步中</text>
+    </view>
+    <template v-if="pageState === 'ready'">
+      <Footer
+        :week-of-term="weekOfTerm"
+        @on-tap-prev-week="onTapPrevWeek"
+        @on-tap-next-week="onTapNextWeek"
+        @on-tap-switch-term="onTapSwitchTerm"
+        @on-tap-more-func="onTapMoreFunc"
+      />
+      <Header :curr-date="currDate" :day-of-week="dayOfWeek"/>
+      <view v-if="isWeixinMiniProgram" class="inline-refresh-row">
+        <button class="inline-refresh" @click="updateCourseInfo">
+          <text class="cuIcon-refresh"></text>
+          <text>刷新课表</text>
+        </button>
+      </view>
+      <view class="table-scroll">
+        <CourseTable
+            :table-items="tableItems"
+            :curr-date="currDate"
+            :curr-week-of-term="weekOfTerm"
+            :fixed-week-of-term="fixedWeekOfTerm"
+            @on-tap-detail="onTapDetail
+        "/>
+      </view>
+    </template>
+    <view v-else class="state-wrap">
+      <PageState
+        :state="pageState"
+        empty-message="暂无课表"
+        empty-hint="当前学期暂时没有可展示的课程数据"
+        empty-action-text="刷新课表"
+        error-message="课表加载失败"
+        @empty-action="updateCourseInfo"
+        @retry="initData"
+      />
+    </view>
+    <CourseDetail
+      :courses="activeCourses"
+      :is-show="isShowDetail"
+      @click="isShowDetail = false"
+    />
+  </view>
 </template>
 
 <script setup lang="ts">
   import NavigationBar from "@/pages/components/NavigationBar.vue";
   import CourseModel, {TermOffset} from "@/models/CourseModel";
-  import {onShow} from "@dcloudio/uni-app";
+  import {onPullDownRefresh, onShow} from "@dcloudio/uni-app";
   import {computed, ref} from "vue";
+  import stdUser from "@/core/StdUser";
   import {getCourseCells, makeColorMap, makeCoursesMatrix} from "@/pages/curriculum/util";
   import type {UniCourse} from "@/pages/curriculum/util";
   import {
@@ -44,8 +72,14 @@
   import Footer from "@/pages/curriculum/Footer.vue";
   import CourseTable from "@/pages/curriculum/CourseTable.vue";
   import CourseDetail from "@/pages/curriculum/CourseDetail.vue";
+  import PageState from "@/pages/components/PageState.vue";
   import CustomCourseModel from "@/models/CustomCourseModel";
   import CoursePriorityModel from "@/models/CoursePriorityModel";
+
+  let isWeixinMiniProgram = false;
+  // #ifdef MP-WEIXIN
+  isWeixinMiniProgram = true;
+  // #endif
 
   const courseModel = CourseModel.getInstance();
   const customCourseModel = CustomCourseModel.getInstance();
@@ -58,8 +92,12 @@
   const currDate = ref(new Date());
   const startDate = ref<Date>(new Date());
   const courses = ref<UniCourse[]>([]);
+  const hasUserInfo = ref(false);
+  const hasLoadError = ref(false);
+  const isLoading = ref(false);
   const activeCourses = ref<UniCourse[]>([]);
   const isShowDetail = ref(false);
+  const isRefreshing = ref(false);
   // COMPUTED
   const dayOfWeek = computed(() => calcDayOfWeek(currDate.value));
   const weekOfTerm = computed(() => calcWeeksBetweenDates(startDate.value, currDate.value));
@@ -71,6 +109,14 @@
         .filter(it => it.dayTime.period.start !== -1 && it.dayTime.period.end !== -1);
   });
   const coursesMatrix = computed(() => makeCoursesMatrix(currWeekCourses.value));
+  const hasCourseData = computed(() => courses.value.length > 0);
+  const pageState = computed<"loading" | "unauthorized" | "empty" | "error" | "ready">(() => {
+    if (isLoading.value && courses.value.length === 0) return "loading";
+    if (!hasUserInfo.value) return "unauthorized";
+    if (hasLoadError.value) return "error";
+    if (!hasCourseData.value) return "empty";
+    return "ready";
+  });
   const tableItems = computed(() => {
     return getCourseCells(coursesMatrix.value).map(it => {
       it.bgColor = colorMap.get(it.course.code) || 'gray';
@@ -79,33 +125,61 @@
   });
 
   async function initData() {
-    await CoursePriorityModel.getInstance().load();
-    termOffset.value = await courseModel.getCurrSelectTerm();
-    const coursesData = await courseModel.getCoursesData(termOffset.value);
-    // termName.value = "unknown";
-    // currDate.value = new Date();
-    // startDate.value = new Date();
-    // courses.value = [];
-    if (coursesData !== null) {
-      termName.value = coursesData.termName;
-      startDate.value = stringToDateInChinaTime(coursesData.startDate);
-      fixedWeekOfTerm.value = weekOfTerm.value;
-      const tmpCourses: UniCourse[] = [...coursesData.courses];
-      tmpCourses.push(...await customCourseModel.get());
-      colorMap = makeColorMap(tmpCourses);
-      courses.value = tmpCourses;
+    isLoading.value = true;
+    try {
+      hasLoadError.value = false;
+      hasUserInfo.value = await stdUser.getUserInfo(false) !== null;
+      if (!hasUserInfo.value) {
+        courses.value = [];
+        return;
+      }
+      await CoursePriorityModel.getInstance().load();
+      termOffset.value = await courseModel.getCurrSelectTerm();
+      const coursesData = await courseModel.getCoursesData(termOffset.value);
+      courses.value = [];
+      if (coursesData !== null) {
+        termName.value = coursesData.termName;
+        startDate.value = stringToDateInChinaTime(coursesData.startDate);
+        fixedWeekOfTerm.value = weekOfTerm.value;
+        const tmpCourses: UniCourse[] = [...coursesData.courses];
+        tmpCourses.push(...await customCourseModel.get());
+        colorMap = makeColorMap(tmpCourses);
+        courses.value = tmpCourses;
+      }
+    } catch (e) {
+      console.error("[CurriculumPage] load failed", e);
+      courses.value = [];
+      hasLoadError.value = true;
+    } finally {
+      isLoading.value = false;
     }
   }
 
   // HOOK
   onShow(initData);
+  onPullDownRefresh(async () => {
+    try {
+      await updateCourseInfo();
+    } finally {
+      uni.stopPullDownRefresh();
+    }
+  });
   async function updateCourseInfo() {
-    await courseModel.update(termOffset.value);
-    await initData();
-    await uni.showToast({
-      title: "更新完成",
-      icon: "success"
-    });
+    if (isRefreshing.value) return;
+    hasUserInfo.value = await stdUser.getUserInfo(false) !== null;
+    if (!hasUserInfo.value) return;
+    isRefreshing.value = true;
+    try {
+      hasLoadError.value = false;
+      await courseModel.update(termOffset.value);
+      await initData();
+      await uni.showToast({
+        title: "更新完成",
+        icon: "success"
+      });
+    } finally {
+      isRefreshing.value = false;
+    }
   }
 
   function onTapNextWeek() { switchWeek(1); }
@@ -163,3 +237,101 @@
     isShowDetail.value = true;
   }
 </script>
+
+<style scoped>
+.page {
+  min-height: 100vh;
+  background: #f5f7fb;
+}
+
+.refresh-mask {
+  position: fixed;
+  top: 196rpx;
+  right: 28rpx;
+  z-index: 200;
+  height: 58rpx;
+  padding: 0 22rpx;
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+  border-radius: 999rpx;
+  background: rgba(255, 255, 255, 0.94);
+  border: 1rpx solid rgba(219, 225, 235, 0.95);
+  box-shadow: 0 10rpx 26rpx rgba(31, 43, 58, 0.12);
+  color: #de3f4a;
+  font-size: 24rpx;
+}
+
+.state-wrap {
+  padding-top: 180rpx;
+}
+
+.inline-refresh-row {
+  padding: 14rpx 22rpx;
+  background: #fff;
+  border-bottom: 1rpx solid #eef1f5;
+}
+
+.inline-refresh {
+  height: 58rpx;
+  padding: 0 22rpx;
+  margin: 0 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  border: 1rpx solid rgba(219, 225, 235, 0.95);
+  border-radius: 999rpx;
+  background: rgba(255, 255, 255, 0.94);
+  color: #de3f4a;
+  font-size: 24rpx;
+  line-height: 58rpx;
+}
+
+.inline-refresh::after {
+  border: none;
+}
+
+.refresh-icon {
+  font-size: 30rpx;
+  animation: refresh-rotate 0.9s linear infinite;
+}
+
+@keyframes refresh-rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@media screen and (min-width: 600px) {
+  .table-scroll {
+    overflow-x: auto;
+    max-width: 100vw;
+  }
+
+  .refresh-mask {
+    top: 150px;
+    right: 28px;
+    height: 40px;
+    padding: 0 16px;
+    font-size: 15px;
+  }
+
+  .refresh-icon {
+    font-size: 20px;
+  }
+
+  .state-wrap {
+    padding-top: 154px;
+  }
+
+  .inline-refresh-row {
+    padding: 10px 22px;
+  }
+
+  .inline-refresh {
+    height: 40px;
+    padding: 0 16px;
+    font-size: 15px;
+    line-height: 40px;
+  }
+}
+</style>

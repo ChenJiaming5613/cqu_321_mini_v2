@@ -138,6 +138,7 @@
   .table-shell {
     margin-top: 370rpx;
     padding-bottom: 24rpx;
+    background: #fff;
   }
 
   .grid-container {
@@ -153,30 +154,30 @@
     height: 1628rpx;
     display: grid;
     grid-template-rows: repeat(4, 120rpx) 34rpx repeat(5, 120rpx) 34rpx repeat(4, 120rpx);
-    color: #8c8c8c;
+    color: #8a95a3;
     font-size: 17rpx;
     text-align: center;
   }
 
   .time-cell {
-    border-right: 1rpx solid #eeeeee;
-    border-bottom: 1rpx solid #eeeeee;
+    border-right: 1rpx solid #eef1f5;
+    border-bottom: 1rpx solid #eef1f5;
     line-height: 24rpx;
   }
 
   .period-index {
-    color: #555;
+    color: #1f2935;
     font-size: 36rpx;
     font-weight: bold;
     line-height: 42rpx;
   }
 
   .break-label {
-    background-color: #f1f1f1;
-    color: #8c8c8c;
+    background-color: #f5f7fb;
+    color: #8a95a3;
     font-size: 22rpx;
     line-height: 34rpx;
-    border-right: 1rpx solid #e8e8e8;
+    border-right: 1rpx solid #e7ebf1;
   }
 
   .lunch-label {
@@ -198,14 +199,14 @@
   }
 
   .grid-cell {
-    border-right: 1rpx solid #eeeeee;
-    border-bottom: 1rpx solid #eeeeee;
+    border-right: 1rpx solid #eef1f5;
+    border-bottom: 1rpx solid #eef1f5;
   }
 
   .break-row {
     grid-column: 1 / 8;
-    background-color: #f1f1f1;
-    color: #777;
+    background-color: #f5f7fb;
+    color: #667381;
     font-size: 22rpx;
     line-height: 34rpx;
     text-align: center;
@@ -240,9 +241,9 @@
     justify-content: center;
     overflow: hidden;
     text-align: center;
-    border: 1rpx solid rgba(255, 255, 255, 0.9);
-    border-radius: 6rpx;
-    margin: 2rpx;
+    border: 1rpx solid rgba(255, 255, 255, 0.95);
+    border-radius: 12rpx;
+    margin: 3rpx;
     padding: 8rpx 6rpx;
     line-height: 32rpx;
     font-weight: 600;
@@ -271,10 +272,142 @@
   .today-col {
     grid-row-start: 1;
     grid-row-end: 16;
-    background-color: rgba(122, 223, 210, 0.18);
+    background-color: rgba(72, 187, 160, 0.12);
   }
 
   .time-line {
-    border-bottom: 6rpx solid #fd6260;
+    border-bottom: 6rpx solid #de3f4a;
+  }
+
+  @media screen and (min-width: 600px) {
+    .table-shell {
+      margin-top: 288px;
+      min-width: 758px;
+      padding-bottom: 24px;
+    }
+
+    .grid-container {
+      width: 700px;
+      grid-template-columns: repeat(7, 100px);
+      grid-template-rows: repeat(4, 78px) 28px repeat(5, 78px) 28px repeat(4, 78px);
+    }
+
+    .time-column {
+      width: 58px;
+      height: 1066px;
+      grid-template-rows: repeat(4, 78px) 28px repeat(5, 78px) 28px repeat(4, 78px);
+      font-size: 12px;
+    }
+
+    .table-area {
+      width: 700px;
+      height: 1066px;
+    }
+
+    .time-cell {
+      line-height: 18px;
+    }
+
+    .period-index {
+      font-size: 25px;
+      line-height: 30px;
+    }
+
+    .break-label,
+    .break-row {
+      font-size: 16px;
+      line-height: 28px;
+    }
+
+    .table-item {
+      border-radius: 9px;
+      margin: 3px;
+      padding: 6px 5px;
+      line-height: 22px;
+    }
+
+    .course-name {
+      font-size: 16px;
+    }
+
+    .course-room {
+      margin-top: 4px;
+      font-size: 14px;
+    }
+
+    .time-line {
+      border-bottom-width: 4px;
+    }
+  }
+
+  @media screen and (min-width: 900px) {
+    .table-shell {
+      min-width: 100vw;
+    }
+
+    .grid-container {
+      width: calc(100vw - 58px);
+      grid-template-columns: repeat(7, minmax(100px, 1fr));
+    }
+
+    .table-area {
+      width: calc(100vw - 58px);
+    }
+  }
+
+  @media screen and (min-width: 900px) and (orientation: landscape) {
+    .table-shell {
+      margin-top: 194px;
+      padding-bottom: 16px;
+    }
+
+    .grid-container {
+      grid-template-rows: repeat(4, 39px) 22px repeat(5, 39px) 22px repeat(4, 39px);
+    }
+
+    .time-column {
+      height: 529px;
+      grid-template-rows: repeat(4, 39px) 22px repeat(5, 39px) 22px repeat(4, 39px);
+      font-size: 11px;
+    }
+
+    .table-area {
+      height: 529px;
+    }
+
+    .time-cell {
+      line-height: 15px;
+    }
+
+    .period-index {
+      font-size: 18px;
+      line-height: 39px;
+    }
+
+    .time-cell view:not(.period-index) {
+      display: none;
+    }
+
+    .break-label,
+    .break-row {
+      font-size: 14px;
+      line-height: 22px;
+    }
+
+    .table-item {
+      border-radius: 7px;
+      margin: 2px;
+      padding: 3px 4px;
+      line-height: 16px;
+    }
+
+    .course-name {
+      font-size: 12px;
+    }
+
+    .course-room {
+      margin-top: 2px;
+      font-size: 11px;
+    }
   }
 </style>

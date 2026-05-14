@@ -42,6 +42,8 @@ const mockCourses = {
     makeCourse('数据结构与算法', 'DYC202', 'D1134', 1, 1, 2, 'CS20001'),
     makeCourse('计算机系统', 'D1314', 'D1314', 1, 1, 2, 'CS20002'),
     makeCourse('数据库原理与设计', 'D1413', 'D1413', 1, 7, 9, 'CS20003'),
+    makeCourse('交互设计基础', 'D1208', '王老师', 2, 1, 2, 'ID20001'),
+    makeCourse('用户研究方法', 'D1321', '赵老师', 2, 6, 7, 'ID20002'),
     makeCourse('WEB开发技术', 'D1134', '陈老师', 2, 10, 12, 'WEB20001'),
     makeCourse('数学实验', '数学媒体实验室', 'D202', 3, 2, 4, 'MATH20001'),
     makeCourse('数据结构与算法', 'DYC202', 'D1134', 4, 6, 7, 'CS20001'),
@@ -289,8 +291,8 @@ async function seedStorage(page) {
       }
     ]);
     window.uni.setStorageSync('ActivityInfo', {
-      lastCheck: '2026-05-13 00:00:00',
-      lastUpdate: '2026-05-13 00:00:00',
+      lastCheck: '2026-05-13 11:00:00',
+      lastUpdate: '2026-05-13 11:00:00',
       pictures: [{
         url: '/static/images/mock_home_banner.svg',
         localUrl: '/static/images/mock_home_banner.svg',

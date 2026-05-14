@@ -1,9 +1,9 @@
 .std-bg-primary {
-    background-color: #f8f8f8;
+    background-color: #f5f7fb;
 }
 
 .std-color-primary {
-    color: #fd6260;
+    color: #de3f4a;
 }
 
 .std-color-secondary {
@@ -11,23 +11,23 @@
 }
 
 .std-color-gray {
-    color: #aaaaaa;
+    color: #98a1ad;
 }
 
 .std-color-main {
-    color: #1a1a1a;
+    color: #1b2430;
 }
 
 .std-color-gradient {
-    color: linear-gradient(45deg, #FE3B39 30%, #FD8B8A 82%);
+    color: linear-gradient(135deg, #de3f4a 0%, #f27d55 100%);
 }
 
 .std-bg-gradient {
-    background: linear-gradient(45deg, #FE3B39 30%, #FD8B8A 82%);
+    background: linear-gradient(135deg, #de3f4a 0%, #f27d55 100%);
 }
 
 .std-box-shadow {
-    box-shadow: 0 6rpx 18rpx 0 rgba(0, 0, 0, 0.12);
+    box-shadow: 0 16rpx 42rpx rgba(31, 43, 58, 0.09);
 }
 
 .std-text-shadow {
@@ -36,7 +36,7 @@
 
 
 .std-border-radius {
-    border-radius: 25rpx;
+    border-radius: 18rpx;
 }
 
 .std-page-margin {
@@ -65,5 +65,23 @@ view {
 
 /* 设置全局页面背景颜色 */
 page {
-    background-color: #f7f7f7;
+    background-color: #f5f7fb;
+    color: #1b2430;
+    font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.std-surface {
+    background: #ffffff;
+    border: 1rpx solid rgba(219, 225, 235, 0.9);
+    box-shadow: 0 14rpx 34rpx rgba(31, 43, 58, 0.07);
+}
+
+.std-muted-surface {
+    background: #f9fafc;
+    border: 1rpx solid #e7ebf1;
+}
+
+.std-accent-soft {
+    background: #fff2ef;
+    color: #de3f4a;
 }

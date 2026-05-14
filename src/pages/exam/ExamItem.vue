@@ -49,13 +49,15 @@
 <style scoped>
 .exam-card {
   position: relative;
-  margin: 0 40rpx 22rpx;
+  margin: 0 32rpx 22rpx;
   padding: 0 28rpx;
-  border-radius: 2rpx;
+  border-radius: 24rpx;
   background: #fff;
-  color: #666;
+  color: #52606f;
   font-size: 28rpx;
-  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.03);
+  border: 1rpx solid rgba(219, 225, 235, 0.95);
+  box-shadow: 0 14rpx 34rpx rgba(31, 43, 58, 0.06);
+  overflow: hidden;
 }
 
 .exam-card.over {
@@ -66,9 +68,10 @@
   position: absolute;
   left: 0;
   top: 24rpx;
-  width: 4rpx;
+  width: 6rpx;
   height: 40rpx;
-  background: #e95b67;
+  background: #de3f4a;
+  border-radius: 999rpx;
 }
 
 .head-row,
@@ -77,7 +80,7 @@
   align-items: center;
   justify-content: space-between;
   min-height: 82rpx;
-  border-bottom: 1rpx solid #f0f0f0;
+  border-bottom: 1rpx solid #eef1f5;
 }
 
 .info-row:last-child {
@@ -94,7 +97,7 @@
 .exam-name {
   overflow: hidden;
   max-width: 430rpx;
-  color: #666;
+  color: #1f2935;
   font-size: 29rpx;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -105,7 +108,7 @@
   height: 8rpx;
   margin-right: 24rpx;
   border-radius: 50%;
-  background: #67cb68;
+  background: #48bb78;
   flex: 0 0 auto;
 }
 
@@ -118,7 +121,7 @@
 
 .hint {
   margin-left: 20rpx;
-  color: #e95b67;
+  color: #de3f4a;
   white-space: nowrap;
 }
 
@@ -133,7 +136,56 @@
 }
 
 .info-row {
-  color: #666;
+  color: #52606f;
   font-size: 28rpx;
+}
+
+@media screen and (min-width: 600px) {
+  .exam-card {
+    margin: 0;
+    padding: 0 20px;
+    border-radius: 18px;
+    font-size: 16px;
+  }
+
+  .accent {
+    top: 18px;
+    width: 4px;
+    height: 30px;
+  }
+
+  .head-row,
+  .info-row {
+    min-height: 58px;
+  }
+
+  .exam-name {
+    max-width: 260px;
+    font-size: 17px;
+  }
+
+  .green-dot {
+    width: 6px;
+    height: 6px;
+    margin-right: 14px;
+  }
+
+  .green-dot.small {
+    width: 4px;
+    height: 4px;
+    margin-right: 14px;
+  }
+
+  .hint-left {
+    font-size: 24px;
+  }
+
+  .hint-right {
+    font-size: 16px;
+  }
+
+  .info-row {
+    font-size: 15px;
+  }
 }
 </style>

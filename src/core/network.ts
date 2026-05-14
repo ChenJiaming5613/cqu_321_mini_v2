@@ -11,11 +11,13 @@ export type StdResponse<T> = {
 };
 
 export type RequestMethod = 'OPTIONS' | 'GET' | 'HEAD' | 'POST' | 'PUT' | 'DELETE' | 'TRACE' | 'CONNECT';
+export type TokenType = "user" | "app";
 export type StdRequestOptions = {
   url: string
   data?: any
   method?: RequestMethod
   needToken?: boolean
+  tokenType?: TokenType
 }
 export async function stdRequest<ResType> (options: StdRequestOptions) {
   // SET DEFAULT
@@ -25,7 +27,7 @@ export async function stdRequest<ResType> (options: StdRequestOptions) {
 
   let header: any = {};
   if (options.needToken) {
-    const tokenInfo = await handleToken();
+    const tokenInfo = await handleToken(options.tokenType || "user");
     header["Authorization"] = "Bearer " + tokenInfo.token;
   }
   const res = await uni.request({
@@ -40,7 +42,7 @@ export async function stdRequest<ResType> (options: StdRequestOptions) {
   return response.data;
 }
 
-async function getToken(username: string, password: string) {
+async function getToken(username: string | null = null, password: string | null = null) {
   const info = await stdRequest<{
     token: string
     refreshToken: string
@@ -56,6 +58,11 @@ async function getToken(username: string, password: string) {
     },
     needToken: false
   });
+  return info;
+}
+
+async function getUserToken(username: string, password: string) {
+  const info = await getToken(username, password);
   await stdToken.setRefreshTokenInfo({
     refreshToken: info.refreshToken,
     refreshTokenExpireTime: info.refreshTokenExpireTime
@@ -66,15 +73,32 @@ async function getToken(username: string, password: string) {
   };
 }
 
-async function updateToken() {
-  stdToken.tokenInfo = await stdRequest<TokenInfo>({
+async function getAppToken() {
+  const info = await getToken();
+  await stdToken.setAppRefreshTokenInfo({
+    refreshToken: info.refreshToken,
+    refreshTokenExpireTime: info.refreshTokenExpireTime
+  });
+  stdToken.appTokenInfo = {
+    token: info.token,
+    tokenExpireTime: info.tokenExpireTime
+  };
+}
+
+async function updateToken(refreshToken: string) {
+  return await stdRequest<TokenInfo>({
     url: "/authorization/refreshToken",
-    data: { "refreshToken": (await stdToken.getRefreshTokenInfo()).refreshToken },
+    data: { "refreshToken": refreshToken },
     needToken: false
   });
 }
 
-async function handleToken() {
+async function handleToken(tokenType: TokenType) {
+  if (tokenType === "app") return await handleAppToken();
+  return await handleUserToken();
+}
+
+async function handleUserToken() {
   // 如果当前的token没有过期则直接返回
   if (checkTokenExpireTime(stdToken.tokenInfo.tokenExpireTime))
     return stdToken.tokenInfo;
@@ -85,10 +109,21 @@ async function handleToken() {
     // if (StdUserInfoError.test()) throw new StdUserInfoError();
     const info = await stdUser.getUserInfo();
     if (info === null) throw new StdUserInfoError(info);
-    await getToken(info.auth, info.password);
+    await getUserToken(info.auth, info.password);
   }
-  else await updateToken();
+  else stdToken.tokenInfo = await updateToken(refreshToken.refreshToken);
   return stdToken.tokenInfo;
+}
+
+async function handleAppToken() {
+  if (checkTokenExpireTime(stdToken.appTokenInfo.tokenExpireTime))
+    return stdToken.appTokenInfo;
+  const refreshToken = await stdToken.getAppRefreshTokenInfo();
+  if (!refreshToken || !checkTokenExpireTime(refreshToken.refreshTokenExpireTime)) {
+    await getAppToken();
+  }
+  else stdToken.appTokenInfo = await updateToken(refreshToken.refreshToken);
+  return stdToken.appTokenInfo;
 }
 
 async function userValidate() {
@@ -96,7 +131,7 @@ async function userValidate() {
 }
 
 export async function login(username: string, password: string) {
-  await getToken(username, password);
+  await getUserToken(username, password);
   await userValidate();
 }
 
