@@ -26,7 +26,7 @@ class ExamModel extends StdModel {
   private _examInfoList: ExamInfo[] = [];
   public async update() {
     const info = await stdUser.getUserInfo();
-    if (info === null) return;
+    if (info === null) return false;
     const sid = info.sid;
     const res: any = await stdRequestHelper({
       requestOptions: {
@@ -37,7 +37,7 @@ class ExamModel extends StdModel {
       showError: true,
       loadingText: "更新中"
     });
-    if (res === null) return;
+    if (res === null) return false;
     const exams: any[] = res.exams;
     this._examInfoList = exams.map(it => {
       return {
@@ -52,6 +52,7 @@ class ExamModel extends StdModel {
     });
     await this.save();
     await this.load();
+    return true;
   }
   private async save() {
     await stdSetStorage(ExamModel.STORAGE_KEY, this._examInfoList);

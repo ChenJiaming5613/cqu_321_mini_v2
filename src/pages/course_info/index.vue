@@ -56,6 +56,7 @@
   import TeacherCourse from "@/pages/course_info/TeacherCourse.vue";
   import Tip from "@/pages/course_info/Tip.vue";
   import ScoreLegend from "@/pages/course_info/ScoreLegend.vue";
+  import {stdShowErrorToast} from "@/core/common";
   const searchType = ref(SearchType.CourseName);
   const dataByCourseName = ref<CourseAbstract[]>([]);
   const dataByTeacherName = ref<[string, CourseAbstract[]][]>([]);
@@ -63,13 +64,18 @@
   async function onTapQuery() {
     if (queryInfo.value.length > 0) {
       await uni.showLoading({ title: "查询中" });
-      const data = await CourseInfoModel.query(searchType.value, queryInfo.value);
-      uni.hideLoading();
-      if (searchType.value === SearchType.CourseName) {
-        dataByCourseName.value = data;
-      }
-      else {
-        dataByTeacherName.value = Array.from(arrayGroupBy<string, CourseAbstract>(data, "instructor"));
+      try {
+        const data = await CourseInfoModel.query(searchType.value, queryInfo.value);
+        if (searchType.value === SearchType.CourseName) {
+          dataByCourseName.value = data;
+        }
+        else {
+          dataByTeacherName.value = Array.from(arrayGroupBy<string, CourseAbstract>(data, "instructor"));
+        }
+      } catch (e) {
+        await stdShowErrorToast(e);
+      } finally {
+        uni.hideLoading();
       }
     }
     else {

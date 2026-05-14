@@ -108,7 +108,11 @@
     isLoading.value = true;
     try {
       hasLoadError.value = false;
-      await examModel.update();
+      const isUpdated = await examModel.update();
+      if (!isUpdated) {
+        hasLoadError.value = true;
+        return;
+      }
       examInfoList.value = await examModel.get();
       await uni.showToast({ title: "更新完成", icon: "success" });
     } catch (e) {

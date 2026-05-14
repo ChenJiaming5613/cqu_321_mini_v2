@@ -41,7 +41,7 @@ class CourseModel extends StdModel {
   }
   public async update(termOffset: TermOffset = TermOffset.CurrTerm) {
     const info = await stdUser.getUserInfo();
-    if (info === null) return;
+    if (info === null) return false;
     const sid = info.sid;
     const _courses = await stdRequestHelper<_Courses>({
       requestOptions: {
@@ -52,13 +52,14 @@ class CourseModel extends StdModel {
       showError: true,
       loadingText: "更新中"
     });
-    if (_courses === null) return;
+    if (_courses === null) return false;
     await this._setCoursesData(termOffset, {
       termName: _courses.session_name,
       startDate: _courses.start_date,
       endDate: _courses.end_date,
       courses: _courses.timetables.map(it => convertCourses(it))
     });
+    return true;
   }
   private async _setCoursesData(termOffset: TermOffset, coursesData: CoursesData) {
     const key = termOffset === TermOffset.CurrTerm ? '-Curr' : '-Next';

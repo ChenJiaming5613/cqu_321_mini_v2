@@ -171,7 +171,11 @@
     isRefreshing.value = true;
     try {
       hasLoadError.value = false;
-      await courseModel.update(termOffset.value);
+      const isUpdated = await courseModel.update(termOffset.value);
+      if (!isUpdated) {
+        hasLoadError.value = true;
+        return;
+      }
       await initData();
       await uni.showToast({
         title: "更新完成",
