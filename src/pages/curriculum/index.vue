@@ -43,7 +43,7 @@
         empty-action-text="刷新课表"
         error-message="课表加载失败"
         @empty-action="updateCourseInfo"
-        @retry="initData"
+        @retry="loadCurriculumPageData"
       />
     </view>
     <CourseDetail
@@ -57,7 +57,7 @@
 <script setup lang="ts">
   import NavigationBar from "@/pages/components/NavigationBar.vue";
   import CourseModel, {TermOffset} from "@/models/CourseModel";
-  import {onPullDownRefresh, onShow} from "@dcloudio/uni-app";
+  import {onPullDownRefresh} from "@dcloudio/uni-app";
   import {computed, ref} from "vue";
   import stdUser from "@/core/StdUser";
   import {getCourseCells, makeColorMap, makeCoursesMatrix} from "@/pages/curriculum/util";
@@ -75,6 +75,7 @@
   import PageState from "@/pages/components/PageState.vue";
   import CustomCourseModel from "@/models/CustomCourseModel";
   import CoursePriorityModel from "@/models/CoursePriorityModel";
+  import {useAuthorizedPageData} from "@/composables/useAuthorizedPageData";
 
   let isWeixinMiniProgram = false;
   // #ifdef MP-WEIXIN
@@ -92,9 +93,6 @@
   const currDate = ref(new Date());
   const startDate = ref<Date>(new Date());
   const courses = ref<UniCourse[]>([]);
-  const hasUserInfo = ref(false);
-  const hasLoadError = ref(false);
-  const isLoading = ref(false);
   const activeCourses = ref<UniCourse[]>([]);
   const isShowDetail = ref(false);
   const isRefreshing = ref(false);
@@ -110,12 +108,19 @@
   });
   const coursesMatrix = computed(() => makeCoursesMatrix(currWeekCourses.value));
   const hasCourseData = computed(() => courses.value.length > 0);
-  const pageState = computed<"loading" | "unauthorized" | "empty" | "error" | "ready">(() => {
-    if (isLoading.value && courses.value.length === 0) return "loading";
-    if (!hasUserInfo.value) return "unauthorized";
-    if (hasLoadError.value) return "error";
-    if (!hasCourseData.value) return "empty";
-    return "ready";
+  const {
+    hasLoadError,
+    pageState,
+    loadPageData: loadCurriculumPageData
+  } = useAuthorizedPageData({
+    hasReadyData: () => hasCourseData.value,
+    hasInitialData: () => courses.value.length > 0,
+    loadData: loadCurriculumData,
+    clearData: () => {
+      courses.value = [];
+    },
+    logTag: "CurriculumPage",
+    registerOnShow: true
   });
   const tableItems = computed(() => {
     return getCourseCells(coursesMatrix.value).map(it => {
@@ -124,39 +129,22 @@
     });
   });
 
-  async function initData() {
-    isLoading.value = true;
-    try {
-      hasLoadError.value = false;
-      hasUserInfo.value = await stdUser.getUserInfo(false) !== null;
-      if (!hasUserInfo.value) {
-        courses.value = [];
-        return;
-      }
-      await CoursePriorityModel.getInstance().load();
-      termOffset.value = await courseModel.getCurrSelectTerm();
-      const coursesData = await courseModel.getCoursesData(termOffset.value);
-      courses.value = [];
-      if (coursesData !== null) {
-        termName.value = coursesData.termName;
-        startDate.value = stringToDateInChinaTime(coursesData.startDate);
-        fixedWeekOfTerm.value = weekOfTerm.value;
-        const tmpCourses: UniCourse[] = [...coursesData.courses];
-        tmpCourses.push(...await customCourseModel.get());
-        colorMap = makeColorMap(tmpCourses);
-        courses.value = tmpCourses;
-      }
-    } catch (e) {
-      console.error("[CurriculumPage] load failed", e);
-      courses.value = [];
-      hasLoadError.value = true;
-    } finally {
-      isLoading.value = false;
+  async function loadCurriculumData() {
+    await CoursePriorityModel.getInstance().load();
+    termOffset.value = await courseModel.getCurrSelectTerm();
+    const coursesData = await courseModel.getCoursesData(termOffset.value);
+    courses.value = [];
+    if (coursesData !== null) {
+      termName.value = coursesData.termName;
+      startDate.value = stringToDateInChinaTime(coursesData.startDate);
+      fixedWeekOfTerm.value = weekOfTerm.value;
+      const tmpCourses: UniCourse[] = [...coursesData.courses];
+      tmpCourses.push(...await customCourseModel.get());
+      colorMap = makeColorMap(tmpCourses);
+      courses.value = tmpCourses;
     }
   }
 
-  // HOOK
-  onShow(initData);
   onPullDownRefresh(async () => {
     try {
       await updateCourseInfo();
@@ -166,8 +154,7 @@
   });
   async function updateCourseInfo() {
     if (isRefreshing.value) return;
-    hasUserInfo.value = await stdUser.getUserInfo(false) !== null;
-    if (!hasUserInfo.value) return;
+    if (await stdUser.getUserInfo(false) === null) return;
     isRefreshing.value = true;
     try {
       hasLoadError.value = false;
@@ -176,7 +163,7 @@
         hasLoadError.value = true;
         return;
       }
-      await initData();
+      await loadCurriculumData();
       await uni.showToast({
         title: "更新完成",
         icon: "success"
@@ -216,7 +203,7 @@
       success: async result => {
         termOffset.value = result.tapIndex;
         await courseModel.setCurrSelectTerm(termOffset.value);
-        await initData();
+        await loadCurriculumPageData();
         if ((termOffset.value === TermOffset.CurrTerm ? termNames.curr : termNames.next) === null) {
           await updateCourseInfo();
         }
