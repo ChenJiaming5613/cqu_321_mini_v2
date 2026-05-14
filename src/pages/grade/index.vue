@@ -54,9 +54,7 @@
 
 <script setup lang="ts">
   import GradeModel, {GpaType, type GradeInfo, type ScoreItem} from "@/models/GradeModel";
-  import {onPullDownRefresh, onShow} from "@dcloudio/uni-app";
   import {computed, ref} from "vue";
-  import stdUser from "@/core/StdUser";
   import {
     convertToTermName,
     filterCourseWhenCalcGpa,
@@ -68,39 +66,43 @@
   import GradeItem from "@/pages/grade/GradeItem.vue";
   import PageState from "@/pages/components/PageState.vue";
   import NavigationBar from "@/pages/components/NavigationBar.vue";
+  import {useAuthorizedPageData} from "@/composables/useAuthorizedPageData";
 
   const gradeModel = GradeModel.getInstance();
 
   // 成绩信息
   const gradeInfo = ref<GradeInfo | null>(null);
-  const hasUserInfo = ref(false);
-  const hasLoadError = ref(false);
-  const isLoading = ref(false);
   const expandedTerms = ref(new Set<string>());
   const pullStartY = ref<number | null>(null);
   const pullDistance = ref(0);
   const pullRefreshThreshold = 80;
 
-  onShow(async () => {
-    await loadGradeInfo();
-  });
-  onPullDownRefresh(async () => {
-    try {
-      await updateGradeInfo();
-    } finally {
-      uni.stopPullDownRefresh();
-    }
-  });
-
   const hasGradeData = computed(() => {
     return gpaInfo.value !== null || (gradeInfo.value?.scoreItems.length ?? 0) > 0;
   });
-  const pageState = computed<"loading" | "unauthorized" | "empty" | "error" | "ready">(() => {
-    if (isLoading.value && gradeInfo.value === null) return "loading";
-    if (!hasUserInfo.value) return "unauthorized";
-    if (hasLoadError.value) return "error";
-    if (!hasGradeData.value) return "empty";
-    return "ready";
+
+  const {
+    isLoading,
+    pageState,
+    loadPageData: loadGradeInfo,
+    refreshPageData: updateGradeInfo
+  } = useAuthorizedPageData({
+    hasReadyData: () => hasGradeData.value,
+    hasInitialData: () => gradeInfo.value !== null,
+    loadData: async () => {
+      gradeInfo.value = await gradeModel.get();
+      expandFirstTerm();
+    },
+    refreshData: async () => {
+      await gradeModel.update();
+    },
+    clearData: () => {
+      gradeInfo.value = null;
+    },
+    logTag: "GradePage",
+    successMessage: "更新完成",
+    registerOnShow: true,
+    registerPullDownRefresh: true
   });
   const termGroups = computed(() => {
     const termMap = new Map<string, ScoreItem[]>();
@@ -166,26 +168,6 @@
     expandedTerms.value = new Set([termGroups.value[0].name]);
   }
 
-  async function loadGradeInfo() {
-    isLoading.value = true;
-    try {
-      hasLoadError.value = false;
-      hasUserInfo.value = await stdUser.getUserInfo(false) !== null;
-      if (!hasUserInfo.value) {
-        gradeInfo.value = null;
-        return;
-      }
-      gradeInfo.value = await gradeModel.get();
-      expandFirstTerm();
-    } catch (e) {
-      console.error("[GradePage] load failed", e);
-      gradeInfo.value = null;
-      hasLoadError.value = true;
-    } finally {
-      isLoading.value = false;
-    }
-  }
-
   function onTouchStart(event: TouchEvent) {
     if (isLoading.value || getScrollTop() > 0) return;
     pullStartY.value = event.touches[0]?.clientY ?? null;
@@ -220,25 +202,6 @@
     return window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0;
   }
 
-  // 更新成绩
-  async function updateGradeInfo() {
-    if (isLoading.value) return;
-    hasUserInfo.value = await stdUser.getUserInfo(false) !== null;
-    if (!hasUserInfo.value) return;
-    isLoading.value = true;
-    try {
-      hasLoadError.value = false;
-      await gradeModel.update();
-      gradeInfo.value = await gradeModel.get();
-      expandFirstTerm();
-      await uni.showToast({
-        title: "更新完成",
-        icon: "success"
-      });
-    } finally {
-      isLoading.value = false;
-    }
-  }
 </script>
 
 <style scoped>
