@@ -67,7 +67,7 @@
 
 <script setup lang="ts">
   import {ref} from "vue";
-  import {login} from "@/core/network";
+  import {login} from "@/core/authService";
   import {stdShowErrorToast} from "@/core/common";
   import NavigationBar from "@/pages/components/NavigationBar.vue";
   import {getSvgPath} from "@/utils/resource";

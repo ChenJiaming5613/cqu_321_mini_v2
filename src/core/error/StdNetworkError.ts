@@ -1,5 +1,5 @@
 import {StdError} from "@/core/error/StdError";
-import type {StdResponse} from "@/core/network";
+import type {StdResponse} from "@/core/httpClient";
 
 export class StdNetworkError<ResType> extends StdError {
   public readonly url: string;
