@@ -112,10 +112,10 @@ class GradeModel extends StdModel {
     }
 
     private async load() {
-        let gradeInfo: GradeInfo;
+        let gradeInfo: GradeInfo | null;
         try {
             gradeInfo = await stdGetStorage<GradeInfo>(GradeModel.STORAGE_KEY);
-        } catch (e) { gradeInfo = { gpaInfo: null, scoreItems: [] }; }
+        } catch (e) { gradeInfo = null; }
         return gradeInfo;
     }
 

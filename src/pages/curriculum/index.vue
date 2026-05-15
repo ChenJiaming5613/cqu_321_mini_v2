@@ -107,16 +107,17 @@
         .filter(it => it.dayTime.period.start !== -1 && it.dayTime.period.end !== -1);
   });
   const coursesMatrix = computed(() => makeCoursesMatrix(currWeekCourses.value));
-  const hasCourseData = computed(() => courses.value.length > 0);
+  const hasTermData = computed(() => termName.value !== "unknown");
   const {
     hasLoadError,
     pageState,
     loadPageData: loadCurriculumPageData
   } = useAuthorizedPageData({
-    hasReadyData: () => hasCourseData.value,
-    hasInitialData: () => courses.value.length > 0,
+    hasReadyData: () => hasTermData.value,
+    hasInitialData: () => hasTermData.value,
     loadData: loadCurriculumData,
     clearData: () => {
+      termName.value = "unknown";
       courses.value = [];
     },
     logTag: "CurriculumPage",

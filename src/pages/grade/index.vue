@@ -91,6 +91,10 @@
     hasInitialData: () => gradeInfo.value !== null,
     loadData: async () => {
       gradeInfo.value = await gradeModel.get();
+      if (gradeInfo.value === null) {
+        await gradeModel.update();
+        gradeInfo.value = await gradeModel.get();
+      }
       expandFirstTerm();
     },
     refreshData: async () => {
