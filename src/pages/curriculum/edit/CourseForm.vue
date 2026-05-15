@@ -22,6 +22,8 @@
   import {range} from "@/utils/util";
   import {getWeeksText} from "@/utils/course";
   import type {CustomCourse} from "@/models/CustomCourseModel";
+  import {useFormCheck} from "@/composables/useFormCheck";
+
   const props = defineProps<{ oldCustomCourse?: CustomCourse }>();
   const emit = defineEmits<{ (e: 'submit', customCourse: CustomCourse): void }>();
   const course = ref<CustomCourse>({
@@ -37,13 +39,9 @@
     },
     weeks: [...(props.oldCustomCourse?.weeks || []).map(it => it - 1)]
   });
-  const isCheck = ref(false);
+  const {isCheck, checkPass} = useFormCheck(() => course.value.name.length > 0);
   const weeksText = computed(() => getWeeksText(course.value.weeks.map(it => it + 1)));
-  function checkPass() {
-    isCheck.value = true;
-    const c = course.value;
-    return c.name.length > 0;
-  }
+
   function onTapSave() {
     course.value.code = course.value.name;
     if (!checkPass()) return;

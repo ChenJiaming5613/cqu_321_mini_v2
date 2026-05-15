@@ -27,6 +27,8 @@
   import ExamModel from "@/models/ExamModel";
   import {onLoad} from "@dcloudio/uni-app";
   import DateTimeSelector from "@/pages/components/form/DateTimeSelector.vue";
+  import {useFormCheck} from "@/composables/useFormCheck";
+
   const examModel = ExamModel.getInstance();
   const examInfo = ref<ExamInfo>({
     name: "",
@@ -37,7 +39,8 @@
     startTime: getCurrTime(),
     endTime: getCurrTime(),
   });
-  const isCheck = ref(false);
+  const {isCheck, checkPass} = useFormCheck(() => examInfo.value.name.length > 0);
+
   onLoad((option: any) => {
     if (option.name) {
       const name = decodeURIComponent(option.name);
@@ -45,12 +48,9 @@
       if (info) examInfo.value = { ...info };
     }
   });
-  function checkInfo() {
-    isCheck.value = true;
-    return examInfo.value.name.length > 0;
-  }
+
   async function onTapSubmit() {
-    if (!checkInfo()) return;
+    if (!checkPass()) return;
     await examModel.add(examInfo.value);
     await uni.navigateBack({ delta: 1 });
     setTimeout(async () => {
