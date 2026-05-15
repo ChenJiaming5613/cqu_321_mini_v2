@@ -1,7 +1,7 @@
-import {stdGetStorage, stdSetStorage} from "@/core/storage";
+import {stdGetStorageOrDefault, stdSetStorage} from "@/core/storage";
 import StdModel from "@/core/StdModel";
 import stdUser from "@/core/StdUser";
-import {stdRequestHelper} from "@/core/common";
+import {stdRequest} from "@/core/network";
 import type {DayTime} from "@/domain/course";
 
 export type {DayTime};
@@ -46,23 +46,22 @@ class CourseModel extends StdModel {
     const info = await stdUser.getUserInfo();
     if (info === null) return false;
     const sid = info.sid;
-    const _courses = await stdRequestHelper<_Courses>({
-      requestOptions: {
+    try {
+      const courses = await stdRequest<_Courses>({
         url: "/edu_admin_center/fetchCourseTimetable",
         data: { "code": sid, "offset": termOffset }
-      },
-      showLoading: true,
-      showError: true,
-      loadingText: "更新中"
-    });
-    if (!_courses.ok) return false;
-    await this._setCoursesData(termOffset, {
-      termName: _courses.data.session_name,
-      startDate: _courses.data.start_date,
-      endDate: _courses.data.end_date,
-      courses: _courses.data.timetables.map(it => convertCourses(it))
-    });
-    return true;
+      });
+      await this._setCoursesData(termOffset, {
+        termName: courses.session_name,
+        startDate: courses.start_date,
+        endDate: courses.end_date,
+        courses: courses.timetables.map(it => convertCourses(it))
+      });
+      return true;
+    } catch (e) {
+      console.error("[CourseModel] update failed", e);
+      return false;
+    }
   }
   private async _setCoursesData(termOffset: TermOffset, coursesData: CoursesData) {
     const key = termOffset === TermOffset.CurrTerm ? '-Curr' : '-Next';
@@ -72,21 +71,17 @@ class CourseModel extends StdModel {
   public async getCoursesData(termOffset: TermOffset) {
     if (this._data.has(termOffset)) return this._data.get(termOffset)!;
     const key = termOffset === TermOffset.CurrTerm ? '-Curr' : '-Next';
-    try {
-      const data = await stdGetStorage<CoursesData>(CourseModel.STORAGE_KEY + key);
-      this._data.set(termOffset, data);
-    } catch (e) {
-      this._data.delete(termOffset);
-    }
+    const data = await stdGetStorageOrDefault<CoursesData | null>(CourseModel.STORAGE_KEY + key, null);
+    if (data === null) this._data.delete(termOffset);
+    else this._data.set(termOffset, data);
     return this._data.get(termOffset) || null;
   }
   public async getCurrSelectTerm() {
     if (this._currSelectTerm !== null) return this._currSelectTerm;
-    try {
-      this._currSelectTerm = await stdGetStorage<TermOffset>(CourseModel.STORAGE_KEY + '-SelectTerm');
-    } catch (e) {
-      this._currSelectTerm = TermOffset.CurrTerm;
-    }
+    this._currSelectTerm = await stdGetStorageOrDefault<TermOffset>(
+      CourseModel.STORAGE_KEY + '-SelectTerm',
+      TermOffset.CurrTerm
+    );
     return this._currSelectTerm;
   }
   public async setCurrSelectTerm(currSelectTerm: TermOffset) {

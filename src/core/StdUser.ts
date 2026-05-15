@@ -1,7 +1,6 @@
 import StdModel from "@/core/StdModel";
 import {stdGetStorage, stdSetStorage} from "@/core/storage";
 import {StdUserInfoError} from "@/core/error/StdUserInfoError";
-import {userInfoLackCallback} from "@/utils/callback";
 
 export type UserInfo = {
   uid: string       // 用户唯一id
@@ -18,10 +17,7 @@ class StdUser extends StdModel {
       try {
         this._userInfo = await stdGetStorage<UserInfo>("UserInfo")
       } catch (e) {
-        if (execCallback) {
-          await userInfoLackCallback();
-          throw new StdUserInfoError(e);
-        }
+        if (execCallback) throw new StdUserInfoError(e);
       }
     }
     return this._userInfo;

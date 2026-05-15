@@ -1,7 +1,6 @@
 import StdModel from "@/core/StdModel";
 import {stdGetStorage, stdGetStorageOrDefault, stdSetStorage} from "@/core/storage";
 import {StdRefreshTokenError} from "@/core/error/StdRefreshTokenError";
-import {userInfoLackCallback} from "@/utils/callback";
 
 export type TokenInfo = {
   token: string
@@ -29,7 +28,6 @@ class StdToken extends StdModel {
     try {
       return await stdGetStorage<RefreshTokenInfo>("RefreshTokenInfo");
     } catch (e) {
-      await userInfoLackCallback();
       throw new StdRefreshTokenError(e);
     }
   }

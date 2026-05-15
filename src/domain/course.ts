@@ -1,3 +1,5 @@
+import {calcDateAfterNDays, calcDayOfWeek} from "@/utils/datetime";
+
 export type DayTime = {
   weekday: number
   period: {
@@ -43,4 +45,17 @@ export function calcCurrPeriod(date: Date): [number, number] {
     }
   }
   return [i - 1, 1];
+}
+
+// 根据 date 获取所在周的日期。
+export function getWeekDates(date: Date) {
+  const dayOfWeek = calcDayOfWeek(date);
+  const dateList: number[] = [];
+  for (let i = dayOfWeek - 1; i >= 0; --i) {
+    dateList.push(calcDateAfterNDays(date, -i-1).getDate());
+  }
+  for (let i = 0; i < 7 - dayOfWeek; ++i) {
+    dateList.push(calcDateAfterNDays(date, i).getDate());
+  }
+  return dateList;
 }

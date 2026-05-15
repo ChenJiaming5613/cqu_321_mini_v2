@@ -26,7 +26,6 @@ class CoursePriorityModel extends StdModel {
     public async del(code: string) {
         await this.load();
         this._priorityList = this._priorityList!.filter(it => it !== code);
-        console.log('hello', this._priorityList)
         await stdSetStorage(CoursePriorityModel.STORAGE_KEY, this._priorityList);
     }
     public has(code: string) {

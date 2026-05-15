@@ -1,20 +1,21 @@
 import StdModel from "@/core/StdModel";
-import {stdRequestHelper} from "@/core/common";
+import {stdRequest} from "@/core/network";
 import {err, ok, type Result} from "@/core/result";
 
 class LibraryModel extends StdModel {
 
     public async update(isCurr=true): Promise<Result<BookInfo[]>> {
-        const res = await stdRequestHelper<LibraryBorrowResponse>({
-            requestOptions: {
+        try {
+            const res = await stdRequest<LibraryBorrowResponse>({
                 url: "/library/borrow",
                 data: { is_curr: isCurr },
                 method: "GET"
-            },
-            showError: true
-        });
-        if (!res.ok) return err(res.error);
-        return ok(convertToBookInfos(res.data));
+            });
+            return ok(convertToBookInfos(res));
+        } catch (e) {
+            console.error("[LibraryModel] update failed", e);
+            return err(e);
+        }
     }
 }
 export default LibraryModel;

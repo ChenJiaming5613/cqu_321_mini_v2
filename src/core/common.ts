@@ -1,26 +1,4 @@
-import type {StdRequestOptions, StdResponse} from "@/core/network";
-import {stdRequest} from "@/core/network";
-import {err, ok} from "@/core/result";
-
-
-export async function stdRequestHelper<ResType>(options: {
-    requestOptions: StdRequestOptions
-    showLoading?: boolean
-    showError?: boolean
-    loadingText?: string
-}) {
-    if (options.showLoading)
-        await uni.showLoading({ title: options.loadingText || "" });
-    try {
-        const res = await stdRequest<ResType>(options.requestOptions);
-        if (options.showLoading) uni.hideLoading();
-        return ok(res);
-    } catch (e: any) {
-        if (options.showLoading) uni.hideLoading();
-        if (options.showError) await stdShowErrorToast(e);
-        return err(e);
-    }
-}
+import type {StdResponse} from "@/core/network";
 
 export async function stdShowErrorToast(res: unknown) {
     let text = "操作失败";

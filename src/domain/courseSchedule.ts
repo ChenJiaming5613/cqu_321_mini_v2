@@ -1,7 +1,5 @@
 import type {Course} from "@/models/CourseModel";
-import {calcDateAfterNDays, calcDayOfWeek} from "@/utils/datetime";
 import type {CustomCourse} from "@/models/CustomCourseModel";
-import CoursePriorityModel from "@/models/CoursePriorityModel";
 
 export type UniCourse = Course | CustomCourse;
 
@@ -18,6 +16,8 @@ export type GridItemPosStyle = {
     gridRowStart: number
     gridRowEnd: number
 }
+
+export type CourseComparator = (a: UniCourse, b: UniCourse) => number;
 
 const COLORS = [
     '#ff9b6a',
@@ -56,21 +56,7 @@ export function makeColorMap(courses: UniCourse[]) {
     return colorMap;
 }
 
-// 根据date获取所在周的日期
-export function getWeekDates(date: Date) {
-    let dayOfWeek = calcDayOfWeek(date);
-    const dateList: number[] = [];
-    for (let i = dayOfWeek - 1; i >= 0; --i) {
-        dateList.push(calcDateAfterNDays(date, -i-1).getDate());
-    }
-    for (let i = 0; i < 7 - dayOfWeek; ++i) {
-        dateList.push(calcDateAfterNDays(date, i).getDate());
-    }
-    return dateList;
-}
-
-export function makeCoursesMatrix(courses: UniCourse[]) {
-    // 初始化 7 * 13 矩阵，每个元素是一个UniCourse[]
+export function makeCoursesMatrix(courses: UniCourse[], compareCourses?: CourseComparator) {
     const matrix = new Array<UniCourse[][]>();
     for (let i = 0; i < 7; i++) {
         const li: UniCourse[][] = [];
@@ -79,27 +65,20 @@ export function makeCoursesMatrix(courses: UniCourse[]) {
         }
         matrix.push(li);
     }
-    // 填充
     courses.forEach(it => {
         for (let i = it.dayTime.period.start - 1; i < it.dayTime.period.end; i++) {
             matrix[it.dayTime.weekday][i].push(it);
         }
     });
-    applyPriority(matrix);
+    if (compareCourses) applyPriority(matrix, compareCourses);
     return matrix;
 }
 
-function applyPriority(matrix: UniCourse[][][]) {
-    const priorityModel = CoursePriorityModel.getInstance();
+function applyPriority(matrix: UniCourse[][][], compareCourses: CourseComparator) {
     for (let i = 0; i < matrix.length; i++) {
         for (let j = 0; j < matrix[i].length; j++) {
             if (matrix[i][j].length === 0) continue;
-            matrix[i][j].sort((a, b) => priorityModel.compare(
-                b.code,
-                a.code,
-                'courseNum' in a ? 1 : 0,
-                'courseNum' in b ? 1 : 0
-            ));
+            matrix[i][j].sort(compareCourses);
         }
     }
 }
@@ -111,9 +90,7 @@ function isSameCourse(a: UniCourse, b: UniCourse) {
     if (tyA === 'course') {
         return (a as Course).courseNum === (b as Course).courseNum;
     }
-    else {
-        return (a as CustomCourse).code === (b as CustomCourse).code;
-    }
+    return (a as CustomCourse).code === (b as CustomCourse).code;
 }
 
 export function getCourseCells(coursesMatrix: UniCourse[][][]) {
@@ -139,26 +116,21 @@ export function getCourseCells(coursesMatrix: UniCourse[][][]) {
                     } as CourseCell;
                 }
                 else {
-                    // 按照教学班号区分（区分同一课程的教学课与实验课）
-                    // if (courseCell.course.courseNum === courses[0].courseNum) {
                     if (isSameCourse(courseCell.course, courses[0])) {
                         if (isOverlap) courseCell.isOverlap = isOverlap;
                         courseCell.pos.gridRowEnd ++;
                     }
-                    // submit
                     else {
                         courseCells.push(courseCell);
                         courseCell = null;
                         j --;
                     }
                 }
-                // submit
                 if (courseCell !== null && j === dayCourses.length - 1) {
                     courseCells.push(courseCell);
                     courseCell = null;
                 }
             }
-            // submit
             else if (courseCell !== null) {
                 courseCells.push(courseCell);
                 courseCell = null;

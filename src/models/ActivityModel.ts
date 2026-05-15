@@ -51,10 +51,6 @@ class ActivityModel extends StdModel {
             } as _RawActivityInfo;
         } catch (e) {
             console.error("[ActivityModel] update failed", e);
-            await uni.showToast({
-                title: "获取活动失败",
-                icon: "error"
-            });
             return null;
         }
     }

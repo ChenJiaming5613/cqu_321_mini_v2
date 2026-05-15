@@ -364,7 +364,7 @@ async function checkCurriculumInteractions(page, counters) {
 
   const before = counters.courseRefresh;
   await page.locator('.button-refresh').click();
-  await page.getByText('更新中', { exact: true }).waitFor({ state: 'visible' });
+  await page.getByText('同步中', { exact: true }).waitFor({ state: 'visible' });
   await waitFor(() => counters.courseRefresh > before);
   await page.getByText('更新完成', { exact: true }).waitFor({ state: 'visible' });
 }

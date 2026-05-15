@@ -1,7 +1,7 @@
 import stdUser from "../core/StdUser";
 import StdModel from "@/core/StdModel";
 import {stdGetStorageOrDefault, stdSetStorage} from "@/core/storage";
-import {stdRequestHelper} from "@/core/common";
+import {stdRequest} from "@/core/network";
 
 export type ExamInfo = {
   name: string
@@ -28,17 +28,17 @@ class ExamModel extends StdModel {
     const info = await stdUser.getUserInfo();
     if (info === null) return false;
     const sid = info.sid;
-    const res = await stdRequestHelper<{exams: any[]}>({
-      requestOptions: {
+    let exams: any[];
+    try {
+      const res = await stdRequest<{exams: any[]}>({
         url: "/edu_admin_center/fetchExam",
         data: { "sid": sid }
-      },
-      showLoading: true,
-      showError: true,
-      loadingText: "更新中"
-    });
-    if (!res.ok) return false;
-    const exams: any[] = res.data.exams;
+      });
+      exams = res.exams;
+    } catch (e) {
+      console.error("[ExamModel] update failed", e);
+      return false;
+    }
     this._examInfoList = exams.map(it => {
       return {
         name: it.course.name,

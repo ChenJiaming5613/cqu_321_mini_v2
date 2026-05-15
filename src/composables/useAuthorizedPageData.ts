@@ -61,6 +61,7 @@ export function useAuthorizedPageData(options: {
       const isUpdated = await options.refreshData?.();
       if (isUpdated === false) {
         hasLoadError.value = true;
+        await uni.showToast({ title: "更新失败", icon: "error" });
         return false;
       }
       await options.loadData();
@@ -71,6 +72,7 @@ export function useAuthorizedPageData(options: {
     } catch (e) {
       console.error(`[${options.logTag || "AuthorizedPage"}] refresh failed`, e);
       hasLoadError.value = true;
+      await uni.showToast({ title: "更新失败", icon: "error" });
       return false;
     } finally {
       isLoading.value = false;

@@ -60,8 +60,8 @@
   import {onPullDownRefresh} from "@dcloudio/uni-app";
   import {computed, ref} from "vue";
   import stdUser from "@/core/StdUser";
-  import {getCourseCells, makeColorMap, makeCoursesMatrix} from "@/pages/curriculum/util";
-  import type {UniCourse} from "@/pages/curriculum/util";
+  import {getCourseCells, makeColorMap, makeCoursesMatrix} from "@/domain/courseSchedule";
+  import type {UniCourse} from "@/domain/courseSchedule";
   import {
     calcDateAfterNDays,
     calcDayOfWeek,
@@ -106,7 +106,7 @@
         // 过滤掉无效时间段
         .filter(it => it.dayTime.period.start !== -1 && it.dayTime.period.end !== -1);
   });
-  const coursesMatrix = computed(() => makeCoursesMatrix(currWeekCourses.value));
+  const coursesMatrix = computed(() => makeCoursesMatrix(currWeekCourses.value, compareCoursePriority));
   const hasTermData = computed(() => termName.value !== "unknown");
   const {
     hasLoadError,
@@ -162,6 +162,7 @@
       const isUpdated = await courseModel.update(termOffset.value);
       if (!isUpdated) {
         hasLoadError.value = true;
+        await uni.showToast({ title: "更新失败", icon: "error" });
         return;
       }
       await loadCurriculumData();
@@ -169,6 +170,10 @@
         title: "更新完成",
         icon: "success"
       });
+    } catch (e) {
+      console.error("[CurriculumPage] refresh failed", e);
+      hasLoadError.value = true;
+      await uni.showToast({ title: "更新失败", icon: "error" });
     } finally {
       isRefreshing.value = false;
     }
@@ -227,6 +232,15 @@
     }
     activeCourses.value = targetCourses;
     isShowDetail.value = true;
+  }
+
+  function compareCoursePriority(a: UniCourse, b: UniCourse) {
+    return CoursePriorityModel.getInstance().compare(
+      b.code,
+      a.code,
+      'courseNum' in a ? 1 : 0,
+      'courseNum' in b ? 1 : 0
+    );
   }
 </script>
 

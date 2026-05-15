@@ -34,7 +34,7 @@
 
 <script setup lang="ts">
   import {getPeriodText, getTimeText, getWeeksText} from "@/utils/course";
-  import type {UniCourse} from "@/pages/curriculum/util";
+  import type {UniCourse} from "@/domain/courseSchedule";
   defineProps<{ courses: UniCourse[], isShow: boolean }>();
   defineEmits<{ (e: 'click'): void }>();
   function getItems(course: UniCourse) {

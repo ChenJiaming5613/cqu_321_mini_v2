@@ -48,14 +48,14 @@
           gridColumnStart: dayOfWeek,
           gridRowStart: mapPeriodStartToGridLine(idxOfDay[0] + 1),
           gridRowEnd: mapPeriodEndToGridLine(idxOfDay[0] + 2),
-        }"><view :style="{height: `${120 * idxOfDay[1]}rpx`}" class="time-line"></view></view>
+        }"><view :style="{height: `calc(var(--period-row-height) * ${idxOfDay[1]})`}" class="time-line"></view></view>
       </view>
     </view>
   </view>
 </template>
 
 <script setup lang="ts">
-  import type {CourseCell, UniCourse} from "@/pages/curriculum/util";
+  import type {CourseCell, UniCourse} from "@/domain/courseSchedule";
   import {calcDayOfWeek} from "@/utils/datetime";
   import {computed} from "vue";
   import {calcCurrPeriod, TIME_TABLE} from "@/domain/course";
@@ -136,6 +136,7 @@
 
 <style scoped>
   .table-shell {
+    --period-row-height: 120rpx;
     margin-top: 370rpx;
     padding-bottom: 24rpx;
     background: #fff;
@@ -281,6 +282,7 @@
 
   @media screen and (min-width: 600px) {
     .table-shell {
+      --period-row-height: 78px;
       margin-top: 288px;
       min-width: 758px;
       padding-bottom: 24px;
@@ -357,6 +359,7 @@
 
   @media screen and (min-width: 900px) and (orientation: landscape) {
     .table-shell {
+      --period-row-height: 39px;
       margin-top: 194px;
       padding-bottom: 16px;
     }

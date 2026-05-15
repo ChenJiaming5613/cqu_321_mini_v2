@@ -19,7 +19,7 @@
 
 <script setup lang="ts">
   import {formatNumber} from "@/utils/util";
-  import {getWeekDates} from "@/pages/curriculum/util";
+  import {getWeekDates} from "@/domain/course";
   import {computed} from "vue";
   const props = defineProps<{
     currDate: Date,
