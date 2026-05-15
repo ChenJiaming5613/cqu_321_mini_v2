@@ -3,6 +3,16 @@ import {stdRequest} from "@/core/network";
 import {err, ok, type Result} from "@/core/result";
 
 class LibraryModel extends StdModel {
+    private static _instance: LibraryModel | null = null;
+
+    public static getInstance(): LibraryModel {
+        if (this._instance === null) this._instance = new LibraryModel();
+        return this._instance;
+    }
+
+    private constructor() {
+        super();
+    }
 
     public async update(isCurr=true): Promise<Result<BookInfo[]>> {
         try {

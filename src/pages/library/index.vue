@@ -35,7 +35,7 @@
     hasReadyData: () => tabCur.value === 0 ? currBookInfos.value.length > 0 : prevBookInfos.value.length > 0,
     hasInitialData: () => currBookInfos.value.length > 0 || prevBookInfos.value.length > 0,
     loadData: async () => {
-      const libraryModel = new LibraryModel();
+      const libraryModel = LibraryModel.getInstance();
       const [currBooksResult, prevBooksResult] = await Promise.all([
         libraryModel.update(true),
         libraryModel.update(false)

@@ -49,12 +49,14 @@
   const weeksText = computed(() => getWeeksText(course.value.weeks.map(it => it + 1)));
 
   function onTapSave() {
-    course.value.code = course.value.name;
     if (!checkPass()) {
       uni.showToast({ title: "请补全课程信息", icon: "none" });
       return;
     }
-    course.value.weeks = course.value.weeks.map(it => it + 1);
-    emit('submit', course.value);
+    emit('submit', {
+      ...course.value,
+      code: course.value.name,
+      weeks: course.value.weeks.map(it => it + 1)
+    });
   }
 </script>
