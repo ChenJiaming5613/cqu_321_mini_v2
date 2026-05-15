@@ -1,9 +1,10 @@
 import StdModel from "@/core/StdModel";
 import {stdRequestHelper} from "@/core/common";
+import {err, ok, type Result} from "@/core/result";
 
 class LibraryModel extends StdModel {
 
-    public async update(isCurr=true) {
+    public async update(isCurr=true): Promise<Result<BookInfo[]>> {
         const res = await stdRequestHelper<LibraryBorrowResponse>({
             requestOptions: {
                 url: "/library/borrow",
@@ -12,8 +13,8 @@ class LibraryModel extends StdModel {
             },
             showError: true
         });
-        if (!res.ok) return [];
-        return convertToBookInfos(res.data);
+        if (!res.ok) return err(res.error);
+        return ok(convertToBookInfos(res.data));
     }
 }
 export default LibraryModel;

@@ -16,20 +16,23 @@ export function useAuthorizedPageData(options: {
   registerPullDownRefresh?: boolean
 }) {
   const hasUserInfo = ref(false);
+  const hasCheckedUserInfo = ref(false);
   const hasLoadError = ref(false);
   const isLoading = ref(false);
 
   const pageState = computed<PageDataState>(() => {
     const hasInitialData = options.hasInitialData?.() ?? options.hasReadyData();
+    if (!hasCheckedUserInfo.value) return "loading";
     if (isLoading.value && !hasInitialData) return "loading";
     if (!hasUserInfo.value) return "unauthorized";
-    if (hasLoadError.value) return "error";
+    if (hasLoadError.value && !hasInitialData) return "error";
     if (!options.hasReadyData()) return "empty";
     return "ready";
   });
 
   async function checkUserInfo() {
     hasUserInfo.value = await stdUser.getUserInfo(false) !== null;
+    hasCheckedUserInfo.value = true;
     if (!hasUserInfo.value) options.clearData?.();
     return hasUserInfo.value;
   }

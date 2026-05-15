@@ -36,12 +36,14 @@
     hasInitialData: () => currBookInfos.value.length > 0 || prevBookInfos.value.length > 0,
     loadData: async () => {
       const libraryModel = new LibraryModel();
-      const [currBooks, prevBooks] = await Promise.all([
+      const [currBooksResult, prevBooksResult] = await Promise.all([
         libraryModel.update(true),
         libraryModel.update(false)
       ]);
-      currBookInfos.value = currBooks;
-      prevBookInfos.value = prevBooks;
+      if (!currBooksResult.ok) throw currBooksResult.error;
+      if (!prevBooksResult.ok) throw prevBooksResult.error;
+      currBookInfos.value = currBooksResult.data;
+      prevBookInfos.value = prevBooksResult.data;
     },
     clearData: () => {
       currBookInfos.value = [];

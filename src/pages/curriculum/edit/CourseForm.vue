@@ -33,18 +33,27 @@
     dayTime: {
       weekday: props.oldCustomCourse?.dayTime.weekday || 0,
       period: {
-        start: props.oldCustomCourse?.dayTime.period.start || 0,
-        end: props.oldCustomCourse?.dayTime.period.end || 0
+        start: props.oldCustomCourse?.dayTime.period.start || 1,
+        end: props.oldCustomCourse?.dayTime.period.end || 1
       }
     },
     weeks: [...(props.oldCustomCourse?.weeks || []).map(it => it - 1)]
   });
-  const {isCheck, checkPass} = useFormCheck(() => course.value.name.length > 0);
+  const {isCheck, checkPass} = useFormCheck(() => {
+    const {period} = course.value.dayTime;
+    return course.value.name.length > 0
+      && course.value.weeks.length > 0
+      && period.start >= 1
+      && period.end >= period.start;
+  });
   const weeksText = computed(() => getWeeksText(course.value.weeks.map(it => it + 1)));
 
   function onTapSave() {
     course.value.code = course.value.name;
-    if (!checkPass()) return;
+    if (!checkPass()) {
+      uni.showToast({ title: "请补全课程信息", icon: "none" });
+      return;
+    }
     course.value.weeks = course.value.weeks.map(it => it + 1);
     emit('submit', course.value);
   }
