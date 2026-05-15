@@ -13,7 +13,7 @@
   import {computed, onMounted, ref} from "vue";
   import {range} from "@/utils/util";
   import MultiSelector from "@/pages/components/form/MultiSelector.vue";
-  import type {DayTime} from "@/models/CourseModel";
+  import type {DayTime} from "@/domain/course";
 
   const props = defineProps<{dayTime: DayTime}>();
   const emit = defineEmits<{ (e: 'update:dayTime', dayTime: DayTime): void }>();

@@ -2,6 +2,9 @@ import {stdGetStorage, stdSetStorage} from "@/core/storage";
 import StdModel from "@/core/StdModel";
 import stdUser from "@/core/StdUser";
 import {stdRequestHelper} from "@/core/common";
+import type {DayTime} from "@/domain/course";
+
+export type {DayTime};
 
 type CoursesInfo = {
   currTerm: CoursesData | null
@@ -108,13 +111,6 @@ export interface Course {
   credit: number
   weeks: number[]
   dayTime: DayTime
-}
-export type DayTime = {
-  weekday: number
-  period: {
-    start: number
-    end: number
-  }
 }
 interface _Courses {
   timetables: _Timetable[]

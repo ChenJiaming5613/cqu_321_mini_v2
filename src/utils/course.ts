@@ -1,5 +1,4 @@
-import {TIME_TABLE} from "@/pages/curriculum/util";
-import type {DayTime} from "@/models/CourseModel";
+import {TIME_TABLE, type DayTime} from "@/domain/course";
 
 /**
  * 将weeks数组转为weeks字符串

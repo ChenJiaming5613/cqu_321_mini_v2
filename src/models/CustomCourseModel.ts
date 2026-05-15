@@ -1,5 +1,5 @@
 import StdModel from "@/core/StdModel";
-import type {DayTime} from "@/models/CourseModel";
+import type {DayTime} from "@/domain/course";
 import {stdGetStorageOrDefault, stdSetStorage} from "@/core/storage";
 
 class CustomCourseModel extends StdModel {

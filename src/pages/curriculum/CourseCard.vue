@@ -60,7 +60,7 @@
   import CourseModel, {TermOffset} from "@/models/CourseModel";
   import {computed, onMounted, ref} from "vue";
   import {calcDayOfWeek, calcWeeksBetweenDates, stringToDateInChinaTime} from "@/utils/datetime";
-  import {calcCurrPeriod, TIME_TABLE} from "./util";
+  import {calcCurrPeriod, TIME_TABLE} from "@/domain/course";
   import type {UniCourse} from "./util";
   import {getTimeText} from "@/utils/course";
   import CustomCourseModel from "@/models/CustomCourseModel";

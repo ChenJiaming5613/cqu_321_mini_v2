@@ -58,7 +58,7 @@
   import type {CourseCell, UniCourse} from "@/pages/curriculum/util";
   import {calcDayOfWeek} from "@/utils/datetime";
   import {computed} from "vue";
-  import {calcCurrPeriod, TIME_TABLE} from "@/pages/curriculum/util";
+  import {calcCurrPeriod, TIME_TABLE} from "@/domain/course";
 
   const props = defineProps<{
     tableItems: CourseCell[],
