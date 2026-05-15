@@ -95,29 +95,24 @@ class ActivityModel extends StdModel {
             await this._load();
             // 更新最新数据
             if (this._activityInfo === null) {
-                console.log('[数据缺失更新]');
                 await this.update();
                 return this._activityInfo;
             }
         }
         // 如果超过一天了要更新
         if (calcDaysBetweenDates(this._activityInfo.lastCheck, new Date()) >= 1) {
-            console.log('[超过一天更新]');
             await this.update();
             return this._activityInfo;
         }
         const threshold = new Date();
         threshold.setHours(4, 0, 0, 0);
-        console.log(formatTime(threshold));
         // 如果没有超过一天：上次检查时间小于今天04:00，当前时间大于今天04:00
         if (this._activityInfo.lastCheck.getTime() <= threshold.getTime() &&
             new Date().getTime() >= threshold.getTime()
         ) {
-            console.log('[四点过后更新]');
             await this.update();
             return this._activityInfo;
         }
-        console.log('[不触发更新]');
         return this._activityInfo;
     }
 }

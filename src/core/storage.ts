@@ -1,10 +1,8 @@
 export async function stdSetStorage(key: string, data: any) {
-  console.log("[StdSetStorage] " + key);
   await uni.setStorage({ key, data });
 }
 
 export async function stdGetStorage<T>(key: string) {
-  console.log("[StdGetStorage] " + key);
   try {
     const res = await uni.getStorage({ key });
     return res.data as T;
@@ -16,7 +14,6 @@ export async function stdGetStorage<T>(key: string) {
 }
 
 export async function stdGetStorageOrDefault<T>(key: string, defaultValue: T) {
-  console.log("[StdGetStorageOrDefault] " + key);
   try {
     const res = await uni.getStorage({ key });
     return res.data as T;
@@ -30,7 +27,6 @@ export async function stdPrintStorageInfo() {
 }
 
 export async function stdClearAllStorage() {
-  console.log("[ClearAllStorage]");
   await uni.clearStorage();
 }
 
