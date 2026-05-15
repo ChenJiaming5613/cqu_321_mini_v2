@@ -1,6 +1,6 @@
 import StdModel from "@/core/StdModel";
 import {calcDaysBetweenDates, formatTime, stringToDateInChinaTime} from "@/utils/datetime";
-import {downloadAndSaveFile, stdGetStorage, stdSetStorage} from "@/core/storage";
+import {downloadAndSaveFile, stdGetStorageOrDefault, stdSetStorage} from "@/core/storage";
 import {stdRequest} from "@/core/network";
 
 export type ActivityInfo = {
@@ -66,25 +66,25 @@ class ActivityModel extends StdModel {
         return rawActivityInfo;
     }
     private async _load() {
-        try {
-            let rawInfo = await stdGetStorage<_RawActivityInfo>(ActivityModel.STORAGE_KEY);
-            const oldCnt = rawInfo.pictures
-                .reduce((prev, curr) => prev + (curr.localUrl === null ? 0 : 1), 0);
-            const rawInfo2 = await this._downloadImages(rawInfo);
-            const newCnt = rawInfo2.pictures
-                .reduce((prev, curr) => prev + (curr.localUrl === null ? 0 : 1), 0);
-            if (newCnt !== oldCnt) {
-                rawInfo = rawInfo2;
-                await stdSetStorage(ActivityModel.STORAGE_KEY, rawInfo);
-            }
-            this._activityInfo = {
-                lastCheck: stringToDateInChinaTime(rawInfo.lastCheck),
-                lastUpdate: stringToDateInChinaTime(rawInfo.lastUpdate),
-                pictures: rawInfo.pictures
-            };
-        } catch (e) {
+        let rawInfo = await stdGetStorageOrDefault<_RawActivityInfo | null>(ActivityModel.STORAGE_KEY, null);
+        if (rawInfo === null) {
             this._activityInfo = null;
+            return;
         }
+        const oldCnt = rawInfo.pictures
+            .reduce((prev, curr) => prev + (curr.localUrl === null ? 0 : 1), 0);
+        const rawInfo2 = await this._downloadImages(rawInfo);
+        const newCnt = rawInfo2.pictures
+            .reduce((prev, curr) => prev + (curr.localUrl === null ? 0 : 1), 0);
+        if (newCnt !== oldCnt) {
+            rawInfo = rawInfo2;
+            await stdSetStorage(ActivityModel.STORAGE_KEY, rawInfo);
+        }
+        this._activityInfo = {
+            lastCheck: stringToDateInChinaTime(rawInfo.lastCheck),
+            lastUpdate: stringToDateInChinaTime(rawInfo.lastUpdate),
+            pictures: rawInfo.pictures
+        };
     }
     private async update() {
         const rawInfo = await this._update();

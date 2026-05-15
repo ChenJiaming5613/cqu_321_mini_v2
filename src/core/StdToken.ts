@@ -1,5 +1,5 @@
 import StdModel from "@/core/StdModel";
-import {stdGetStorage, stdSetStorage} from "@/core/storage";
+import {stdGetStorage, stdGetStorageOrDefault, stdSetStorage} from "@/core/storage";
 import {StdRefreshTokenError} from "@/core/error/StdRefreshTokenError";
 import {userInfoLackCallback} from "@/utils/callback";
 
@@ -35,11 +35,7 @@ class StdToken extends StdModel {
   }
   public async setRefreshTokenInfo(info: RefreshTokenInfo) { await stdSetStorage("RefreshTokenInfo", info); }
   public async getAppRefreshTokenInfo() {
-    try {
-      return await stdGetStorage<RefreshTokenInfo>("AppRefreshTokenInfo");
-    } catch (e) {
-      return null;
-    }
+    return await stdGetStorageOrDefault<RefreshTokenInfo | null>("AppRefreshTokenInfo", null);
   }
   public async setAppRefreshTokenInfo(info: RefreshTokenInfo) { await stdSetStorage("AppRefreshTokenInfo", info); }
   public clear() {

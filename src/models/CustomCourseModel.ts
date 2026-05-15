@@ -1,6 +1,6 @@
 import StdModel from "@/core/StdModel";
 import type {DayTime} from "@/models/CourseModel";
-import {stdGetStorage, stdSetStorage} from "@/core/storage";
+import {stdGetStorageOrDefault, stdSetStorage} from "@/core/storage";
 
 class CustomCourseModel extends StdModel {
     private static _instance: CustomCourseModel | null = null;
@@ -10,23 +10,21 @@ class CustomCourseModel extends StdModel {
         return this._instance;
     }
     private static STORAGE_KEY = "CustomCourse";
-    private _courses: CustomCourse[] = [];
-    public clear() { this._courses = []; }
+    private _courses: CustomCourse[] | null = null;
+    public clear() { this._courses = null; }
     public async get() {
-        if (this._courses.length > 0) return this._courses;
-        try {
-            this._courses = await stdGetStorage<CustomCourse[]>(CustomCourseModel.STORAGE_KEY);
-        } catch (e) {
-            this._courses = [];
-        }
+        if (this._courses !== null) return this._courses;
+        this._courses = await stdGetStorageOrDefault<CustomCourse[]>(CustomCourseModel.STORAGE_KEY, []);
         return this._courses;
     }
     public async add(customCourse: CustomCourse) {
-        this._courses.push(customCourse);
+        await this.get();
+        this._courses!.push(customCourse);
         await stdSetStorage(CustomCourseModel.STORAGE_KEY, this._courses);
     }
     public async del(course: CustomCourse) {
-        this._courses = this._courses.filter(it => {
+        await this.get();
+        this._courses = this._courses!.filter(it => {
             return !(
                 it.name === course.name
                 && it.code === course.code

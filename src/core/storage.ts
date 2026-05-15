@@ -15,6 +15,16 @@ export async function stdGetStorage<T>(key: string) {
   }
 }
 
+export async function stdGetStorageOrDefault<T>(key: string, defaultValue: T) {
+  console.log("[StdGetStorageOrDefault] " + key);
+  try {
+    const res = await uni.getStorage({ key });
+    return res.data as T;
+  } catch (e) {
+    return defaultValue;
+  }
+}
+
 export async function stdPrintStorageInfo() {
   console.log("[StorageInfo]", await uni.getStorageInfo());
 }

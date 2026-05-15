@@ -1,5 +1,5 @@
 import {stdRequest} from "@/core/network";
-import {stdGetStorage, stdSetStorage} from "@/core/storage";
+import {stdGetStorageOrDefault, stdSetStorage} from "@/core/storage";
 import {tryParseNumber} from "@/utils/util";
 import StdModel from "@/core/StdModel";
 import stdUser from "@/core/StdUser";
@@ -112,11 +112,7 @@ class GradeModel extends StdModel {
     }
 
     private async load() {
-        let gradeInfo: GradeInfo | null;
-        try {
-            gradeInfo = await stdGetStorage<GradeInfo>(GradeModel.STORAGE_KEY);
-        } catch (e) { gradeInfo = null; }
-        return gradeInfo;
+        return await stdGetStorageOrDefault<GradeInfo | null>(GradeModel.STORAGE_KEY, null);
     }
 
     private async save(gradeInfo: GradeInfo) {

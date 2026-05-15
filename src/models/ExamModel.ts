@@ -1,6 +1,6 @@
 import stdUser from "../core/StdUser";
 import StdModel from "@/core/StdModel";
-import {stdGetStorage, stdSetStorage} from "@/core/storage";
+import {stdGetStorageOrDefault, stdSetStorage} from "@/core/storage";
 import {stdRequestHelper} from "@/core/common";
 
 export type ExamInfo = {
@@ -23,7 +23,7 @@ class ExamModel extends StdModel {
   }
   public clear() { this._examInfoList = []; }
   private static STORAGE_KEY = "ExamsInfo";
-  private _examInfoList: ExamInfo[] = [];
+  private _examInfoList: ExamInfo[] | null = null;
   public async update() {
     const info = await stdUser.getUserInfo();
     if (info === null) return false;
@@ -58,24 +58,20 @@ class ExamModel extends StdModel {
     await stdSetStorage(ExamModel.STORAGE_KEY, this._examInfoList);
   }
   private async load() {
-    try {
-      this._examInfoList = await stdGetStorage<ExamInfo[]>(ExamModel.STORAGE_KEY);
-    } catch (e) {
-      this._examInfoList = [];
-    }
+    this._examInfoList = await stdGetStorageOrDefault<ExamInfo[]>(ExamModel.STORAGE_KEY, []);
   }
   public async get() {
-    if (this._examInfoList.length === 0)
-      await this.load();
-    return this._examInfoList;
+    if (this._examInfoList === null) await this.load();
+    return this._examInfoList ?? [];
   }
   public getByName(name: string) {
-    return this._examInfoList.find(it => it.name === name);
+    return this._examInfoList?.find(it => it.name === name);
   }
   public async add(examInfo: ExamInfo) {
+    await this.get();
     const name = this.isSelfExam(examInfo.name) ? examInfo.name : examInfo.name + '🍒';
     // 清除已存在的相同名称
-    this._examInfoList = this._examInfoList.filter(it => it.name !== name);
+    this._examInfoList = this._examInfoList!.filter(it => it.name !== name);
     examInfo.name = name;
     this._examInfoList.push(examInfo);
     await this.save();
@@ -85,7 +81,8 @@ class ExamModel extends StdModel {
     return name.includes('🍒');
   }
   public async deleteByName(name: string) {
-    this._examInfoList = this._examInfoList.filter(it => it.name !== name);
+    await this.get();
+    this._examInfoList = this._examInfoList!.filter(it => it.name !== name);
     await this.save();
     await this.load();
   }

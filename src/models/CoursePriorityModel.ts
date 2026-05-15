@@ -1,5 +1,5 @@
 import StdModel from "@/core/StdModel";
-import {stdGetStorage, stdSetStorage} from "@/core/storage";
+import {stdGetStorageOrDefault, stdSetStorage} from "@/core/storage";
 
 class CoursePriorityModel extends StdModel {
     private static _instance: CoursePriorityModel | null = null;
@@ -14,11 +14,7 @@ class CoursePriorityModel extends StdModel {
     public clear() { this._priorityList = null; }
     public async load() {
         if (this._priorityList !== null) return;
-        try {
-            this._priorityList = await stdGetStorage<string[]>(CoursePriorityModel.STORAGE_KEY);
-        } catch (e) {
-            this._priorityList = [];
-        }
+        this._priorityList = await stdGetStorageOrDefault<string[]>(CoursePriorityModel.STORAGE_KEY, []);
     }
     public async add(code: string) {
         await this.load();
