@@ -1,6 +1,7 @@
 import stdUser, {type UserInfo} from "@/core/StdUser";
-import {stdRequest} from "@/core/network";
+import {stdRequest} from "@/core/request";
 import {getUserToken} from "@/core/tokenService";
+import {obfuscate} from "@/core/storage";
 
 export async function login(username: string, password: string) {
   await getUserToken(username, password);
@@ -8,7 +9,7 @@ export async function login(username: string, password: string) {
   await stdUser.setUserInfo({
     ...validatedInfo,
     auth: username,
-    password
+    password: obfuscate(password)
   });
 }
 

@@ -1,3 +1,37 @@
+/** 应用自有存储键白名单，stdClearAllStorage 仅清理这些键 */
+export const APP_STORAGE_KEYS = [
+  "UserInfo",
+  "RefreshTokenInfo",
+  "AppRefreshTokenInfo",
+  "ScoreItems",
+  "ExamsInfo",
+  "ActivityInfo",
+  "CustomCourse",
+  "CoursePriority",
+  "CoursesInfo-",
+] as const;
+
+/** 将字符串编码为 base64（跨平台兼容） */
+export function obfuscate(str: string): string {
+  const buf = new ArrayBuffer(str.length);
+  const bufView = new Uint8Array(buf);
+  for (let i = 0; i < str.length; i++) {
+    bufView[i] = str.charCodeAt(i);
+  }
+  return uni.arrayBufferToBase64(buf);
+}
+
+/** 将 base64 字符串解码为原始字符串 */
+export function deobfuscate(str: string): string {
+  const buf = uni.base64ToArrayBuffer(str);
+  const bufView = new Uint8Array(buf);
+  let result = '';
+  for (let i = 0; i < bufView.length; i++) {
+    result += String.fromCharCode(bufView[i]);
+  }
+  return result;
+}
+
 export async function stdSetStorage(key: string, data: any) {
   await uni.setStorage({ key, data });
 }
@@ -6,9 +40,8 @@ export async function stdGetStorage<T>(key: string) {
   try {
     const res = await uni.getStorage({ key });
     return res.data as T;
-  } catch (e) {
+  } catch (e: unknown) {
     console.error("[StdGetStorage] key: " + key + " is not found!");
-    // 当键不存在时抛出异常
     throw e;
   }
 }
@@ -17,7 +50,7 @@ export async function stdGetStorageOrDefault<T>(key: string, defaultValue: T) {
   try {
     const res = await uni.getStorage({ key });
     return res.data as T;
-  } catch (e) {
+  } catch (_e: unknown) {
     return defaultValue;
   }
 }
@@ -27,7 +60,12 @@ export async function stdPrintStorageInfo() {
 }
 
 export async function stdClearAllStorage() {
-  await uni.clearStorage();
+  const info = await uni.getStorageInfo();
+  for (const key of info.keys) {
+    if (APP_STORAGE_KEYS.some(k => key.startsWith(k))) {
+      await uni.removeStorage({ key });
+    }
+  }
 }
 
 /**
@@ -57,7 +95,7 @@ export async function downloadAndSaveFile(url: string) {
       console.error(`[DownloadAndSaveFile] [${res.statusCode}] ${res.errMsg}`);
       return null;
     }
-  } catch (e) {
+  } catch (e: unknown) {
     console.error('[DownloadAndSaveFile]', e);
     return null;
   }

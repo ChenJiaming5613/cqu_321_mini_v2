@@ -6,7 +6,7 @@ export type UserInfo = {
   uid: string       // 用户唯一id
   sid: string       // 学号
   auth: string      // 统一身份证号
-  password: string  // 密码
+  password: string  // 密码（base64 混淆存储）
   name: string      // 姓名
 }
 
@@ -16,7 +16,7 @@ class StdUser extends StdModel {
     if (!this._userInfo) {
       try {
         this._userInfo = await stdGetStorage<UserInfo>("UserInfo")
-      } catch (e) {
+      } catch (e: unknown) {
         if (execCallback) throw new StdUserInfoError(e);
       }
     }
