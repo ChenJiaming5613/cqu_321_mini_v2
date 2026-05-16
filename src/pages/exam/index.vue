@@ -57,7 +57,9 @@
   import {useAuthorizedPageData} from "@/composables/useAuthorizedPageData";
   import {usePullRefresh} from "@/composables/usePullRefresh";
   import PullRefreshIndicator from "@/pages/components/PullRefreshIndicator.vue";
+  import {usePageScrollTop} from "@/composables/usePageScrollTop";
   const examModel = ExamModel.getInstance();
+  const {isAtTop} = usePageScrollTop();
   const examInfoList = ref<ExamInfo[]>([]);
   const tabCur = ref(0);
   const currDate = ref(new Date());
@@ -107,6 +109,7 @@
     resetPullState
   } = usePullRefresh({
     isRefreshing: isLoading,
+    canStartPull: () => isAtTop.value,
     onRefresh: onTapUpdate
   });
 

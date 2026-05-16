@@ -87,6 +87,7 @@
   import {useAuthorizedPageData} from "@/composables/useAuthorizedPageData";
   import {usePullRefresh} from "@/composables/usePullRefresh";
   import PullRefreshIndicator from "@/pages/components/PullRefreshIndicator.vue";
+  import {usePageScrollTop} from "@/composables/usePageScrollTop";
 
   let isWeixinMiniProgram = false;
   // #ifdef MP-WEIXIN
@@ -95,6 +96,7 @@
 
   const courseModel = CourseModel.getInstance();
   const customCourseModel = CustomCourseModel.getInstance();
+  const {isAtTop} = usePageScrollTop();
   // CONST
   let colorMap: Map<string, string> = new Map<string, string>();
   const fixedWeekOfTerm = ref(0);
@@ -150,6 +152,7 @@
     resetPullState
   } = usePullRefresh({
     isRefreshing,
+    canStartPull: () => isAtTop.value,
     onRefresh: updateCourseInfo
   });
 

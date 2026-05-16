@@ -6,6 +6,7 @@ export function usePullRefresh(options: {
   onRefresh: () => Promise<unknown>
   isRefreshing?: BoolSource
   isDisabled?: BoolSource
+  canStartPull?: () => boolean
   threshold?: number
   maxDistance?: number
 }) {
@@ -22,7 +23,7 @@ export function usePullRefresh(options: {
   });
 
   function onTouchStart(event: TouchEvent) {
-    if (refreshing.value || disabled.value || getScrollTop() > 0) return;
+    if (refreshing.value || disabled.value || !canStartPull()) return;
     pullStartY.value = event.touches[0]?.clientY ?? null;
   }
 
@@ -49,6 +50,10 @@ export function usePullRefresh(options: {
     pullDistance.value = 0;
   }
 
+  function canStartPull() {
+    return options.canStartPull?.() ?? true;
+  }
+
   return {
     pullDistance,
     pullRefreshThreshold: threshold,
@@ -64,9 +69,4 @@ function readBool(source?: BoolSource) {
   if (typeof source === "function") return source();
   if (typeof source === "object" && source !== null && "value" in source) return source.value;
   return source ?? false;
-}
-
-function getScrollTop() {
-  if (typeof window === "undefined") return 0;
-  return window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0;
 }

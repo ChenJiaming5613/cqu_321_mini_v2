@@ -1,18 +1,21 @@
 <template>
-  <view class="bar-background">
+  <view class="bar-background" :style="navStyle">
     <image class="cqu-buildings" :src="getSvgPath('cqu_buildings')"/>
   </view>
 </template>
 
 <script setup lang="ts">
 import {getSvgPath} from "@/utils/resource";
+import {useNavigationLayout} from "@/composables/useNavigationLayout";
+
+const {navStyle} = useNavigationLayout();
 </script>
 
 <style scoped>
 .cqu-buildings {
   height: 66rpx;
   width: 356rpx;
-  margin: 98rpx auto 0;
+  margin: var(--nav-buildings-top, 98rpx) auto 0;
   opacity: 0.9;
   z-index: 1;
 }
@@ -21,7 +24,7 @@ import {getSvgPath} from "@/utils/resource";
   position: relative;
   display: flex;
   flex-direction: column;
-  height: 180rpx;
+  height: var(--nav-height, 180rpx);
   width: 100%;
   background: linear-gradient(180deg, #ffffff 0%, #f5f7fb 100%);
 }

@@ -37,6 +37,9 @@
     "build:quickapp-webview-huawei": "uni build -p quickapp-webview-huawei",
     "build:quickapp-webview-union": "uni build -p quickapp-webview-union",
     "type-check": "vue-tsc --noEmit",
+    "test:logic": "node scripts/logic-checks.js",
+    "interaction:h5": "node scripts/h5-interaction-check.js",
+    "validate:h5": "npm run type-check && npm run build:h5 && npm run test:logic && npm run screenshots:h5 && npm run screenshots:h5:responsive && npm run interaction:h5",
     "screenshots:h5": "node scripts/h5-mock-screenshots.js",
     "screenshots:h5:responsive": "node scripts/h5-mock-screenshots.js --responsive"
   },

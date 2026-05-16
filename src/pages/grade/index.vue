@@ -68,8 +68,10 @@
   import {useAuthorizedPageData} from "@/composables/useAuthorizedPageData";
   import {usePullRefresh} from "@/composables/usePullRefresh";
   import PullRefreshIndicator from "@/pages/components/PullRefreshIndicator.vue";
+  import {usePageScrollTop} from "@/composables/usePageScrollTop";
 
   const gradeModel = GradeModel.getInstance();
+  const {isAtTop} = usePageScrollTop();
 
   // 成绩信息
   const gradeInfo = ref<GradeInfo | null>(null);
@@ -115,6 +117,7 @@
     resetPullState
   } = usePullRefresh({
     isRefreshing: isLoading,
+    canStartPull: () => isAtTop.value,
     onRefresh: updateGradeInfo
   });
   const termGroups = computed(() => {

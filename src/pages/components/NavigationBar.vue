@@ -1,5 +1,5 @@
 <template>
-  <view class="nav-shell" :class="isFixed ? 'fixed-position' : ''">
+  <view class="nav-shell" :class="isFixed ? 'fixed-position' : ''" :style="navStyle">
     <view class="nav-bg"></view>
     <view class="button-back" @click="handleBack">
       <text class="button-back-icon cuIcon-back"></text>
@@ -14,13 +14,19 @@
 
 <script setup lang="ts">
 import {getSvgPath} from "@/utils/resource";
+import {useNavigationLayout} from "@/composables/useNavigationLayout";
 let isWeixinMiniProgram = false;
 // #ifdef MP-WEIXIN
 isWeixinMiniProgram = true;
 // #endif
 const handleBack = () => {
-  uni.navigateBack();
+  if (getCurrentPages().length > 1) {
+    uni.navigateBack();
+    return;
+  }
+  uni.reLaunch({ url: "/pages/index/index" });
 }
+const {navStyle} = useNavigationLayout();
 withDefaults(defineProps<{
   pageTitle: string
   isFixed?: boolean
@@ -38,17 +44,17 @@ defineEmits<{
 .cqu-buildings {
   height: 66rpx;
   width: 356rpx;
-  margin: 98rpx auto 0;
+  margin: var(--nav-buildings-top, 98rpx) auto 0;
   opacity: 0.9;
   z-index: 1;
 }
 
 .button-back {
   position: fixed;
-  height: 70rpx;
-  width: 70rpx;
-  top: 92rpx;
-  left: 34rpx;
+  height: var(--nav-action-size, 70rpx);
+  width: var(--nav-action-size, 70rpx);
+  top: var(--nav-action-top, 92rpx);
+  left: var(--nav-action-left, 34rpx);
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.78);
   z-index: 1024;
@@ -58,7 +64,7 @@ defineEmits<{
   justify-content: center;
   color: #de3f4a;
   font-size: 38rpx;
-  line-height: 70rpx;
+  line-height: var(--nav-action-size, 70rpx);
 }
 
 .button-back-icon {
@@ -69,23 +75,23 @@ defineEmits<{
 .button-refresh {
   position: fixed;
   top: 92rpx;
-  right: 36rpx;
-  width: 70rpx;
-  height: 70rpx;
+  right: var(--nav-action-right, 36rpx);
+  width: var(--nav-action-size, 70rpx);
+  height: var(--nav-action-size, 70rpx);
   z-index: 1024;
   color: #de3f4a;
   background: rgba(255, 255, 255, 0.82);
   border-radius: 50%;
   box-shadow: 0 8rpx 22rpx rgba(31, 43, 58, 0.08);
   font-size: 38rpx;
-  line-height: 70rpx;
+  line-height: var(--nav-action-size, 70rpx);
   text-align: center;
 }
 
 .nav-shell {
   position: relative;
   width: 100%;
-  height: 180rpx;
+  height: var(--nav-height, 180rpx);
   z-index: 1000;
 }
 
@@ -103,13 +109,13 @@ defineEmits<{
   position: relative;
   display: flex;
   flex-direction: column;
-  height: 180rpx;
+  height: var(--nav-height, 180rpx);
   width: 100%;
 }
 
 .bar-title {
   position: absolute;
-  top: 114rpx;
+  top: var(--nav-title-top, 114rpx);
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 2;
