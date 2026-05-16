@@ -1,20 +1,23 @@
 <template>
   <view class="week-switch bg-white text-center flex align-center justify-center">
     <view class="cuIcon-back switch-icon" @click="$emit('onTapPrevWeek')"></view>
-    <view class="week-title text-bold" @click="$emit('onTapSwitchTerm')">第 {{ weekOfTerm }} 周</view>
+    <view class="week-title text-bold" @click="$emit('onTapSwitchTerm')">第 {{ weekText }} 周</view>
     <view class="cuIcon-right switch-icon" @click="$emit('onTapNextWeek')"></view>
     <view class="cuIcon-apps more-icon" @click="$emit('onTapMoreFunc')"></view>
   </view>
 </template>
 
 <script setup lang="ts">
-  defineProps<{weekOfTerm: number}>();
+  import {computed} from "vue";
+
+  const props = defineProps<{weekOfTerm: number}>();
   defineEmits<{
     (e: 'onTapPrevWeek'): void
     (e: 'onTapNextWeek'): void
     (e: 'onTapSwitchTerm'): void
     (e: 'onTapMoreFunc'): void
   }>();
+  const weekText = computed(() => Number.isFinite(props.weekOfTerm) ? props.weekOfTerm : "-");
 </script>
 
 <style scoped>

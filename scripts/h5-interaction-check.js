@@ -211,8 +211,8 @@ async function installRoutes(page, counters) {
         msg: 'success',
         data: {
           session_name: mockCourses.termName,
-          start_date: mockCourses.startDate,
-          end_date: mockCourses.endDate,
+          start_date: '2026-02-24T00:00:00+08:00',
+          end_date: '2026-06-30T00:00:00+08:00',
           timetables: mockCourses.courses.map(toApiCourse)
         }
       })
@@ -364,9 +364,11 @@ async function checkCurriculumInteractions(page, counters) {
 
   const before = counters.courseRefresh;
   await page.locator('.button-refresh').click();
-  await page.getByText('同步中', { exact: true }).waitFor({ state: 'visible' });
+  await page.getByText('刷新中', { exact: true }).waitFor({ state: 'visible' });
   await waitFor(() => counters.courseRefresh > before);
   await page.getByText('更新完成', { exact: true }).waitFor({ state: 'visible' });
+  const weekAfterRefresh = await page.locator('.week-title').textContent();
+  if (weekAfterRefresh.includes('NaN')) throw new Error('Curriculum week should not be NaN after refresh.');
 }
 
 async function checkCourseInfoInteractions(page) {

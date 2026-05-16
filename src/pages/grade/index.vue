@@ -7,13 +7,12 @@
     @touchcancel="resetPullState"
   >
     <NavigationBar page-title="成绩管理"/>
-    <view
-      v-if="pullDistance > 0 || isLoading"
-      class="pull-indicator"
-      :style="{transform: `translateY(${Math.min(pullDistance, 80)}rpx)`}"
-    >
-      {{isLoading ? '刷新中' : pullDistance >= pullRefreshThreshold ? '释放刷新' : '下拉刷新'}}
-    </view>
+    <PullRefreshIndicator
+      :pull-distance="pullDistance"
+      :threshold="pullRefreshThreshold"
+      :is-refreshing="isLoading"
+      :text="pullText"
+    />
     <view v-if="pageState === 'ready'" class="content">
       <Overview
         v-if="gpaInfo !== null"
@@ -67,15 +66,14 @@
   import PageState from "@/pages/components/PageState.vue";
   import NavigationBar from "@/pages/components/NavigationBar.vue";
   import {useAuthorizedPageData} from "@/composables/useAuthorizedPageData";
+  import {usePullRefresh} from "@/composables/usePullRefresh";
+  import PullRefreshIndicator from "@/pages/components/PullRefreshIndicator.vue";
 
   const gradeModel = GradeModel.getInstance();
 
   // 成绩信息
   const gradeInfo = ref<GradeInfo | null>(null);
   const expandedTerms = ref(new Set<string>());
-  const pullStartY = ref<number | null>(null);
-  const pullDistance = ref(0);
-  const pullRefreshThreshold = 80;
 
   const hasGradeData = computed(() => {
     return gpaInfo.value !== null || (gradeInfo.value?.scoreItems.length ?? 0) > 0;
@@ -105,8 +103,19 @@
     },
     logTag: "GradePage",
     successMessage: "更新完成",
-    registerOnShow: true,
-    registerPullDownRefresh: true
+    registerOnShow: true
+  });
+  const {
+    pullDistance,
+    pullRefreshThreshold,
+    pullText,
+    onTouchStart,
+    onTouchMove,
+    onTouchEnd,
+    resetPullState
+  } = usePullRefresh({
+    isRefreshing: isLoading,
+    onRefresh: updateGradeInfo
   });
   const termGroups = computed(() => {
     const termMap = new Map<string, ScoreItem[]>();
@@ -172,40 +181,6 @@
     expandedTerms.value = new Set([termGroups.value[0].name]);
   }
 
-  function onTouchStart(event: TouchEvent) {
-    if (isLoading.value || getScrollTop() > 0) return;
-    pullStartY.value = event.touches[0]?.clientY ?? null;
-  }
-
-  function onTouchMove(event: TouchEvent) {
-    if (pullStartY.value === null || isLoading.value) return;
-    const currentY = event.touches[0]?.clientY ?? pullStartY.value;
-    const distance = currentY - pullStartY.value;
-    if (distance <= 0) {
-      pullDistance.value = 0;
-      return;
-    }
-    pullDistance.value = Math.min(Math.round(distance / 2), 120);
-  }
-
-  async function onTouchEnd() {
-    if (pullStartY.value === null) return;
-    const shouldRefresh = pullDistance.value >= pullRefreshThreshold;
-    resetPullState();
-    if (shouldRefresh) await updateGradeInfo();
-  }
-
-  function resetPullState() {
-    pullStartY.value = null;
-    pullDistance.value = 0;
-  }
-
-  function getScrollTop() {
-    // H5 预览使用 window 滚动；小程序端不存在 window 时回落为 0。
-    if (typeof window === "undefined") return 0;
-    return window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0;
-  }
-
 </script>
 
 <style scoped>
@@ -216,21 +191,6 @@
 
 .content {
   padding: 208rpx 28rpx 54rpx;
-}
-
-.pull-indicator {
-  position: fixed;
-  top: 180rpx;
-  left: 0;
-  right: 0;
-  height: 48rpx;
-  line-height: 48rpx;
-  color: #de3f4a;
-  font-size: 24rpx;
-  text-align: center;
-  z-index: 99;
-  pointer-events: none;
-  transition: transform 0.16s ease;
 }
 
 .terms {

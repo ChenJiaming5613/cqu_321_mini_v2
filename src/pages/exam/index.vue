@@ -1,34 +1,48 @@
 <template>
-  <NavigationBar pageTitle="考试安排" show-refresh @refresh="onTapUpdate"/>
-  <view class="tabs-shell">
-    <TabBar
-      :tab-cur="tabCur"
-      @on-tap-tab="newTabCur => tabCur = newTabCur"
+  <view
+    class="page-shell"
+    @touchstart="onTouchStart"
+    @touchmove="onTouchMove"
+    @touchend="onTouchEnd"
+    @touchcancel="resetPullState"
+  >
+    <NavigationBar pageTitle="考试安排" show-refresh @refresh="onTapUpdate"/>
+    <PullRefreshIndicator
+      :pull-distance="pullDistance"
+      :threshold="pullRefreshThreshold"
+      :is-refreshing="isLoading"
+      :text="pullText"
     />
-  </view>
-  <view class="page">
-    <PageState
-        v-if="pageState !== 'ready'"
-        :state="pageState"
-        empty-message="暂无考试安排"
-        empty-hint="当前账号暂时没有可展示的考试安排"
-        empty-action-text="刷新考试安排"
-        error-message="考试安排加载失败"
-        @empty-action="onTapUpdate"
-        @retry="loadExamInfo"
-    />
-    <view v-else class="exam-list">
-      <ExamItem
-          v-for="examInfo in currExamInfoList"
-          :key="examInfo.name"
-          :exam-info="examInfo"
-          :days="calcDays(examInfo)"
-          :is-over="tabCur !== 0"
-          :is-self="examModel.isSelfExam(examInfo.name)"
-          @click="onTapExamItem"
+    <view class="tabs-shell">
+      <TabBar
+        :tab-cur="tabCur"
+        @on-tap-tab="newTabCur => tabCur = newTabCur"
       />
     </view>
-    <view class="custom-entry" @click="onTapAdd">添加自定义考试</view>
+    <view class="page">
+      <PageState
+          v-if="pageState !== 'ready'"
+          :state="pageState"
+          empty-message="暂无考试安排"
+          empty-hint="当前账号暂时没有可展示的考试安排"
+          empty-action-text="刷新考试安排"
+          error-message="考试安排加载失败"
+          @empty-action="onTapUpdate"
+          @retry="loadExamInfo"
+      />
+      <view v-else class="exam-list">
+        <ExamItem
+            v-for="examInfo in currExamInfoList"
+            :key="examInfo.name"
+            :exam-info="examInfo"
+            :days="calcDays(examInfo)"
+            :is-over="tabCur !== 0"
+            :is-self="examModel.isSelfExam(examInfo.name)"
+            @click="onTapExamItem"
+        />
+      </view>
+      <view class="custom-entry" @click="onTapAdd">添加自定义考试</view>
+    </view>
   </view>
 </template>
 
@@ -41,6 +55,8 @@
   import TabBar from "@/pages/exam/TabBar.vue";
   import {calcDaysBetweenDates, stringToDateInChinaTime, truncDate} from "@/utils/datetime";
   import {useAuthorizedPageData} from "@/composables/useAuthorizedPageData";
+  import {usePullRefresh} from "@/composables/usePullRefresh";
+  import PullRefreshIndicator from "@/pages/components/PullRefreshIndicator.vue";
   const examModel = ExamModel.getInstance();
   const examInfoList = ref<ExamInfo[]>([]);
   const tabCur = ref(0);
@@ -62,6 +78,7 @@
       })
   );
   const {
+    isLoading,
     pageState,
     loadPageData: loadExamInfo,
     refreshPageData: onTapUpdate
@@ -78,8 +95,19 @@
     },
     logTag: "ExamPage",
     successMessage: "更新完成",
-    registerOnShow: true,
-    registerPullDownRefresh: true
+    registerOnShow: true
+  });
+  const {
+    pullDistance,
+    pullRefreshThreshold,
+    pullText,
+    onTouchStart,
+    onTouchMove,
+    onTouchEnd,
+    resetPullState
+  } = usePullRefresh({
+    isRefreshing: isLoading,
+    onRefresh: onTapUpdate
   });
 
   function calcDays(examInfo: ExamInfo) {
@@ -111,6 +139,11 @@
 .page {
   min-height: calc(100vh - 260rpx);
   padding: 26rpx 0 80rpx;
+  background: #f5f7fb;
+}
+
+.page-shell {
+  min-height: 100vh;
   background: #f5f7fb;
 }
 

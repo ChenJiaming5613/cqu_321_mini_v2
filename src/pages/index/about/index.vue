@@ -1,10 +1,11 @@
 <template>
-  <view class="padding margin">
+  <PageShell title="关于我们" content-class="markdown-card">
     <ua-markdown :source="mdText"/>
-  </view>
+  </PageShell>
 </template>
 <script setup lang="ts">
   import UaMarkdown from "@/pages/components/ua-markdown/ua-markdown.vue";
+  import PageShell from "@/pages/components/PageShell.vue";
   import {ref} from "vue";
   import {onShow} from "@dcloudio/uni-app";
   import {oldRequestV1} from "@/core/old";

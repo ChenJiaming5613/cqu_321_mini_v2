@@ -16,8 +16,30 @@ export const formatTime = (date: Date) => {
 }
 
 export function stringToDateInChinaTime(dateString: string): Date {
-    // UTC时间矫正为北京时间
-    return new Date(dateString + " GMT+0800");
+    const text = dateString.trim();
+    if (text.length === 0) return new Date(NaN);
+    if (hasExplicitTimezone(text)) return new Date(text);
+    const match = text.match(/^(\d{4})-(\d{1,2})-(\d{1,2})(?:[ T](\d{1,2}):(\d{1,2})(?::(\d{1,2}))?)?$/);
+    if (match) {
+        const [, year, month, day, hour = "0", minute = "0", second = "0"] = match;
+        return new Date(Date.UTC(
+            Number(year),
+            Number(month) - 1,
+            Number(day),
+            Number(hour) - 8,
+            Number(minute),
+            Number(second)
+        ));
+    }
+    return new Date(text);
+}
+
+export function isValidDate(date: Date): boolean {
+    return !Number.isNaN(date.getTime());
+}
+
+function hasExplicitTimezone(dateString: string): boolean {
+    return /(?:Z|[+-]\d{2}:?\d{2})$/i.test(dateString);
 }
 
 export function calcDaysBetweenDates(date1: Date, date2: Date): number {

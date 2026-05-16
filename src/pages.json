@@ -15,15 +15,13 @@
 		{
 			"path": "pages/grade/index",
 			"style": {
-				"navigationBarTitleText": "成绩查询",
-				"enablePullDownRefresh": true
+				"navigationBarTitleText": "成绩查询"
 			}
 		},
 		{
 			"path": "pages/curriculum/index",
 			"style": {
-				"navigationBarTitleText": "课程表",
-				"enablePullDownRefresh": true
+				"navigationBarTitleText": "课程表"
 			}
 		},
 		{
@@ -65,8 +63,7 @@
 		{
 			"path": "pages/exam/index",
 			"style": {
-				"navigationBarTitleText": "考试安排",
-				"enablePullDownRefresh": true
+				"navigationBarTitleText": "考试安排"
 			}
 		},
 		{

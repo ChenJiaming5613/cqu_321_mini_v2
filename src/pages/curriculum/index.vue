@@ -1,15 +1,24 @@
 <template>
-  <view class="page">
+  <view
+    class="page"
+    @touchstart="onTouchStart"
+    @touchmove="onTouchMove"
+    @touchend="onTouchEnd"
+    @touchcancel="resetPullState"
+  >
     <NavigationBar
       pageTitle="课程表"
       :isFixed="true"
       :show-refresh="true"
       @refresh="updateCourseInfo"
     />
-    <view v-if="isRefreshing" class="refresh-mask">
-      <text class="cuIcon-loading2 refresh-icon"></text>
-      <text>同步中</text>
-    </view>
+    <PullRefreshIndicator
+      class="curriculum-refresh-indicator"
+      :pull-distance="pullDistance"
+      :threshold="pullRefreshThreshold"
+      :is-refreshing="isRefreshing"
+      :text="pullText"
+    />
     <template v-if="pageState === 'ready'">
       <Footer
         :week-of-term="weekOfTerm"
@@ -57,7 +66,6 @@
 <script setup lang="ts">
   import NavigationBar from "@/pages/components/NavigationBar.vue";
   import CourseModel, {TermOffset} from "@/models/CourseModel";
-  import {onPullDownRefresh} from "@dcloudio/uni-app";
   import {computed, ref} from "vue";
   import stdUser from "@/core/StdUser";
   import {getCourseCells, makeColorMap, makeCoursesMatrix} from "@/domain/courseSchedule";
@@ -66,6 +74,7 @@
     calcDateAfterNDays,
     calcDayOfWeek,
     calcWeeksBetweenDates,
+    isValidDate,
     stringToDateInChinaTime
   } from "@/utils/datetime";
   import Header from "@/pages/curriculum/Header.vue";
@@ -76,6 +85,8 @@
   import CustomCourseModel from "@/models/CustomCourseModel";
   import CoursePriorityModel from "@/models/CoursePriorityModel";
   import {useAuthorizedPageData} from "@/composables/useAuthorizedPageData";
+  import {usePullRefresh} from "@/composables/usePullRefresh";
+  import PullRefreshIndicator from "@/pages/components/PullRefreshIndicator.vue";
 
   let isWeixinMiniProgram = false;
   // #ifdef MP-WEIXIN
@@ -129,6 +140,18 @@
       return it;
     });
   });
+  const {
+    pullDistance,
+    pullRefreshThreshold,
+    pullText,
+    onTouchStart,
+    onTouchMove,
+    onTouchEnd,
+    resetPullState
+  } = usePullRefresh({
+    isRefreshing,
+    onRefresh: updateCourseInfo
+  });
 
   async function loadCurriculumData() {
     await CoursePriorityModel.getInstance().load();
@@ -136,8 +159,10 @@
     const coursesData = await courseModel.getCoursesData(termOffset.value);
     courses.value = [];
     if (coursesData !== null) {
+      const termStartDate = stringToDateInChinaTime(coursesData.startDate);
+      if (!isValidDate(termStartDate)) throw new Error(`Invalid course start date: ${coursesData.startDate}`);
       termName.value = coursesData.termName;
-      startDate.value = stringToDateInChinaTime(coursesData.startDate);
+      startDate.value = termStartDate;
       fixedWeekOfTerm.value = weekOfTerm.value;
       const tmpCourses: UniCourse[] = [...coursesData.courses];
       tmpCourses.push(...await customCourseModel.get());
@@ -146,13 +171,6 @@
     }
   }
 
-  onPullDownRefresh(async () => {
-    try {
-      await updateCourseInfo();
-    } finally {
-      uni.stopPullDownRefresh();
-    }
-  });
   async function updateCourseInfo() {
     if (isRefreshing.value) return;
     if (await stdUser.getUserInfo(false) === null) return;
@@ -250,24 +268,6 @@
   background: #f5f7fb;
 }
 
-.refresh-mask {
-  position: fixed;
-  top: 196rpx;
-  right: 28rpx;
-  z-index: 200;
-  height: 58rpx;
-  padding: 0 22rpx;
-  display: flex;
-  align-items: center;
-  gap: 10rpx;
-  border-radius: 999rpx;
-  background: rgba(255, 255, 255, 0.94);
-  border: 1rpx solid rgba(219, 225, 235, 0.95);
-  box-shadow: 0 10rpx 26rpx rgba(31, 43, 58, 0.12);
-  color: #de3f4a;
-  font-size: 24rpx;
-}
-
 .state-wrap {
   padding-top: 180rpx;
 }
@@ -297,32 +297,10 @@
   border: none;
 }
 
-.refresh-icon {
-  font-size: 30rpx;
-  animation: refresh-rotate 0.9s linear infinite;
-}
-
-@keyframes refresh-rotate {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
 @media screen and (min-width: 600px) {
   .table-scroll {
     overflow-x: auto;
     max-width: 100vw;
-  }
-
-  .refresh-mask {
-    top: 150px;
-    right: 28px;
-    height: 40px;
-    padding: 0 16px;
-    font-size: 15px;
-  }
-
-  .refresh-icon {
-    font-size: 20px;
   }
 
   .state-wrap {

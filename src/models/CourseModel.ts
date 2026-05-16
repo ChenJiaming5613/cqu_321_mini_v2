@@ -3,6 +3,7 @@ import StdModel from "@/core/StdModel";
 import stdUser from "@/core/StdUser";
 import {stdRequest} from "@/core/network";
 import type {DayTime} from "@/domain/course";
+import {isValidDate, stringToDateInChinaTime} from "@/utils/datetime";
 
 export type {DayTime};
 
@@ -51,6 +52,10 @@ class CourseModel extends StdModel {
         url: "/edu_admin_center/fetchCourseTimetable",
         data: { "code": sid, "offset": termOffset }
       });
+      if (!isValidCourseDate(courses.start_date) || !isValidCourseDate(courses.end_date)) {
+        console.error("[CourseModel] invalid course date", courses.start_date, courses.end_date);
+        return false;
+      }
       await this._setCoursesData(termOffset, {
         termName: courses.session_name,
         startDate: courses.start_date,
@@ -90,6 +95,10 @@ class CourseModel extends StdModel {
   }
 }
 export default CourseModel;
+
+function isValidCourseDate(dateString: string) {
+  return isValidDate(stringToDateInChinaTime(dateString));
+}
 
 export interface CoursesData {
   termName: string

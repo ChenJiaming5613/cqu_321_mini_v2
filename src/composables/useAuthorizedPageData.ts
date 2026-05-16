@@ -1,5 +1,5 @@
 import {computed, ref} from "vue";
-import {onPullDownRefresh, onShow} from "@dcloudio/uni-app";
+import {onShow} from "@dcloudio/uni-app";
 import stdUser from "@/core/StdUser";
 
 export type PageDataState = "loading" | "unauthorized" | "empty" | "error" | "ready";
@@ -13,7 +13,6 @@ export function useAuthorizedPageData(options: {
   logTag?: string
   successMessage?: string
   registerOnShow?: boolean
-  registerPullDownRefresh?: boolean
 }) {
   const hasUserInfo = ref(false);
   const hasCheckedUserInfo = ref(false);
@@ -81,16 +80,6 @@ export function useAuthorizedPageData(options: {
 
   if (options.registerOnShow) {
     onShow(loadPageData);
-  }
-
-  if (options.registerPullDownRefresh) {
-    onPullDownRefresh(async () => {
-      try {
-        await refreshPageData();
-      } finally {
-        uni.stopPullDownRefresh();
-      }
-    });
   }
 
   return {
