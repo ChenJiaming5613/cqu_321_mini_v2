@@ -28,10 +28,11 @@
   const emit = defineEmits<{ (e: "update:value", newValue: number): void }>();
   const isFocus = ref(false);
   const isValid = ref(true);
-  function onChange(e: any) {
-    isValid.value = e.target.value.length > 0 && !isNaN(e.target.value);
+  function onChange(event: Event) {
+    const e = event as unknown as { detail: { value: string } };
+    isValid.value = e.detail.value.length > 0 && !isNaN(Number(e.detail.value));
     if (isValid.value) {
-      emit('update:value', parseFloat(e.target.value));
+      emit('update:value', parseFloat(e.detail.value));
     }
     else {
       emit('update:value', props.defaultValue || 0);
@@ -40,5 +41,4 @@
 </script>
 
 <style scoped>
-  @import "form.css";
 </style>

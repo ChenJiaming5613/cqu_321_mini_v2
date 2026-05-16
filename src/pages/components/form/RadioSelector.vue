@@ -22,12 +22,12 @@
   }>();
   const emit = defineEmits<{ (e: 'update:idx', newValue: number): void }>();
   const isFocus = ref(false);
-  function onChange(e: any) {
+  function onChange(event: Event) {
+    const e = event as unknown as { detail: { value: number } };
     isFocus.value = false;
-    emit('update:idx', parseInt(e.detail.value));
+    emit('update:idx', e.detail.value);
   }
 </script>
 
 <style scoped>
-  @import "form.css";
 </style>

@@ -28,15 +28,16 @@
     (e: 'change', col: number, row: number): void
   }>();
   const isFocus = ref(false);
-  function onChange(e: any) {
+  function onChange(event: Event) {
+    const e = event as unknown as { detail: { value: number[] } };
     isFocus.value = false;
     emit('update:idxList', e.detail.value);
   }
-  function onColumnChange(e: any) {
+  function onColumnChange(event: Event) {
+    const e = event as unknown as { detail: { column: number; value: number } };
     emit('change', e.detail.column, e.detail.value);
   }
 </script>
 
 <style scoped>
-  @import "form.css";
 </style>

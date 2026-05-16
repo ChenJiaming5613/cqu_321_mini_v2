@@ -13,5 +13,6 @@ onHide(() => {
 <style>
   @import "colorui/main.css";
   @import "colorui/icon.css";
+  @import "pages/components/form/form.css";
   @import "App.css";
 </style>

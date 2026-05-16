@@ -34,11 +34,11 @@
   function checkPass() {
     return !props.check || props.value.length > 0;
   }
-  function onInput(event: any) {
-    emits("update:value", event.detail?.value ?? "");
+  function onInput(event: Event) {
+    const e = event as unknown as { detail: { value: string } };
+    emits("update:value", e.detail?.value ?? "");
   }
 </script>
 
 <style scoped>
-  @import "form.css";
 </style>

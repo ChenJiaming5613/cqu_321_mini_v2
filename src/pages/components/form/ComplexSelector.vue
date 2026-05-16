@@ -39,7 +39,6 @@
 </script>
 
 <style scoped>
-  @import "form.css";
   .cells {
     width: 100%;
     padding: 50rpx 10rpx;

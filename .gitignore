@@ -19,3 +19,6 @@ dist
 *.njsproj
 *.sln
 *.sw?
+
+/分页面设计稿
+/docs/**/*.png

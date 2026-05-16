@@ -28,7 +28,7 @@
 <script setup lang="ts">
   import Icon1st from "@/pages/index/_home/Icon1st.vue";
   import Icon2nd from "@/pages/index/_home/Icon2nd.vue";
-  import CourseCard from "@/pages/curriculum/CourseCard.vue";
+  import CourseCard from "@/pages/components/CourseCard.vue";
   import ActivityCard from "@/pages/index/_home/ActivityCard.vue";
   import CardTitle from "@/pages/index/_home/CardTitle.vue";
   import NavigationBarHome from "@/pages/components/NavigationBarHome.vue";
