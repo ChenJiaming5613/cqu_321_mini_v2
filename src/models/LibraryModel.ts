@@ -1,5 +1,5 @@
 import StdModel from "@/core/StdModel";
-import {stdRequest} from "@/core/network";
+import {stdRequest} from "@/core/request";
 import {err, ok, type Result} from "@/core/result";
 
 class LibraryModel extends StdModel {
@@ -22,7 +22,7 @@ class LibraryModel extends StdModel {
                 method: "GET"
             });
             return ok(convertToBookInfos(res));
-        } catch (e) {
+        } catch (e: unknown) {
             console.error("[LibraryModel] update failed", e);
             return err(e);
         }
@@ -31,11 +31,24 @@ class LibraryModel extends StdModel {
 export default LibraryModel;
 
 type LibraryBorrowResponse = {
-    book_infos: any[]
+    book_infos: _BookRaw[]
+}
+
+interface _BookRaw {
+    borrow_time: string
+    call_no: string
+    can_renew: boolean
+    id: number | null
+    is_return: boolean
+    library_name: string
+    renew_count: number
+    return_time: string | null
+    should_return_time: string | null
+    title: string
 }
 
 function convertToBookInfos(res: LibraryBorrowResponse): BookInfo[] {
-    return res.book_infos.map((it: any) => {
+    return res.book_infos.map((it: _BookRaw) => {
        return {
            borrowTime: it.borrow_time,
            callNo: it.call_no,

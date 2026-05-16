@@ -1,5 +1,5 @@
 import StdModel from "@/core/StdModel";
-import {stdRequest} from "@/core/network";
+import {stdRequest} from "@/core/request";
 
 export enum SearchType {
     CourseName,

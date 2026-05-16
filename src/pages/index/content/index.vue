@@ -6,13 +6,13 @@
 
 <script setup lang="ts">
   import {onLoad} from "@dcloudio/uni-app";
-  import {getMarkdownUrl} from "@/core/old";
+  import {getMarkdownUrl} from "@/core/common";
   import {ref} from "vue";
   import UaMarkdown from "@/pages/components/ua-markdown/ua-markdown.vue";
   import PageShell from "@/pages/components/PageShell.vue";
   const markdownContent = ref("");
-  onLoad(async (option: any) => {
-    const res = await uni.request({ url: getMarkdownUrl(option.url), method: "GET" });
+  onLoad(async (option?: Record<string, any>) => {
+    const res = await uni.request({ url: getMarkdownUrl(option?.url || ""), method: "GET" });
     if (res.statusCode === 200) markdownContent.value = res.data as string;
   });
 </script>

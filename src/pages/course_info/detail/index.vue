@@ -1,6 +1,6 @@
 <template>
   <NavigationBar pageTitle="查课详情"/>
-  <view class="std-bg-primary padding-bottom-xl padding">
+  <view v-if="courseDetail" class="std-bg-primary padding-bottom-xl padding">
     <TitleCard :name="courseDetail.name" :code="courseDetail.code"/>
     <DetailItem
       v-for="(detail, index) in courseDetail.details"
@@ -17,10 +17,10 @@
   import type {CourseDetail} from "@/models/CourseInfoModel";
   import TitleCard from "@/pages/course_info/detail/TitleCard.vue";
   import DetailItem from "@/pages/course_info/detail/DetailItem.vue";
-  const courseDetail = ref<CourseDetail>({} as CourseDetail);
-  onLoad(async (option: any) => {
-    const code = decodeURIComponent(option.code || "");
-    const name = decodeURIComponent(option.name || "");
+  const courseDetail = ref<CourseDetail | null>(null);
+  onLoad(async (option?: Record<string, any>) => {
+    const code = decodeURIComponent(option?.code || "");
+    const name = decodeURIComponent(option?.name || "");
     courseDetail.value = await CourseInfoModel.queryDetail(code);
     courseDetail.value.name = name;
     courseDetail.value.code = code;

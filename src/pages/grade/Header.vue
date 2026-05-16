@@ -18,7 +18,7 @@
   // 用于标签页自动右滑
   const scrollLeft = computed(() => (props.tabCur - 1) * 60);
   // 切换标签页时触发的回调
-  function onTabSelect(e: any) {
+  function onTabSelect(e: { currentTarget: { dataset: { id: number } } }) {
     emits('onTabSelect', e.currentTarget!.dataset.id);
   }
 </script>

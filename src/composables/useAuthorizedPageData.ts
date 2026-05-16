@@ -42,7 +42,7 @@ export function useAuthorizedPageData(options: {
       hasLoadError.value = false;
       if (!await checkUserInfo()) return;
       await options.loadData();
-    } catch (e) {
+    } catch (e: unknown) {
       console.error(`[${options.logTag || "AuthorizedPage"}] load failed`, e);
       options.clearData?.();
       hasLoadError.value = true;
@@ -68,7 +68,7 @@ export function useAuthorizedPageData(options: {
         await uni.showToast({ title: options.successMessage, icon: "success" });
       }
       return true;
-    } catch (e) {
+    } catch (e: unknown) {
       console.error(`[${options.logTag || "AuthorizedPage"}] refresh failed`, e);
       hasLoadError.value = true;
       await uni.showToast({ title: "更新失败", icon: "error" });

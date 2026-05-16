@@ -107,7 +107,7 @@
       uni.hideLoading();
       await uni.showToast({ title: "绑定成功", icon: "success" });
       await uni.navigateBack({ delta: 1});
-    } catch (e: any) {
+    } catch (e: unknown) {
       uni.hideLoading();
       await stdShowErrorToast(e);
     } finally {

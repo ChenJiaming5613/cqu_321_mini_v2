@@ -27,7 +27,7 @@ class StdToken extends StdModel {
   public async getRefreshTokenInfo() {
     try {
       return await stdGetStorage<RefreshTokenInfo>("RefreshTokenInfo");
-    } catch (e) {
+    } catch (e: unknown) {
       throw new StdRefreshTokenError(e);
     }
   }

@@ -1,7 +1,7 @@
 import {stdGetStorageOrDefault, stdSetStorage} from "@/core/storage";
 import StdModel from "@/core/StdModel";
 import stdUser from "@/core/StdUser";
-import {stdRequest} from "@/core/network";
+import {stdRequest} from "@/core/request";
 import type {DayTime} from "@/domain/course";
 import {isValidDate, stringToDateInChinaTime} from "@/utils/datetime";
 
@@ -63,7 +63,7 @@ class CourseModel extends StdModel {
         courses: courses.timetables.map(it => convertCourses(it))
       });
       return true;
-    } catch (e) {
+    } catch (e: unknown) {
       console.error("[CourseModel] update failed", e);
       return false;
     }

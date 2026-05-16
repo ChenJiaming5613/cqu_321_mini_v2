@@ -41,8 +41,8 @@
   });
   const {isCheck, checkPass} = useFormCheck(() => examInfo.value.name.length > 0);
 
-  onLoad((option: any) => {
-    if (option.name) {
+  onLoad((option?: Record<string, any>) => {
+    if (option?.name) {
       const name = decodeURIComponent(option.name);
       const info = examModel.getByName(name);
       if (info) examInfo.value = { ...info };

@@ -1,4 +1,4 @@
-import {stdRequest} from "@/core/network";
+import {stdRequest} from "@/core/request";
 import {stdGetStorageOrDefault, stdSetStorage} from "@/core/storage";
 import {tryParseNumber} from "@/utils/util";
 import StdModel from "@/core/StdModel";

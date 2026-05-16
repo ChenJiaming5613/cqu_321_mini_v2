@@ -1,7 +1,7 @@
 import StdModel from "@/core/StdModel";
 import {calcDaysBetweenDates, formatTime, stringToDateInChinaTime} from "@/utils/datetime";
 import {downloadAndSaveFile, stdGetStorageOrDefault, stdSetStorage} from "@/core/storage";
-import {stdRequest} from "@/core/network";
+import {stdRequest} from "@/core/request";
 
 export type ActivityInfo = {
     lastCheck: Date
@@ -49,7 +49,7 @@ class ActivityModel extends StdModel {
                     } as ActivityItem;
                 })
             } as _RawActivityInfo;
-        } catch (e) {
+        } catch (e: unknown) {
             console.error("[ActivityModel] update failed", e);
             return null;
         }
@@ -146,7 +146,7 @@ function resolveHomepageJumpUrl(jumpParam: string | null) {
     try {
         const parsed = JSON.parse(jumpParam) as {url?: string};
         if (typeof parsed.url === "string") return parsed.url;
-    } catch (e) {
+    } catch (_e: unknown) {
         return jumpParam;
     }
     return "";

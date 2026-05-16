@@ -1,5 +1,5 @@
 import {StdError} from "@/core/error/StdError";
 
 export class StdUserInfoError extends StdError {
-  constructor(errMsg: any) { super("User Info Lack: " + errMsg); }
+  constructor(errMsg: unknown) { super("User Info Lack: " + String(errMsg)); }
 }

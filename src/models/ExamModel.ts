@@ -1,7 +1,7 @@
 import stdUser from "../core/StdUser";
 import StdModel from "@/core/StdModel";
 import {stdGetStorageOrDefault, stdSetStorage} from "@/core/storage";
-import {stdRequest} from "@/core/network";
+import {stdRequest} from "@/core/request";
 
 export type ExamInfo = {
   name: string
@@ -28,14 +28,14 @@ class ExamModel extends StdModel {
     const info = await stdUser.getUserInfo();
     if (info === null) return false;
     const sid = info.sid;
-    let exams: any[];
+    let exams: _ExamRaw[];
     try {
-      const res = await stdRequest<{exams: any[]}>({
+      const res = await stdRequest<_ExamFetchResponse>({
         url: "/edu_admin_center/fetchExam",
         data: { "sid": sid }
       });
       exams = res.exams;
-    } catch (e) {
+    } catch (e: unknown) {
       console.error("[ExamModel] update failed", e);
       return false;
     }
@@ -88,3 +88,16 @@ class ExamModel extends StdModel {
   }
 }
 export default ExamModel;
+
+interface _ExamFetchResponse {
+  exams: _ExamRaw[]
+}
+
+interface _ExamRaw {
+  course: { name: string; code: string }
+  date: string
+  start_time: string
+  end_time: string
+  room: string
+  seat_num: string
+}
