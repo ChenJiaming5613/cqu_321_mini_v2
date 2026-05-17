@@ -15,7 +15,7 @@ const {navStyle} = useNavigationLayout();
 .cqu-buildings {
   height: 66rpx;
   width: 356rpx;
-  margin: var(--nav-buildings-top, 98rpx) auto 0;
+  margin: 98rpx auto 0;
   opacity: 0.9;
   z-index: 1;
 }

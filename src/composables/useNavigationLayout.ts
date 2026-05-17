@@ -7,7 +7,6 @@ type NavigationMetrics = {
   actionLeft: number
   actionRight: number
   titleTop: number
-  buildingsTop: number
 };
 
 const DEFAULT_METRICS: NavigationMetrics = {
@@ -16,8 +15,7 @@ const DEFAULT_METRICS: NavigationMetrics = {
   actionSize: 35,
   actionLeft: 17,
   actionRight: 18,
-  titleTop: 57,
-  buildingsTop: 49
+  titleTop: 57
 };
 
 export function useNavigationLayout() {
@@ -42,8 +40,7 @@ export function useNavigationLayout() {
       "--nav-action-size": `${curr.actionSize}px`,
       "--nav-action-left": `${curr.actionLeft}px`,
       "--nav-action-right": `${curr.actionRight}px`,
-      "--nav-title-top": `${curr.titleTop}px`,
-      "--nav-buildings-top": `${curr.buildingsTop}px`
+      "--nav-title-top": `${curr.titleTop}px`
     };
   });
 
@@ -77,7 +74,6 @@ function getDynamicNavigationMetrics(): NavigationMetrics {
     actionSize,
     actionLeft: DEFAULT_METRICS.actionLeft,
     actionRight,
-    titleTop,
-    buildingsTop: Math.max(statusBarHeight + 34, titleTop - 8)
+    titleTop
   };
 }
