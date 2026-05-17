@@ -9,10 +9,11 @@ export type StdResponse<T> = {
 };
 
 export type RequestMethod = 'OPTIONS' | 'GET' | 'HEAD' | 'POST' | 'PUT' | 'DELETE' | 'TRACE' | 'CONNECT';
+export type RequestData = string | Record<string, unknown> | ArrayBuffer;
 
 export type StdHttpRequestOptions = {
   url: string
-  data?: any
+  data?: RequestData
   method?: RequestMethod
   header?: Record<string, string>
   timeout?: number
@@ -49,7 +50,7 @@ export async function stdHttpRequest<ResType>(options: StdHttpRequestOptions) {
 
 async function doRequest<ResType>(
   url: string, method: RequestMethod, header: Record<string, string>,
-  data: any, timeout: number
+  data: RequestData, timeout: number
 ) {
   let res: UniApp.RequestSuccessCallbackResult;
   try {
@@ -60,11 +61,11 @@ async function doRequest<ResType>(
       data,
       timeout
     });
-  } catch (e: any) {
+  } catch (e: unknown) {
     throw new StdNetworkError<ResType>({
       url,
       statusCode: 0,
-      errMsg: e?.errMsg || e?.message || "网络请求失败",
+      errMsg: getErrorMessage(e),
       requestParams: data
     });
   }
@@ -83,7 +84,16 @@ async function doRequest<ResType>(
   return response.data as ResType;
 }
 
-function isRetryableError(error: StdNetworkError<any>): boolean {
+function getErrorMessage(error: unknown) {
+  if (typeof error === "object" && error !== null) {
+    const maybeError = error as { errMsg?: unknown; message?: unknown };
+    if (typeof maybeError.errMsg === "string") return maybeError.errMsg;
+    if (typeof maybeError.message === "string") return maybeError.message;
+  }
+  return "网络请求失败";
+}
+
+function isRetryableError(error: StdNetworkError<unknown>): boolean {
   return error.statusCode === 0 || error.statusCode >= 500;
 }
 

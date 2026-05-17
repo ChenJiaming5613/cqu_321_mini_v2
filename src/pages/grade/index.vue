@@ -92,13 +92,15 @@
     loadData: async () => {
       gradeInfo.value = await gradeModel.get();
       if (gradeInfo.value === null) {
-        await gradeModel.update();
+        const result = await gradeModel.update();
+        if (!result.ok) throw result.error;
         gradeInfo.value = await gradeModel.get();
       }
       expandFirstTerm();
     },
     refreshData: async () => {
-      await gradeModel.update();
+      const result = await gradeModel.update();
+      return result.ok;
     },
     clearData: () => {
       gradeInfo.value = null;

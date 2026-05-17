@@ -180,8 +180,8 @@
     isRefreshing.value = true;
     try {
       hasLoadError.value = false;
-      const isUpdated = await courseModel.update(termOffset.value);
-      if (!isUpdated) {
+      const result = await courseModel.update(termOffset.value);
+      if (!result.ok) {
         hasLoadError.value = true;
         await uni.showToast({ title: "更新失败", icon: "error" });
         return;

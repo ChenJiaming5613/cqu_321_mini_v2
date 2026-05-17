@@ -4,6 +4,7 @@ import stdUser from "@/core/StdUser";
 import {stdRequest} from "@/core/request";
 import type {DayTime} from "@/domain/course";
 import {isValidDate, stringToDateInChinaTime} from "@/utils/datetime";
+import {err, ok, type Result} from "@/core/result";
 
 export type {DayTime};
 
@@ -43,9 +44,9 @@ class CourseModel extends StdModel {
       next: this._data.get(TermOffset.NextTerm)?.termName || null
     };
   }
-  public async update(termOffset: TermOffset = TermOffset.CurrTerm) {
+  public async update(termOffset: TermOffset = TermOffset.CurrTerm): Promise<Result<void>> {
     const info = await stdUser.getUserInfo();
-    if (info === null) return false;
+    if (info === null) return err(new Error("Missing user info"));
     const sid = info.sid;
     try {
       const courses = await stdRequest<_Courses>({
@@ -53,8 +54,7 @@ class CourseModel extends StdModel {
         data: { "code": sid, "offset": termOffset }
       });
       if (!isValidCourseDate(courses.start_date) || !isValidCourseDate(courses.end_date)) {
-        console.error("[CourseModel] invalid course date", courses.start_date, courses.end_date);
-        return false;
+        return err(new Error(`Invalid course date: ${courses.start_date} - ${courses.end_date}`));
       }
       await this._setCoursesData(termOffset, {
         termName: courses.session_name,
@@ -62,10 +62,10 @@ class CourseModel extends StdModel {
         endDate: courses.end_date,
         courses: courses.timetables.map(it => convertCourses(it))
       });
-      return true;
+      return ok(undefined);
     } catch (e: unknown) {
       console.error("[CourseModel] update failed", e);
-      return false;
+      return err(e);
     }
   }
   private async _setCoursesData(termOffset: TermOffset, coursesData: CoursesData) {

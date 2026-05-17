@@ -91,7 +91,10 @@
       examInfoList.value = await examModel.get();
       currDate.value = new Date();
     },
-    refreshData: () => examModel.update(),
+    refreshData: async () => {
+      const result = await examModel.update();
+      return result.ok;
+    },
     clearData: () => {
       examInfoList.value = [];
     },

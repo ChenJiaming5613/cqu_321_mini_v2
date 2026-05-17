@@ -5,14 +5,14 @@ export class StdNetworkError<ResType> extends StdError {
   public readonly url: string;
   public readonly statusCode: number;
   public readonly errMsg: string;
-  public readonly requestParams: any;
+  public readonly requestParams: unknown;
   public readonly responseData?: Partial<StdResponse<ResType>>;
 
   constructor(options: {
     url: string
     statusCode: number
     errMsg: string
-    requestParams: any
+    requestParams: unknown
     responseData?: Partial<StdResponse<ResType>>
   }) {
     const responseMsg = typeof options.responseData?.msg === "string" ? options.responseData.msg : "";

@@ -1,4 +1,4 @@
-import {type RequestMethod, type StdResponse, stdHttpRequest} from "@/core/httpClient";
+import {type RequestData, type RequestMethod, type StdResponse, stdHttpRequest} from "@/core/httpClient";
 import {handleToken, type TokenType} from "@/core/tokenService";
 
 export type {RequestMethod, StdResponse};
@@ -6,7 +6,7 @@ export type {TokenType};
 
 export type StdRequestOptions = {
   url: string
-  data?: any
+  data?: RequestData
   method?: RequestMethod
   needToken?: boolean
   tokenType?: TokenType

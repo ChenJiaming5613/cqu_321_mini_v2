@@ -117,8 +117,8 @@
     }
   }
   async function onTapUpdate() {
-    const isUpdated = await courseModel.update(TermOffset.CurrTerm);
-    if (!isUpdated) return;
+    const result = await courseModel.update(TermOffset.CurrTerm);
+    if (!result.ok) return;
     await initData();
     await uni.showToast({
       title: "更新完成",

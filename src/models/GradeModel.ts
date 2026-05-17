@@ -3,6 +3,7 @@ import {stdGetStorageOrDefault, stdSetStorage} from "@/core/storage";
 import {tryParseNumber} from "@/utils/util";
 import StdModel from "@/core/StdModel";
 import stdUser from "@/core/StdUser";
+import {err, ok, type Result} from "@/core/result";
 
 export type ScoreItem = {
     name: string
@@ -62,53 +63,59 @@ class GradeModel extends StdModel {
         return this._gradeInfo;
     }
 
-    public async update() {
+    public async update(): Promise<Result<void>> {
         const info = await stdUser.getUserInfo();
-        if (info === null) return;
+        if (info === null) return err(new Error("Missing user info"));
         const sid = info.sid;
-        const [scoresData, gpaData] = await Promise.all([
-            stdRequest<{scores: _Score[]}>({
-                url: "/edu_admin_center/fetchScore",
-                data: { "sid": sid, "is_minor": true }
-            }),
-            stdRequest<_GpaInfo>({ url: "/edu_admin_center/fetchGpaRanking" })
-        ]);
-        await this.save({
-            gpaInfo: {
-                gpa: gpaData.gpa,
-                weightedAvg: gpaData.weighted_avg,
-                majorRanking: gpaData.major_ranking,
-                gradeRanking: gpaData.grade_ranking,
-                classRanking: gpaData.class_ranking,
-                minorGpa: gpaData.minor_gpa,
-                minorWeightedAvg: gpaData.minor_weighted_avg
-            },
-            scoreItems: scoresData.scores
-                .filter(it => it.course.name)
-                .map(it => {
-                return {
-                    name: it.course.name ?? "",
-                    credit: it.course.credit ?? 0,
-                    score: tryParseNumber(it.score ?? ""),
-                    instructor: it.course.instructor ?? "",
-                    session: {
-                        year: it.session.year,
-                        isAutumn: it.session.is_autumn
-                    },
-                    tags: {
-                        studyNature: it.study_nature,
-                        courseNature: it.course_nature
-                    },
-                    moreInfo: {
-                        dept: it.course.dept ?? "",
-                        code: it.course.code ?? "",
-                        courseNum: it.course.course_num ?? ""
-                    }
-                };
-            }
-            )
-        });
-        this._gradeInfo = await this.load();
+        try {
+            const [scoresData, gpaData] = await Promise.all([
+                stdRequest<{scores: _Score[]}>({
+                    url: "/edu_admin_center/fetchScore",
+                    data: { "sid": sid, "is_minor": true }
+                }),
+                stdRequest<_GpaInfo>({ url: "/edu_admin_center/fetchGpaRanking" })
+            ]);
+            await this.save({
+                gpaInfo: {
+                    gpa: gpaData.gpa,
+                    weightedAvg: gpaData.weighted_avg,
+                    majorRanking: gpaData.major_ranking,
+                    gradeRanking: gpaData.grade_ranking,
+                    classRanking: gpaData.class_ranking,
+                    minorGpa: gpaData.minor_gpa,
+                    minorWeightedAvg: gpaData.minor_weighted_avg
+                },
+                scoreItems: scoresData.scores
+                    .filter(it => it.course.name)
+                    .map(it => {
+                    return {
+                        name: it.course.name ?? "",
+                        credit: it.course.credit ?? 0,
+                        score: tryParseNumber(it.score ?? ""),
+                        instructor: it.course.instructor ?? "",
+                        session: {
+                            year: it.session.year,
+                            isAutumn: it.session.is_autumn
+                        },
+                        tags: {
+                            studyNature: it.study_nature,
+                            courseNature: it.course_nature
+                        },
+                        moreInfo: {
+                            dept: it.course.dept ?? "",
+                            code: it.course.code ?? "",
+                            courseNum: it.course.course_num ?? ""
+                        }
+                    };
+                }
+                )
+            });
+            this._gradeInfo = await this.load();
+            return ok(undefined);
+        } catch (e: unknown) {
+            console.error("[GradeModel] update failed", e);
+            return err(e);
+        }
     }
 
     private async load() {

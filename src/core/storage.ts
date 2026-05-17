@@ -55,7 +55,7 @@ export function deobfuscateOrPlainText(str: string): string {
   }
 }
 
-export async function stdSetStorage(key: string, data: any) {
+export async function stdSetStorage(key: string, data: unknown) {
   await uni.setStorage({ key, data });
 }
 

@@ -117,8 +117,8 @@
     }
   }
   async function onTapUpdate() {
-    const isUpdated = await courseModel.update(TermOffset.CurrTerm);
-    if (!isUpdated) return;
+    const result = await courseModel.update(TermOffset.CurrTerm);
+    if (!result.ok) return;
     await initData();
     await uni.showToast({
       title: "更新完成",
@@ -127,8 +127,9 @@
   }
   async function navToCurriculumPage() { await uni.navigateTo({ url: props.curriculumPageUrl }) }
 
-  function onSwiperChange(event: any) {
-    activeIdx.value = event.detail?.current ?? 0;
+  function onSwiperChange(event: Event) {
+    const e = event as unknown as { detail: { current: number } };
+    activeIdx.value = e.detail?.current ?? 0;
   }
 
   function getCourseRoom(course: UniCourse) {

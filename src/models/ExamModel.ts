@@ -2,6 +2,7 @@ import stdUser from "../core/StdUser";
 import StdModel from "@/core/StdModel";
 import {stdGetStorageOrDefault, stdSetStorage} from "@/core/storage";
 import {stdRequest} from "@/core/request";
+import {err, ok, type Result} from "@/core/result";
 
 export type ExamInfo = {
   name: string
@@ -24,9 +25,9 @@ class ExamModel extends StdModel {
   public clear() { this._examInfoList = []; }
   private static STORAGE_KEY = "ExamsInfo";
   private _examInfoList: ExamInfo[] | null = null;
-  public async update() {
+  public async update(): Promise<Result<void>> {
     const info = await stdUser.getUserInfo();
-    if (info === null) return false;
+    if (info === null) return err(new Error("Missing user info"));
     const sid = info.sid;
     let exams: _ExamRaw[];
     try {
@@ -37,7 +38,7 @@ class ExamModel extends StdModel {
       exams = res.exams;
     } catch (e: unknown) {
       console.error("[ExamModel] update failed", e);
-      return false;
+      return err(e);
     }
     this._examInfoList = exams.map(it => {
       return {
@@ -52,7 +53,7 @@ class ExamModel extends StdModel {
     });
     await this.save();
     await this.load();
-    return true;
+    return ok(undefined);
   }
   private async save() {
     await stdSetStorage(ExamModel.STORAGE_KEY, this._examInfoList);
