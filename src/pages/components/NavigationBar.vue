@@ -42,9 +42,10 @@ defineEmits<{
 
 <style scoped>
 .cqu-buildings {
-  height: 66rpx;
-  width: 356rpx;
-  margin: 98rpx auto 0;
+  height: 80rpx;
+  width: 432rpx;
+  margin: 0 auto;
+  margin-top: auto;
   opacity: 0.9;
   z-index: 1;
 }
