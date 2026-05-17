@@ -6,12 +6,12 @@
 
 ## 构建、测试与开发命令
 
-- `npm install`：根据 `package-lock.json` 安装依赖。
-- `npm run dev:h5`：启动 H5 开发环境。
-- `npm run build:h5`：构建 H5 生产版本。
-- `npm run dev:mp-weixin` / `npm run build:mp-weixin`：开发或构建微信小程序目标。
-- `npm run dev:app`：通过 UniApp 工具运行 App 目标。
-- `npm run type-check`：执行 `vue-tsc --noEmit`，检查 TypeScript 与 Vue 类型问题。
+- `bun install`：根据 `bun.lock` 安装依赖。
+- `bun run dev:h5`：启动 H5 开发环境。
+- `bun run build:h5`：构建 H5 生产版本。
+- `bun run dev:mp-weixin` / `bun run build:mp-weixin`：开发或构建微信小程序目标。
+- `bun run dev:app`：通过 UniApp 工具运行 App 目标。
+- `bun run type-check`：执行 `vue-tsc --noEmit`，检查 TypeScript 与 Vue 类型问题。
 
 其他平台请使用 `package.json` 中对应的 `dev:<platform>` 和 `build:<platform>` 脚本。
 
@@ -21,7 +21,7 @@
 
 ## 测试指南
 
-当前仓库尚未配置独立的单元测试框架。提交前至少运行 `npm run type-check`，并构建受影响的平台目标，通常是 `npm run build:h5` 或对应的小程序构建命令。涉及 UI 的改动需要在目标 UniApp 平台上手动冒烟测试，重点检查页面跳转、加载状态、数据展示和平台 API 调用。
+提交前至少运行 `bun run type-check`，并构建受影响的平台目标，通常是 `bun run build:h5` 或对应的小程序构建命令。涉及 UI 的改动需要在目标 UniApp 平台上手动冒烟测试，重点检查页面跳转、加载状态、数据展示和平台 API 调用。
 
 ## 页面开发与设计稿验收流程
 
@@ -29,15 +29,15 @@
 
 页面开发完成后必须执行：
 
-- `npm run type-check`
-- `npm run build:h5`
+- `bun run type-check`
+- `bun run build:h5`
 
 可见 UI 改动还必须使用 Playwright 做 H5 截图验收：
 
-1. 启动 H5：`npm run dev:h5`。
-2. 运行 mock 数据截图脚本：`node scripts/h5-mock-screenshots.js`，也可使用 `npm run screenshots:h5`。
+1. 启动 H5：`bun run dev:h5`。
+2. 运行 mock 数据截图脚本：`node scripts/h5-mock-screenshots.js`，也可使用 `bun run screenshots:h5`。
 3. 截图会保存到 `docs/页面验收截图/`，当前包含首页、成绩管理、课表、查课和考试安排的数据态截图。
-4. 对涉及响应式布局或大屏适配的页面运行 `npm run screenshots:h5:responsive`。该命令会输出多设备比例截图到 `docs/页面验收截图/responsive/`，覆盖窄屏手机、常见手机、长屏手机、大屏手机、平板竖屏和平板横屏。
+4. 对涉及响应式布局或大屏适配的页面运行 `bun run screenshots:h5:responsive`。该命令会输出多设备比例截图到 `docs/页面验收截图/responsive/`，覆盖窄屏手机、常见手机、长屏手机、大屏手机、平板竖屏和平板横屏。
 5. 将生成截图与 `分页面设计稿/` 中对应设计稿对比，重点检查顶部导航、卡片宽度、圆角、阴影、字号、颜色、列表密度、空状态、按钮位置、底部栏遮挡和滚动区域。
 6. 对涉及交互的页面运行 `node scripts/h5-interaction-check.js`，覆盖点击、输入、切换、下拉刷新、右上刷新、弹窗和详情展开等关键动作。
 7. 如果截图中出现明显布局偏差、文本溢出、空白占位、数据态未渲染或交互状态不符合预期，应先修复并重新截图/重跑交互脚本，确认无明显偏差后再结束开发。

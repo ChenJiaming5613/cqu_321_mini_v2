@@ -11,8 +11,9 @@ export const APP_STORAGE_KEYS = [
   "CoursesInfo-",
 ] as const;
 
-/** 将字符串编码为 base64（跨平台兼容） */
-export function obfuscate(str: string): string {
+const OBFUSCATION_PREFIX = "v1:";
+
+function encodeBase64(str: string): string {
   const buf = new ArrayBuffer(str.length);
   const bufView = new Uint8Array(buf);
   for (let i = 0; i < str.length; i++) {
@@ -21,15 +22,37 @@ export function obfuscate(str: string): string {
   return uni.arrayBufferToBase64(buf);
 }
 
-/** 将 base64 字符串解码为原始字符串 */
-export function deobfuscate(str: string): string {
+function decodeBase64(str: string): string {
   const buf = uni.base64ToArrayBuffer(str);
   const bufView = new Uint8Array(buf);
-  let result = '';
+  let result = "";
   for (let i = 0; i < bufView.length; i++) {
     result += String.fromCharCode(bufView[i]);
   }
   return result;
+}
+
+/** 将字符串编码为 base64（跨平台兼容） */
+export function obfuscate(str: string): string {
+  return OBFUSCATION_PREFIX + encodeBase64(encodeURIComponent(str));
+}
+
+/** 将 base64 字符串解码为原始字符串 */
+export function deobfuscate(str: string): string {
+  if (str.startsWith(OBFUSCATION_PREFIX)) {
+    return decodeURIComponent(decodeBase64(str.slice(OBFUSCATION_PREFIX.length)));
+  }
+  return decodeBase64(str);
+}
+
+export function deobfuscateOrPlainText(str: string): string {
+  try {
+    const decoded = deobfuscate(str);
+    if (/[\u0000-\u001f\u007f-\u009f]/.test(decoded)) return str;
+    return decoded;
+  } catch (_e: unknown) {
+    return str;
+  }
 }
 
 export async function stdSetStorage(key: string, data: any) {

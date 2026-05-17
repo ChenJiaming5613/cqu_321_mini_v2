@@ -2,7 +2,7 @@ import stdToken, {type TokenInfo} from "@/core/StdToken";
 import stdUser from "@/core/StdUser";
 import {StdUserInfoError} from "@/core/error/StdUserInfoError";
 import {stdHttpRequest} from "@/core/httpClient";
-import {deobfuscate} from "@/core/storage";
+import {deobfuscateOrPlainText} from "@/core/storage";
 
 export type TokenType = "user" | "app";
 
@@ -69,7 +69,7 @@ async function handleUserToken() {
   if (!refreshToken || !checkTokenExpireTime(refreshToken.refreshTokenExpireTime)) {
     const info = await stdUser.getUserInfo();
     if (info === null) throw new StdUserInfoError(info);
-    await getUserToken(info.auth, deobfuscate(info.password));
+    await getUserToken(info.auth, deobfuscateOrPlainText(info.password));
   }
   else stdToken.tokenInfo = await updateToken(refreshToken.refreshToken);
   return stdToken.tokenInfo;
